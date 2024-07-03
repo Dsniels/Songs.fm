@@ -1,20 +1,22 @@
 import { Button, Pressable, Text, View } from "react-native";
 import * as AuthSession from 'expo-auth-session';
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import * as WebBrowser from 'expo-web-browser';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ThemedView } from "@/components/ThemedView";
 import { ThemedText } from "@/components/ThemedText";
-
+import {REACT_APP_CLIENTE_ID} from '@env';
 import { styles } from "@/Styles/styles";
-import { Link } from "expo-router";
+import { Link, Redirect } from "expo-router";
+import { getAccessToken} from "@/Api/SpotifyData";
+import { AxiosResponse } from "axios";
+import { getprofile } from "@/Api/UserAction";
 
 
 WebBrowser.maybeCompleteAuthSession();
-export  function login() {
+export default function login() {
     
     const URI = AuthSession.makeRedirectUri({native :'myapp://', path:'/login'})
-    console.log(URI)
     const endpoints = { 
       authorizationEndpoint: 'https://accounts.spotify.com/authorize',
       tokenEndpoint: 'https://accounts.spotify.com/api/token',
@@ -22,10 +24,11 @@ export  function login() {
 
     const [request, response, promptAsync] = AuthSession.useAuthRequest(
       {
-        clientId:'7783b093ae68457a9044441573eb49f2',
-        scopes: ['user-read-email', 'playlist-modify-public'],
+        clientId: REACT_APP_CLIENTE_ID || '',
+        scopes: ['user-read-email', 'user-read-private'],
         responseType: 'code',
         redirectUri: URI,
+        usePKCE:false
       },
       endpoints
     );
@@ -33,22 +36,31 @@ export  function login() {
         await AsyncStorage.setItem('code',data);
     }
     useEffect(()=>{
+        const fetchData = async (code : string)=>{
+          const response :any= await getAccessToken(code);
+          const token : string = response.data?.access_token;
+          console.log('token data = ',token)
+          await AsyncStorage.setItem('token', token);
+          const user = await getprofile();
+
+        }
+       
          if(response?.type === 'success'){
             const {code} = response.params;
+            
+            fetchData(code);
            setData(code);
-            console.log(code);
+            
         }
-  
+
     },[response, request])
 
     return(
     <ThemedView style={styles.stepContainer}>
         <ThemedText type='subtitle'>Conecta tu cuenta de Spotify</ThemedText>
-         <Link style={styles.LinkLogin}  href='/login'>
-            <Pressable >
-              <Text style={{color:'white', fontStyle:'normal', fontWeight:"bold"}}   >Login</Text>
-            </Pressable>
-          </Link>
+          <Button title="Conectar" onPress={()=>promptAsync()}/>
+            <Text>Hola</Text>
+          
       </ThemedView>
 
     )
