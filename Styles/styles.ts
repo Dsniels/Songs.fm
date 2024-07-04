@@ -21,6 +21,12 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 8,
   },
+  headerImage: {
+    color: '#808080',
+    bottom: -90,
+    left: -35,
+    position: 'absolute',
+  },
   stepContainer: {
     display:"flex",
     flexWrap:'wrap',
@@ -48,5 +54,22 @@ export const styles = StyleSheet.create({
     justifyContent:'center',
     alignItems:'center',  
     borderRadius:20 
-  }
+  },
+
+  fixedTop: {
+      zIndex: 1,
+      position: 'absolute',
+      top: 0,
+
+    },
+    linearGradient: {
+      height: 200,
+    },
+    TopSongs :{
+      width:200,
+      height:200,
+      margin:20,
+      borderRadius:50
+      
+    }
 })
