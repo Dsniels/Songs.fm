@@ -24,11 +24,25 @@ export const getAccessToken = async(code: string) => {
 
     return new Promise((resolve, reject) => {
         instancia.post("https://accounts.spotify.com/api/token", qs.stringify(data),  {headers}).then((response: AxiosResponse<any>) => {
+            const expira = new Date();
+            expira.setSeconds(expira.getSeconds() + 3600);
+            response.data.expira = expira;
             resolve(response)
         }).catch((e: any) => {
+            console.log(e)
             resolve(e);
         })
     })
+}
+
+
+export const checkToken = (expira:any)=>{
+    const date = new Date();
+    if(date === expira){
+        console.log('Expiro')
+    }else{
+        console.log(date, expira)
+    }
 }
 
 
