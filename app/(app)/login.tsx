@@ -38,11 +38,13 @@ export default function login() {
     const setData = async(data : any)=>{
         await AsyncStorage.setItem('code',data);
     }
+    
     useEffect(()=>{
-        const fetchData = async (code : string)=>{
-          const response :any= await getAccessToken(code);
+      const fetchData = async (code : string)=>{
+          const response :any= await getAccessToken(code, dispatch);
           const refresh_token : string= response.data?.refresh_token;
           const token : string = response.data?.access_token;
+          console.log(token)
           const expira = response.data.expira;
           checkToken(expira);
           await AsyncStorage.setItem('token', token);
@@ -52,13 +54,10 @@ export default function login() {
           }
 
         }
-       
          if(response?.type === 'success'){
             const {code} = response.params;
-            
             fetchData(code);
-            setData(code);
-            
+            setData(code);   
         }
 
     },[response, request])

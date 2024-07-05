@@ -12,18 +12,17 @@ export default function Applayout (){
     useEffect(()=>{
         const getData = async()=>{
             const token = await AsyncStorage.getItem('token') || false;
-            console.log(token);
-            console.log(!servidorResponse)
+
             if(!servidorResponse && token){
+                console.log('getProfile_layout')
                 await getprofile(dispatch);
                 setServidorResponse(true);
-                console.log(sesionUsuario)
+   
             }
         }
-        getData();
-        console.log(servidorResponse)
-        console.log('sesionUsuario layout',sesionUsuario);
-    }, [servidorResponse, dispatch, sesionUsuario])
+        getData().then(()=>console.log('fetchProfile'))
+        console.log(sesionUsuario);
+    }, [servidorResponse, sesionUsuario])
 
     return(
         <Stack>

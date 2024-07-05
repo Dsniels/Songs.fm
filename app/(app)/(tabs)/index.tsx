@@ -14,18 +14,17 @@ import { useStateValue } from '@/Context/store';
 export default function HomeScreen() {
 
 
-
+    const deleteToken=async()=>{
+      await AsyncStorage.removeItem('token');
+    }
 
 
 useFocusEffect(
   useCallback(() => {
-    const deleteToken=async()=>{
-      AsyncStorage.clear((e:any)=>console.log(e))
-    }
+
     const fetchData = async()=>{
       const token = await AsyncStorage.getItem('token') || false;
       if(!token){
-        console.log('if');
         router.push('/login')
       }
     }
@@ -62,6 +61,7 @@ useFocusEffect(
               <Text style={{color:'white', fontStyle:'normal', fontWeight:"bold"}}   >Login</Text>
             </Pressable>
           </Link>
+          <Button title='delete token' onPress={deleteToken} />
       </ThemedView>
 
     
