@@ -5,19 +5,25 @@ import {
   ScrollView,
   Text,
   ImageBackground,
+  ProgressBarAndroid,
+  SafeAreaView,
+  RefreshControl,
 } from "react-native";
 import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { ThemedText } from "@/components/ThemedText";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useStateValue } from "@/Context/store";
 import { getTop } from "@/Api/SongsActions";
 import { styles } from "@/Styles/styles";
 import { LinearGradient } from "expo-linear-gradient";
 import { topGeneros } from "@/service/TopGeners";
-
+import { seedTracks } from "@/service/seeds";
+import { getprofile } from "@/Api/UserAction";
 export default function TabTwoScreen() {
   const [{ sesionUsuario }, dispatch] = useStateValue();
-  const [generos, setGeneros] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const [generos, setGeneros] = useState<{name :string,value :number}[]>([]);
   const [usuario, setUsuario] = useState({
     display_name: "",
     images: {
@@ -35,10 +41,20 @@ export default function TabTwoScreen() {
   });
 
   useEffect(() => {
-    if (sesionUsuario?.usuario) {
-      setUsuario(sesionUsuario.usuario);
+    const fetching = async ()=>{
+                     
+      await getprofile(dispatch);
     }
-  }, [sesionUsuario, dispatch]);
+
+
+  }, [sesionUsuario, refreshing]);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000);
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -47,27 +63,32 @@ export default function TabTwoScreen() {
         ...prev,
         artists: data.items,
       }));
-      const generos = data.items.map((item:any)=> item.genres).flat();
-
-      const top = topGeneros(generos)
-      console.log('topGeneros',top)
-      
-    };
-    fetchData();
-  }, []);
-
-  useEffect(() => {
+      const top : {name : string, value: number}[] = topGeneros(data)
+      setGeneros(top);
+   };
     const fetchSongs = async () => {
       const data: any = await getTop("tracks", requestMusic.offsetSongs);
       setRequestMusic((prev) => ({
         ...prev,
         songs: data.items,
       }));
+      seedTracks(data);
     };
+    console.log('data')
     fetchSongs();
-  }, []);
+    //fetchData();
+
+  }, [refreshing]);
+
+  
 
   return (
+    <SafeAreaView style={styles.container}>
+      <ScrollView
+        contentContainerStyle={styles.scrollView}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }>
     <ParallaxScrollView
       headerBackgroundColor={{ light: "#D0D0D0", dark: "#353636" }}
       headerImage={
@@ -82,9 +103,20 @@ export default function TabTwoScreen() {
         
       }
     >
-      <View>
+      <View >
         <View style={styles.titleContainer}>
           <ThemedText type="title">Hola {usuario.display_name}!</ThemedText>
+        </View>
+        <View style={{margin:10}}>
+          <ThemedText style={{marginBottom:10}}  type="subtitle">Generos que mas escuchas</ThemedText>
+          {generos ? generos.map((item:any)=>(
+            <View  key={item.name}>
+            <ThemedText type="defaultSemiBold" >{item.name}   {item.value}</ThemedText>
+            
+            </View>
+          )) : (<Text>Null</Text>)}
+          
+          <ThemedText type="default"></ThemedText>
         </View>
         <Text style={{ color: "white", fontWeight: "bold", marginTop: 50 }}>
           Artistas que mas escuchas
@@ -105,7 +137,7 @@ export default function TabTwoScreen() {
               <ImageBackground
                 key={item.id}
                 style={styles.TopSongs}
-                source={{ uri: item.images[0].url }}
+                source={{ uri: item.images[0].url||'https://images.pexels.com/photos/145707/pexels-photo-145707.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1' }}
               >
                 <LinearGradient
                   colors={["rgba(0,0,0,0.8)", "transparent"]}
@@ -163,7 +195,7 @@ export default function TabTwoScreen() {
               <ImageBackground
                 key={item.id}
                 style={styles.TopSongs}
-                source={{ uri: item.album.images[0].url }}
+                source={{ uri: item.album.images[0].url || 'https://images.pexels.com/photos/145707/pexels-photo-145707.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1' }}
               >
                 <LinearGradient
                   colors={["rgba(0,0,0,0.8)", "transparent"]}
@@ -204,5 +236,7 @@ export default function TabTwoScreen() {
         </ScrollView>
       </View>
     </ParallaxScrollView>
+          </ScrollView>
+    </SafeAreaView>
   );
 }
