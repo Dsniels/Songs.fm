@@ -1,5 +1,6 @@
-import { StyleSheet } from "react-native";
-
+import { Colors } from "@/constants/Colors";
+import { Dimensions, StyleSheet } from "react-native";
+const { height } = Dimensions.get('window')
 
 export const styles = StyleSheet.create({
     container : {
@@ -71,5 +72,52 @@ export const styles = StyleSheet.create({
       margin:20,
       borderRadius:50
       
-    }
+    },
+    card:{
+      height: 500,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: 'white',
+      borderRadius: 5,
+      shadowColor: 'black',
+      shadowOffset: {
+        width: 0,
+        height: 2,
+      },
+      margin:20,
+      width:300,
+      shadowRadius: 6,
+      shadowOpacity: 0.3,
+      elevation: 2,
+    },
+    imageCard:{
+      borderRadius:5,
+      flex:1,
+      width:500,
+      height:500
+    },
+    CardDescription:{
+      justifyContent: 'flex-end',
+      alignItems: 'flex-start',
+      flexDirection: 'column',
+      height: '100%',
+      position: 'absolute',
+      left: 10,
+      bottom: 10,
+    },
+    cardContent :{
+      textAlign: 'center',
+      fontSize: 20,
+      color: 'white',
+
+      textShadowColor: 'black',
+      textShadowRadius: 10,
+    },
+    scrollView: {
+    flex: 1,
+    backgroundColor: 'pink',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
 })
