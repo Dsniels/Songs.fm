@@ -11,9 +11,10 @@ axios.defaults.baseURL = REACT_APP_BASE_URL;
 
 axios.interceptors.request.use( async (config)=>{
     const token = await getToken()
-    if(token){
+     if(token){
+        
+
         config.headers.Authorization = `Bearer ${token}`;
-        console.log('config', config);
         return config
     }
     return config;
