@@ -5,7 +5,6 @@ import {
   ScrollView,
   Text,
   ImageBackground,
-  ProgressBarAndroid,
   SafeAreaView,
   RefreshControl,
 } from "react-native";
@@ -18,11 +17,10 @@ import { styles } from "@/Styles/styles";
 import { LinearGradient } from "expo-linear-gradient";
 import { topGeneros } from "@/service/TopGeners";
 import { seedTracks } from "@/service/seeds";
-import { getprofile } from "@/Api/UserAction";
 export default function TabTwoScreen() {
   const [{ sesionUsuario }, dispatch] = useStateValue();
   const [refreshing, setRefreshing] = useState(false);
-
+  const [scrollPosition, setScrollPosition] = useState(0);
   const [generos, setGeneros] = useState<{name :string,value :number}[]>([]);
   const [usuario, setUsuario] = useState({
     display_name: "",
@@ -41,20 +39,26 @@ export default function TabTwoScreen() {
   });
 
   useEffect(() => {
-    const fetching = async ()=>{
-                     
-      await getprofile(dispatch);
-    }
-
-
+      
+      if(sesionUsuario?.usuario){
+        setUsuario(sesionUsuario.usuario);
+      }
+    
   }, [sesionUsuario, refreshing]);
 
-  const onRefresh = useCallback(() => {
-    setRefreshing(true);
-    setTimeout(() => {
-      setRefreshing(false);
-    }, 2000);
-  }, []);
+    const onRefresh = useCallback(() => {
+    if (scrollPosition <= 0) { // Verifica si el usuario está en la parte superior de la pantalla
+      setRefreshing(true);
+      setTimeout(() => {
+        setRefreshing(false);
+      }, 2000);
+    }
+  }, [scrollPosition]);
+    const handleScroll = (event : any) => {
+    const position = event.nativeEvent.contentOffset.y;
+    setScrollPosition(position);
+  };
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -74,11 +78,10 @@ export default function TabTwoScreen() {
       }));
       seedTracks(data);
     };
-    console.log('data')
     fetchSongs();
-    //fetchData();
+    fetchData();
 
-  }, [refreshing]);
+  }, []);
 
   
 
@@ -88,9 +91,11 @@ export default function TabTwoScreen() {
         contentContainerStyle={styles.scrollView}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }>
+        }
+        onScroll={handleScroll}
+       >
     <ParallaxScrollView
-      headerBackgroundColor={{ light: "#D0D0D0", dark: "#353636" }}
+          headerBackgroundColor={{ light: "#D0D0D0", dark: "#353636" }}
       headerImage={
 
         <Image
