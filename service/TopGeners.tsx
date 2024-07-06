@@ -4,6 +4,7 @@ import { seedGeners } from "./seeds";
 
 export const topGeneros = (data: any) => {
 const generos_data = data.items?.map((item:any)=> item.genres).flat() || []
+console.log(generos_data)
     const frec = generos_data?.reduce((acumulador: [string, number][], item: string) => {
         const encontrado = acumulador.find(subArray => subArray[0] === item);
         if (encontrado) {

@@ -74,7 +74,7 @@ export const styles = StyleSheet.create({
       
     },
     card:{
-      height: 500,
+      height: 700,
       justifyContent: 'center',
       alignItems: 'center',
       backgroundColor: 'white',
@@ -94,7 +94,7 @@ export const styles = StyleSheet.create({
       borderRadius:5,
       flex:1,
       width:500,
-      height:500
+      height:700
     },
     CardDescription:{
       justifyContent: 'flex-end',
