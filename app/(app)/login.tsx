@@ -46,6 +46,7 @@ export default function login() {
           const token : string = response.data?.access_token;
           console.log(token)
           const expira = response.data.expira;
+          console.log('token data ', response.data)
           checkToken(expira);
           await AsyncStorage.setItem('token', token);
           await AsyncStorage.setItem('refresh_token', refresh_token);
