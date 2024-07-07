@@ -16,7 +16,7 @@ import { getTop } from "@/Api/SongsActions";
 import { styles } from "@/Styles/styles";
 import { LinearGradient } from "expo-linear-gradient";
 import { topGeneros } from "@/service/TopGeners";
-import { seedTracks } from "@/service/seeds";
+import { seedArtist, seedLongTracks, seedTracks } from "@/service/seeds";
 export default function TabTwoScreen() {
   const [{ sesionUsuario }, dispatch] = useStateValue();
   const [refreshing, setRefreshing] = useState(false);
@@ -58,15 +58,13 @@ export default function TabTwoScreen() {
     const position = event.nativeEvent.contentOffset.y;
     setScrollPosition(position);
   };
-
-
-  useEffect(() => {
-    const fetchData = async () => {
+     const fetchData = async () => {
       const data: any = await getTop("artists", requestArtist.offset);
       setRequestArtist((prev) => ({
         ...prev,
         artists: data.items,
       }));
+      seedArtist(data);
       const top : {name : string, value: number}[] = topGeneros(data)
       setGeneros(top);
    };
@@ -76,8 +74,13 @@ export default function TabTwoScreen() {
         ...prev,
         songs: data.items,
       }));
+      seedLongTracks(data)
       seedTracks(data);
     };
+
+
+  useEffect(() => {
+ 
     fetchSongs();
     fetchData();
 

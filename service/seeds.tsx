@@ -1,4 +1,3 @@
-import { getRecomendations } from "@/Api/SongsActions";
 import AsyncStorage from "@react-native-async-storage/async-storage"
 
 
@@ -7,13 +6,22 @@ export const seedGeners=async(seedGeners:string)=>{
 }
 
 const getTracksSeed =(data:any)=>{
-    const fsd = data?.map((i:any)=>i.id)[0]
-    return fsd?.toString()
+    const fsd = data?.map((i:any)=>i.id)
+    return fsd
 }
 
 
 export const seedTracks = async (data:any) =>{ 
-    const ids :any = getTracksSeed(data.items) ||''
-   await AsyncStorage.setItem('seedTrack', ids);
-   getRecomendations()
+    const ids :any = getTracksSeed(data.items)[0]
+   await AsyncStorage.setItem('seedTrack', ids.toString());
+}
+
+export const seedArtist = async (data : any)=>{
+    const ids = getTracksSeed(data.items).slice(0,4);
+    await AsyncStorage.setItem('seedArtists', ids.toString())
+}
+
+export const seedLongTracks = async (data:any) =>{ 
+    const ids :any = getTracksSeed(data.items).slice(0,4)
+   await AsyncStorage.setItem('seedLongTrack', ids.toString());
 }
