@@ -1,6 +1,7 @@
 import { Axios, AxiosResponse } from "axios";
 import HttpCliente from "../service/HttpCliente";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { seeds } from "@/service/seeds";
 
 export const getTop = (
   type: string,
@@ -19,22 +20,18 @@ export const getTop = (
 };
 
 export const getRecomendations = async (): Promise<any> => {
-  const geners_seed = await AsyncStorage.getItem("seedGeneros");
-  const seed_songs = await AsyncStorage.getItem("seedTrack");
-  console.log('seed geners', geners_seed);
-  console.log('seedSongs', seed_songs);
- const more_recommendations = await getCombinedRecommendations();
+
+  const {songs, artists, generos} = await seeds();
 
   return new Promise((resolve, reject) => {
     HttpCliente.get(
-      `/recommendations?seed_tracks=${seed_songs}&seed_genres=${geners_seed}&min_popularity=40`
+      `/recommendations?seed_tracks=${songs}&seed_genres=${generos}&seed_artists=${artists}`
     )
       .then((response: any) => {
-        const combined = { ...more_recommendations  ,...response.data.tracks };
-        const result = Object.values(combined);
-        resolve(result);
+        resolve(response.data?.tracks );
       })
       .catch((e: any) => {
+        reject([]);
         console.log(e);
       });
   });
@@ -54,81 +51,3 @@ export const getListOfSongs = (
   });
 };
 
-async function getCombinedRecommendations() {
-  try {
-    const recommendations_seedGeneros = await getRecommendationsSeedGeneros();
-    const recommendations_seedSongs = await getRecommendationsSeedSongs();
-    const recommendations_seedArtists = await getRecommendationsSeedArtist();
-    console.log(
-      "recomendation length",
-      recommendations_seedGeneros.length,
-      recommendations_seedSongs.length,
-      recommendations_seedArtists.length
-    );
-
-    const result = {
-      ...recommendations_seedGeneros,
-      ...recommendations_seedSongs,
-      ...recommendations_seedArtists,
-    };
-    //const result = Object.values(combined)
-    return result;
-  } catch (error) {
-    console.error("Error al obtener las recomendaciones:", error);
-  }
-}
-
-export const getRecommendationsSeedGeneros = async (): Promise<any> => {
-  const geners_seed = await AsyncStorage.getItem("seedGeneros");
-  console.log("generos seed", geners_seed);
-
-  return new Promise((resolve, reject) => {
-    HttpCliente.get(
-      `/recommendations?seed_genres=${geners_seed}&min_danceability=0.4&min_energy=0.2&min_popularity=50`
-    )
-      .then((response: any) => {
-        resolve(response.data.tracks);
-      })
-      .catch((e: any) => {
-        resolve([]);
-        console.log(e);
-      });
-  });
-};
-
-export const getRecommendationsSeedSongs = async (): Promise<any> => {
-  const seed_songs = await AsyncStorage.getItem("seedLongTrack");
-  console.log("seed Song", seed_songs);
-
-  return new Promise((resolve, reject) => {
-    HttpCliente.get(
-      `/recommendations?seed_tracks=${seed_songs}&min_popularity=20`
-    )
-      .then((response: any) => {
-        resolve(response.data.tracks);
-      })
-      .catch((e: any) => {
-        resolve([]);
-        console.log(e);
-      });
-  });
-};
-
-export const getRecommendationsSeedArtist = async (): Promise<any> => {
-  const seed_songs = await AsyncStorage.getItem("seedArtists");
-  console.log("artistSeed", seed_songs);
-
-  return new Promise((resolve, reject) => {
-    HttpCliente.get(
-      `/recommendations?seed_artists=${seed_songs}`
-    )
-      .then((response: any) => {
-        if (response.data.tracks.length === 0) console.log("no hay canciones");
-        resolve(response.data.tracks);
-      })
-      .catch((e: any) => {
-        resolve([]);
-        console.log(e);
-      });
-  });
-};

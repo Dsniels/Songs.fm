@@ -18,7 +18,6 @@ export const topGeneros = (data: any) => {
   frec.sort((a: any, b: any) => b[1] - a[1]);
   const seed: string = frec
     .map((i: any) => i[0])
-    .slice(0, 3)
     .toString();
   seedGeners(seed);
   const result = frec
