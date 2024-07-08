@@ -21,6 +21,8 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
+    margin:0,
+    padding:0
   },
   headerImage: {
     color: '#808080',
@@ -74,11 +76,12 @@ export const styles = StyleSheet.create({
       
     },
     card:{
-      height: 700,
+      height: 600,
       justifyContent: 'center',
       alignItems: 'center',
       backgroundColor: 'white',
-      borderRadius: 5,
+      borderRadius: 50,
+      borderWidth:2,
       shadowColor: 'black',
       shadowOffset: {
         width: 0,
@@ -88,13 +91,14 @@ export const styles = StyleSheet.create({
       width:300,
       shadowRadius: 6,
       shadowOpacity: 0.3,
-      elevation: 2,
+      elevation: 6,
+      padding:0
     },
     imageCard:{
-      borderRadius:5,
+      borderRadius:20,
       flex:1,
-      width:500,
-      height:700
+      width:300,
+      height:600
     },
     CardDescription:{
       justifyContent: 'flex-end',
