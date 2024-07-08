@@ -1,27 +1,36 @@
 import AsyncStorage from "@react-native-async-storage/async-storage"
 
 
+
+
+
 export const seedGeners=async(seedGeners:string)=>{
     AsyncStorage.setItem('seedGeneros',seedGeners)
+
 }
 
 const getTracksSeed =(data:any)=>{
+
     const fsd = data?.map((i:any)=>i.id)
     return fsd
 }
 
 
 export const seedTracks = async (data:any) =>{ 
-    const ids :any = getTracksSeed(data.items)[0]
+    const ids :any = getTracksSeed(data.items).slice(0,2)
    await AsyncStorage.setItem('seedTrack', ids.toString());
 }
 
 export const seedArtist = async (data : any)=>{
-    const ids = getTracksSeed(data.items).slice(0,4);
+       
+
+    const ids = getTracksSeed(data.items).slice(0,5);
     await AsyncStorage.setItem('seedArtists', ids.toString())
 }
 
 export const seedLongTracks = async (data:any) =>{ 
-    const ids :any = getTracksSeed(data.items).slice(0,4)
+
+    const ids :any = getTracksSeed(data.items).slice(0,5)
+    console.log(ids.toString())
    await AsyncStorage.setItem('seedLongTrack', ids.toString());
 }
