@@ -1,14 +1,14 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Animated, Dimensions, PanResponder, View } from "react-native";
 import { Audio } from "expo-av";
-import { useFocusEffect } from "@react-navigation/native";
+import { useFocusEffect, useIsFocused } from "@react-navigation/native";
 
 export const SwipeCard = <T,>({ children, items, setItems }: any) => {
   const { height } = Dimensions.get("screen");
   const swipe = useRef(new Animated.ValueXY()).current;
   const titlSign = useRef(new Animated.Value(1)).current;
   const [currentSound, setCurrentSound] = useState<Audio.Sound | null>(null);
-
+  const isFocused = useIsFocused()
   const panResponder = useRef(
     PanResponder.create({
       onMoveShouldSetPanResponder: () => true,
@@ -47,29 +47,27 @@ export const SwipeCard = <T,>({ children, items, setItems }: any) => {
     if (currentSound) {
       await currentSound.stopAsync();
       await currentSound.unloadAsync();
+      setCurrentSound(null);
     }
     const sound = new Audio.Sound();
     try {
-      await sound.loadAsync({ uri: soundUri });
-      setCurrentSound(sound);
-      await sound.playAsync();
+      const soundLoaded =  (await sound.loadAsync({ uri: soundUri })).isLoaded
+      if(soundLoaded){
+        setCurrentSound(sound);
+        await sound.playAsync();
+      }
+
     } catch (error) {
       console.error("Error ", error);
     }
   };
 
   useEffect(() => {
-    if (items.length > 0) {
+    if (items.length > 0 ) {
       playSound(items[0].preview_url);
     }
 
-    return () => {
-      if (currentSound) {
-        currentSound.stopAsync();
-        currentSound.unloadAsync();
-        setCurrentSound(null);
-      }
-    };
+
   }, [items]);
 
   const removeTopCard = useCallback(async () => {
@@ -92,13 +90,27 @@ export const SwipeCard = <T,>({ children, items, setItems }: any) => {
   };
   useFocusEffect(
     useCallback(() => {
+       const playCurrentSound = async () => {
+        if (isFocused && currentSound) {
+          const status = await currentSound.getStatusAsync().catch(console.log);
+          if (status?.isLoaded && !status.isPlaying) {
+            await currentSound.playAsync().catch(console.log);
+          }
+        }
+      };
+
+      playCurrentSound();
       const onBlur = async () => {
-        currentSound?.stopAsync();
-        currentSound?.unloadAsync();
+        if (currentSound) {
+          const status = await currentSound.getStatusAsync();
+          if (status?.isLoaded) {
+            currentSound.pauseAsync();
+          }
+        }
       };
 
       return () => onBlur();
-    }, [currentSound])
+    }, [currentSound, isFocused])
   );
   return (
     <View>

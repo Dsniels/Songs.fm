@@ -17,7 +17,6 @@ export default function music() {
       fetchData().then((traks: any) =>
         setData((prev: any) => [...prev, ...traks])
       );
-      console.log(data.length);
     }
   }, [data]);
 
@@ -30,24 +29,21 @@ export default function music() {
   }, []);
 
   const fetchData = async () => {
-    const data_response: any = await getRecomendations();
-    console.log('dara response',data_response.length)
+    const data_response: any = await getRecomendations() || [];
     const to_process = data_response
       .filter((i: any) => i.preview_url === null)
       .map((i: any) => i.id)
       .toString();
-      console.log('to process', to_process.split(',').length)
     const new_Data : any = await getListOfSongs(to_process);
-    console.log('new data', new_Data.filter((i:any)=>i.preview_url !== null).length);
     const data_merge = { ...new_Data, ...data_response };
-    const data_result = Object.values(data_merge);
+    const data_result = Object.values(data_merge).filter((i:any)=>i.preview_url !== null);
     const extractedData = data_result.map((track: any) => ({
       id: track.id,
       name: track.name,
       image: track.album.images[0]?.url || null,
       artist: track.artists[0]?.name || "",
       preview_url: track.preview_url,
-    })).filter((i:any)=>i.preview_url !== null);
+    }))
     console.log(extractedData.length);
     return extractedData;
   };
