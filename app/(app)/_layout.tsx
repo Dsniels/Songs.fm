@@ -2,7 +2,7 @@ import { refreshToken } from "@/Api/SpotifyAuth";
 import { getprofile } from "@/Api/UserAction";
 import { useStateValue } from "@/Context/store";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Stack } from "expo-router";
+import { router, Stack } from "expo-router";
 import { useEffect, useState } from "react";
 
 export default function Applayout() {
@@ -28,9 +28,12 @@ export default function Applayout() {
 
       const token = (await AsyncStorage.getItem("token")) || false;
       console.log(token);
+      if(!token){
+        router.push('/login')
+      }
       if (!servidorResponse && token) {
-        await getprofile(dispatch);
-        setServidorResponse(true);
+        await getprofile(dispatch).then(()=>setServidorResponse(true));
+        console.log(sesionUsuario)
       }
     };
     getData();

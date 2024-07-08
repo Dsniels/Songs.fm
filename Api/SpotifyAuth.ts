@@ -64,7 +64,7 @@ export const refreshToken = async () : Promise<AxiosResponse<any>>=>{
                         expira.setSeconds(expira.getSeconds() + 3600 );
                         response.data.expira = expira;
                         checkToken(expira);
-                        setTimeout(refreshToken,3600000)
+                         setTimeout(refreshToken,3600000)
                         await AsyncStorage.setItem('token', response.data.access_token);
                         resolve(response)
                       })

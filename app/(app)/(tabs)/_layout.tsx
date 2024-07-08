@@ -17,6 +17,15 @@ export default function TabLayout() {
         tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
         headerShown: false,
       }}>
+             <Tabs.Screen
+        name='music'
+        options={{
+          title : 'Music',
+          tabBarIcon : ({color, focused}) => (
+            <TabBarIcon name={focused? 'musical-note' : 'musical-note-outline'} color={color}/>
+          )
+        }}
+      />
       <Tabs.Screen
         name="index"
         options={{
@@ -26,15 +35,7 @@ export default function TabLayout() {
           ),
         }}
       />
-      <Tabs.Screen
-        name='music'
-        options={{
-          title : 'Music',
-          tabBarIcon : ({color, focused}) => (
-            <TabBarIcon name={focused? 'musical-note' : 'musical-note-outline'} color={color}/>
-          )
-        }}
-      />
+ 
       <Tabs.Screen
         name="perfil"
         options={{

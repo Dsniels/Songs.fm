@@ -15,28 +15,12 @@ export default function HomeScreen() {
 
 
     const deleteToken=async()=>{
-      await AsyncStorage.removeItem('token').then(()=>{
+      await AsyncStorage.clear().then(()=>{
         router.push('/login')
       });
     }
 
 
-useFocusEffect(
-  useCallback(() => {
-
-    const fetchData = async()=>{
-      const token = await AsyncStorage.getItem('token') || false;
-      if(!token){
-        router.push('/login')
-      }
-    }
-    fetchData();
-    //deleteToken();
-
-    return () => {
-    };
-  }, [])
-);
  
 
 

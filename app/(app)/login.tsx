@@ -53,7 +53,9 @@ export default function login() {
 
   useEffect(() => {
     if (response?.type === "success") {
+
       const { code } = response.params;
+      console.log(code);
       handleResponse(code);
       storeData("code", code);
     }
