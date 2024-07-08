@@ -9,17 +9,17 @@ import {
 } from "react-native";
 import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { ThemedText } from "@/components/ThemedText";
-import { useCallback, useEffect, useState } from "react";
+import {  useEffect, useState } from "react";
 import { useStateValue } from "@/Context/store";
 import { getTop } from "@/Api/SongsActions";
 import { styles } from "@/Styles/styles";
 import { LinearGradient } from "expo-linear-gradient";
 import { topGeneros } from "@/service/TopGeners";
-import { seedArtist, seedLongTracks, seedTracks } from "@/service/seeds";
+import { seedArtist,seedTracks } from "@/service/seeds";
+import { green } from "react-native-reanimated/lib/typescript/reanimated2/Colors";
 export default function TabTwoScreen() {
   const [{ sesionUsuario }, dispatch] = useStateValue();
   const [refreshing, setRefreshing] = useState(false);
-  const [scrollPosition, setScrollPosition] = useState(0);
   const [generos, setGeneros] = useState<{ name: string; value: number }[]>([]);
   const [usuario, setUsuario] = useState({
     display_name: "",
@@ -38,24 +38,15 @@ export default function TabTwoScreen() {
   });
 
   useEffect(() => {
+    console.log(sesionUsuario)
     if (sesionUsuario?.usuario) {
+      console.log(sesionUsuario)
       setUsuario(sesionUsuario.usuario);
     }
   }, [sesionUsuario, refreshing]);
 
-  const onRefresh = useCallback(() => {
-    if (scrollPosition <= 0) {
-      // Verifica si el usuario está en la parte superior de la pantalla
-      setRefreshing(true);
-      setTimeout(() => {
-        setRefreshing(false);
-      }, 2000);
-    }
-  }, [scrollPosition]);
-  const handleScroll = (event: any) => {
-    const position = event.nativeEvent.contentOffset.y;
-    setScrollPosition(position);
-  };
+
+  
   const fetchData = async () => {
     const data: any = await getTop("artists", requestArtist.offset);
     setRequestArtist((prev) => ({
@@ -72,7 +63,6 @@ export default function TabTwoScreen() {
       ...prev,
       songs: data.items,
     }));
-    seedLongTracks(data);
     seedTracks(data);
   };
 
@@ -86,9 +76,9 @@ export default function TabTwoScreen() {
       <ScrollView
         contentContainerStyle={styles.scrollView}
         refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          <RefreshControl refreshing={refreshing}  />
         }
-        onScroll={handleScroll}
+
       >
         <ParallaxScrollView
           headerBackgroundColor={{ light: "#D0D0D0", dark: "#353636" }}
@@ -111,10 +101,20 @@ export default function TabTwoScreen() {
               </ThemedText>
               {generos ? (
                 generos.map((item: any) => (
-                  <View key={item.name}>
+                  <View style={{margin:10}} key={item.name}>
                     <ThemedText type="defaultSemiBold">
-                      {item.name} {item.value}
+                      {item.name} 
                     </ThemedText>
+                  <View style={{ height: 10, backgroundColor: 'green', width: 200, borderRadius: 5 }}>
+                      <View
+                        style={{
+                          backgroundColor: 'blue',
+                          height: '100%',
+                          width: `${item.value * 10}%`,
+                          borderRadius: 5,
+                        }}
+                      ></View>
+                    </View>
                   </View>
                 ))
               ) : (
