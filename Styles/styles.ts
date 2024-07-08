@@ -115,7 +115,7 @@ export const styles = StyleSheet.create({
       color: 'white',
 
       textShadowColor: 'black',
-      textShadowRadius: 10,
+      textShadowRadius: 13,
     },
     scrollView: {
     flex: 1,

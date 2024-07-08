@@ -1,6 +1,7 @@
 import { styles } from "@/Styles/styles";
 import { CardType } from "@/types/Card.types";
 import { View, Image, Text } from "react-native";
+import { ThemedText } from "./ThemedText";
 
 const Card = ({ card, isFirst, swipe }: { card: CardType, isFirst: any, swipe: any }) => {
   return (
@@ -11,7 +12,9 @@ const Card = ({ card, isFirst, swipe }: { card: CardType, isFirst: any, swipe: a
         resizeMode="cover"
       />
       <View style={styles.CardDescription}>
-        <Text style={styles.cardContent}> {`${card.name},${card.artist}`}</Text>
+        <ThemedText type="defaultSemiBold" style={styles.cardContent}> {`${card.name}`}</ThemedText>
+        <ThemedText type="default" style={[styles.cardContent, {fontSize:16}]}> {`${card.artist}`}</ThemedText>
+
       </View>
     </View>
   );
