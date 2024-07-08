@@ -32,15 +32,12 @@ useFocusEffect(
     }
     fetchData();
     //deleteToken();
-    // Opcional: Retornar una función de limpieza si es necesario
+
     return () => {
-      // Código de limpieza aquí
     };
   }, [])
 );
-  const toLogin = () => {
-    Navigator({} )
-  }
+ 
 
 
   return (
@@ -60,7 +57,7 @@ useFocusEffect(
         <ThemedText type='subtitle'>Conecta tu cuenta de Spotify</ThemedText>
           <Link style={styles.LinkLogin}  href='/login'>
             <Pressable >
-              <Text style={{color:'white', fontStyle:'normal', fontWeight:"bold"}}   >Login</Text>
+              <Text style={{color:'white', fontStyle:'normal', fontWeight:"bold"}}>Login</Text>
             </Pressable>
           </Link>
           <Button title='delete token' onPress={deleteToken} />

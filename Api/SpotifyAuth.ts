@@ -1,5 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import axios, { Axios, AxiosResponse } from "axios";
+import axios, { AxiosResponse } from "axios";
 import * as AuthSession from 'expo-auth-session';
 import { REACT_APP_CLIENTE_ID, REACT_APP_CLIENTE_SECRET } from '@env'; // Asegúrate de tener CLIENTE_SECRET disponible
 import { Buffer } from 'buffer'; // Importa Buffer de la librería 'buffer'
@@ -27,7 +27,6 @@ export const getAccessToken = async(code: string, dispatch:Dispatch<any>) => {
         instancia.post("https://accounts.spotify.com/api/token", qs.stringify(data),  {headers}).then((response: AxiosResponse<any>) => {
             const expira = new Date();
             expira.setSeconds(expira.getSeconds() + 3600);
-            console.log('token response', response.data)
             response.data.expira = expira;
             resolve(response)
         }).catch((e: any) => {
@@ -39,9 +38,9 @@ export const getAccessToken = async(code: string, dispatch:Dispatch<any>) => {
 
 
 export const checkToken = async (expira:any)=>{
-    const date = new Date();
-    if(date >= expira){
-        AsyncStorage.removeItem('token');
+    const date_actual = new Date();
+    if(date_actual >= expira){
+        await AsyncStorage.removeItem('token');
     }else{
         await AsyncStorage.setItem('expira', expira.toString());
     }
@@ -60,15 +59,12 @@ export const refreshToken = async () : Promise<AxiosResponse<any>>=>{
     return new Promise((resolve, reject)  =>{
         instancia.post('https://accounts.spotify.com/api/token',qs.stringify(body),{headers})
                 .then( async (response: AxiosResponse) =>{
-                    console.log('response refres', response.data)
             
                         const expira = new Date();
                         expira.setSeconds(expira.getSeconds() + 3600 );
                         response.data.expira = expira;
                         checkToken(expira);
-                        setTimeout(()=>{
-                            refreshToken()
-                        },3600000)
+                        setTimeout(refreshToken,3600000)
                         await AsyncStorage.setItem('token', response.data.access_token);
                         resolve(response)
                       })

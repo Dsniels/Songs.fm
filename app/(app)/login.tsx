@@ -1,75 +1,69 @@
-import { Button, Pressable, Text, View } from "react-native";
-import * as AuthSession from 'expo-auth-session';
-import { useEffect, useState } from "react";
-import * as WebBrowser from 'expo-web-browser';
+import { Button, Text } from "react-native";
+import * as AuthSession from "expo-auth-session";
+import { useEffect } from "react";
+import * as WebBrowser from "expo-web-browser";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ThemedView } from "@/components/ThemedView";
 import { ThemedText } from "@/components/ThemedText";
-import {REACT_APP_CLIENTE_ID} from '@env';
+import { REACT_APP_CLIENTE_ID } from "@env";
 import { styles } from "@/Styles/styles";
-import { Link, Redirect, router } from "expo-router";
-
-import { AxiosResponse } from "axios";
-import { getprofile } from "@/Api/UserAction";
+import { router } from "expo-router";
 import { useStateValue } from "@/Context/store";
 import { checkToken, getAccessToken } from "@/Api/SpotifyAuth";
 
-
 WebBrowser.maybeCompleteAuthSession();
 export default function login() {
-  const [{sesionUsuario}, dispatch] = useStateValue();
-    
-    const URI = AuthSession.makeRedirectUri({native :'myapp://', path:'/login'})
-    const endpoints = { 
-      authorizationEndpoint: 'https://accounts.spotify.com/authorize',
-      tokenEndpoint: 'https://accounts.spotify.com/api/token',
-  }
+  const [{ sesionUsuario }, dispatch] = useStateValue();
 
-    const [request, response, promptAsync] = AuthSession.useAuthRequest(
-      {
-        clientId: REACT_APP_CLIENTE_ID || '',
-        scopes: ['user-read-email', 'user-read-private', 'user-top-read'],
-        responseType: 'code',
-        redirectUri: URI,
-        usePKCE:false
-      },
-      endpoints
-    );
-    const setData = async(data : any)=>{
-        await AsyncStorage.setItem('code',data);
+  const URI = AuthSession.makeRedirectUri({
+    native: "myapp://",
+    path: "/login",
+  });
+  const endpoints = {
+    authorizationEndpoint: "https://accounts.spotify.com/authorize",
+    tokenEndpoint: "https://accounts.spotify.com/api/token",
+  };
+
+  const [request, response, promptAsync] = AuthSession.useAuthRequest(
+    {
+      clientId: REACT_APP_CLIENTE_ID || "",
+      scopes: ["user-read-email", "user-read-private", "user-top-read"],
+      responseType: "code",
+      redirectUri: URI,
+      usePKCE: false,
+    },
+    endpoints
+  );
+  const storeData = async (key: string, data: string) => {
+    await AsyncStorage.setItem(key, data);
+  };
+
+  const handleResponse = async (code: string) => {
+    const { data }: any = await getAccessToken(code, dispatch);
+    const { refresh_token, access_token, expira } = data;
+    checkToken(expira);
+
+    await storeData("token", access_token);
+    await storeData("refresh_token", refresh_token);
+
+    if (access_token) {
+      router.replace("(tabs)");
     }
-    
-    useEffect(()=>{
-      const fetchData = async (code : string)=>{
-          const response :any= await getAccessToken(code, dispatch);
-          const refresh_token : string= response.data?.refresh_token;
-          const token : string = response.data?.access_token;
-          console.log(token)
-          const expira = response.data.expira;
-          console.log('token data ', response.data)
-          checkToken(expira);
-          await AsyncStorage.setItem('token', token);
-          await AsyncStorage.setItem('refresh_token', refresh_token);
-          if(token){
-           router.replace('(tabs)')
-          }
+  };
 
-        }
-         if(response?.type === 'success'){
-            const {code} = response.params;
-            fetchData(code);
-            setData(code);   
-        }
+  useEffect(() => {
+    if (response?.type === "success") {
+      const { code } = response.params;
+      handleResponse(code);
+      storeData("code", code);
+    }
+  }, [response]);
 
-    },[response, request])
-
-    return(
+  return (
     <ThemedView style={styles.stepContainer}>
-        <ThemedText type='subtitle'>Conecta tu cuenta de Spotify</ThemedText>
-          <Button title="Conectar" onPress={()=>promptAsync()}/>
-            <Text>Hola</Text>
-          
-      </ThemedView>
-
-    )
+      <ThemedText type="subtitle">Conecta tu cuenta de Spotify</ThemedText>
+      <Button title="Conectar" onPress={() => promptAsync()} />
+      <Text>Hola</Text>
+    </ThemedView>
+  );
 }
