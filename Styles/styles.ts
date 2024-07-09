@@ -4,10 +4,9 @@ const { height } = Dimensions.get('window')
 
 export const styles = StyleSheet.create({
     container : {
-    flex: 1,
-    backgroundColor: '#25292e',
-    alignItems: 'center',
-    justifyContent: 'center',
+      backgroundColor: '#25292e',
+      alignItems: 'center',
+      justifyContent: 'center',
     },
     textContainer : { 
         flexDirection : 'row',
@@ -76,29 +75,31 @@ export const styles = StyleSheet.create({
       
     },
     card:{
-      height: 600,
+      position:'absolute', top:25,
+      height: 750,
+      display:'flex',
       justifyContent: 'center',
       alignItems: 'center',
       backgroundColor: 'white',
-      borderRadius: 50,
+      borderRadius: 5,
       borderWidth:2,
       shadowColor: 'black',
       shadowOffset: {
         width: 0,
         height: 2,
       },
-      margin:20,
-      width:300,
-      shadowRadius: 6,
+      margin:30,
+      width:350,
+      shadowRadius: 8,
       shadowOpacity: 0.3,
-      elevation: 6,
+      elevation: 2,
       padding:0
     },
     imageCard:{
       borderRadius:20,
       flex:1,
-      width:300,
-      height:600
+      width:380,
+      height:750
     },
     CardDescription:{
       justifyContent: 'flex-end',
@@ -118,7 +119,6 @@ export const styles = StyleSheet.create({
       textShadowRadius: 13,
     },
     scrollView: {
-    flex: 1,
     backgroundColor: 'pink',
     alignItems: 'center',
     justifyContent: 'center',

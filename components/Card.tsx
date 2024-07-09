@@ -3,7 +3,7 @@ import { CardType } from "@/types/Card.types";
 import { View, Image, Text } from "react-native";
 import { ThemedText } from "./ThemedText";
 
-const Card = ({ card, isFirst, swipe }: { card: CardType, isFirst: any, swipe: any }) => {
+const Card = ({ card }: { card: CardType}) => {
   return (
     <View style={styles.card}>
       <Image

@@ -118,12 +118,12 @@ export const SwipeCard = <T,>({ children, items, setItems }: any) => {
         {items.map((item: any, index: number) => (
           <Animated.View
             key={index}
-            style={[index === 0 ? animatedCardStyle : {}]}
+            style={[index === 0 ? animatedCardStyle : {}, ]}
             {...(index === 0 ? panResponder.panHandlers : {})}
           >
             {children(item, swipe, index === 0)}
           </Animated.View>
-        ))}
+        )).reverse()}
       </View>
     </View>
   );
