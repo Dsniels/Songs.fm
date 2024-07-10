@@ -10,19 +10,35 @@ export const seedGeners=async(seedGeners:string)=>{
 
 }
 
-const extractIDs =(data:any)=>{
+const extractIDs =(data:any) : string[] =>{
     const fsd = data?.map((i:any)=>i.id)
     return fsd
 }
 
 
 export const seedTracks = async (data:any) =>{ 
-    const ids :any =extractIDs(data.items)
+    const seedPrev = await AsyncStorage.getItem('seedTrack') || false;
+    let ids :any =extractIDs(data.items)
+    if(seedPrev){
+        const seedArray = convertToArray(seedPrev);
+        ids = [...ids,...seedArray]
+        ids = new Set(ids);
+        ids = Array.from(ids);
+        console.log(ids);
+    }
     await AsyncStorage.setItem('seedTrack', ids.toString());
 }
 
 export const seedArtist = async (data : any)=>{
-    const ids = extractIDs(data.items);
+     const seedPrev = await AsyncStorage.getItem('seedArtists') || false;
+    let ids :any =extractIDs(data.items)
+    if(seedPrev){
+        const seedArray = convertToArray(seedPrev);
+        ids = [...ids,...seedArray]
+        ids = new Set(ids);
+        ids = Array.from(ids);
+        console.log(ids);
+    }
     await AsyncStorage.setItem('seedArtists', ids.toString())
 }
 
@@ -31,7 +47,7 @@ const randomIndex = (array : any[])=>{
 }
 
 const convertToArray =(string : string|null) =>{
-    return string?.split(',').slice(0) || []
+   return string?.split(',') || []
 }
 
 const getRandomSeedItem = async (key: string) => {
