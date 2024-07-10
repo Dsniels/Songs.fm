@@ -1,4 +1,4 @@
-import { RefreshControl, SafeAreaView, View } from "react-native";
+import { Pressable, RefreshControl, SafeAreaView, View } from "react-native";
 import React, { useCallback, useEffect, useState } from "react";
 import { ThemedText } from "@/components/ThemedText";
 import { styles } from "@/Styles/styles";
@@ -6,6 +6,7 @@ import { getListOfSongs, getRecomendations } from "@/Api/SongsActions";
 import Card from "@/components/Card";
 import Animated, { useAnimatedRef } from "react-native-reanimated";
 import { SwipeCard } from "@/components/SwipeCard";
+import { router } from "expo-router";
 
 export default function music() {
   const scrollRef = useAnimatedRef<Animated.ScrollView>();
@@ -44,32 +45,23 @@ export default function music() {
       artist: track.artists[0]?.name || "",
       preview_url: track.preview_url,
     }))
-    console.log(extractedData.length);
     return extractedData;
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Animated.ScrollView
-        style={{ margin: 0, padding: 0 }}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
-        ref={scrollRef}
-        scrollEventThrottle={16}
-      >
+    <SafeAreaView style={[styles.container, {width:'100%', height:'100%'}]}>
+
         {data.length >= 0 ? (
-          <View style={{ marginTop: 40 }}>
+          <View style={{  marginTop: 40 }}>
             <SwipeCard items={data} setItems={setData}>
               {(item: any, swipe: any, isFirst: any) => (
-                <Card swipe={swipe} card={item} isFirst={isFirst} />
+                <Card card={item}/>
               )}
             </SwipeCard>
           </View>
         ) : (
           <ThemedText type="subtitle">No Data</ThemedText>
         )}
-      </Animated.ScrollView>
     </SafeAreaView>
   );
 }
