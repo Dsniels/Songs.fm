@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Animated, Dimensions, PanResponder, View } from "react-native";
+import { Animated, Dimensions, PanResponder, Pressable, View } from "react-native";
 import { Audio } from "expo-av";
 import { useFocusEffect, useIsFocused } from "@react-navigation/native";
+import { router } from "expo-router";
 
 export const SwipeCard = <T,>({ children, items, setItems }: any) => {
   const { height } = Dimensions.get("screen");
@@ -112,6 +113,9 @@ export const SwipeCard = <T,>({ children, items, setItems }: any) => {
       return () => onBlur();
     }, [currentSound, isFocused])
   );
+  const getSongDetails =(Item:any)=>{
+    return router.push({pathname:`(app)/songsDetails/[song]`, params:{id:Item.id, name:Item.name}})
+  }
   return (
     <View>
       <View>
@@ -121,7 +125,10 @@ export const SwipeCard = <T,>({ children, items, setItems }: any) => {
             style={[index === 0 ? animatedCardStyle : {}, ]}
             {...(index === 0 ? panResponder.panHandlers : {})}
           >
-            {children(item, swipe, index === 0)}
+            <Pressable onPress={()=>getSongDetails(item)}>
+                  {children(item, swipe, index === 0)}
+            </Pressable>
+            
           </Animated.View>
         )).reverse()}
       </View>

@@ -111,12 +111,11 @@ export const styles = StyleSheet.create({
       bottom: 10,
     },
     cardContent :{
-      textAlign: 'center',
+      textAlign: 'left',
       fontSize: 20,
       color: 'white',
-
       textShadowColor: 'black',
-      textShadowRadius: 13,
+      textShadowRadius: 20,
     },
     scrollView: {
     backgroundColor: 'pink',

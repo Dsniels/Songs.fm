@@ -12,7 +12,7 @@ const Card = ({ card }: { card: CardType}) => {
         resizeMode="cover"
       />
       <View style={styles.CardDescription}>
-        <ThemedText type="defaultSemiBold" style={styles.cardContent}> {`${card.name}`}</ThemedText>
+        <ThemedText numberOfLines={2} type="defaultSemiBold" style={styles.cardContent}> {`${card.name}`}</ThemedText>
         <ThemedText type="default" style={[styles.cardContent, {fontSize:16}]}> {`${card.artist}`}</ThemedText>
 
       </View>
