@@ -1,15 +1,32 @@
-import { Tabs } from 'expo-router';
-import React from 'react';
+import { router, Tabs, useFocusEffect } from 'expo-router';
+import React, { useCallback, useEffect } from 'react';
 
 import { TabBarIcon } from '@/components/navigation/TabBarIcon';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { BlurView } from 'expo-blur';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
   
+useEffect(
+  useCallback(() => {
 
+    const fetchData = async()=>{
+      const token = await AsyncStorage.getItem('token') || false;
+      if(!token){
+        router.push('/login')
+      }
+    }
+    fetchData();
+    //deleteToken();
+
+    return () => {
+    };
+  }, [])
+);
   return (
     <Tabs
       screenOptions={{
@@ -17,7 +34,9 @@ export default function TabLayout() {
         tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
         headerShown: false,
       }}>
-             <Tabs.Screen
+       
+
+       <Tabs.Screen
         name='music'
         options={{
           title : 'Music',
@@ -46,6 +65,7 @@ export default function TabLayout() {
           ),
         }}
       />
+
     </Tabs>
   
   );

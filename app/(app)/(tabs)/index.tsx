@@ -5,8 +5,7 @@ import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { Link, Navigator, Redirect, router } from 'expo-router';
-import { makeRedirectUri } from 'expo-auth-session';
-import { useCallback, useEffect, useMemo } from 'react';
+
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from '@react-navigation/native';
 import { styles } from '@/Styles/styles';

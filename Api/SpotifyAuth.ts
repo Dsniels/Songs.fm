@@ -26,6 +26,7 @@ export const getAccessToken = async(code: string, dispatch:Dispatch<any>) => {
     return new Promise((resolve, reject) => {
         instancia.post("https://accounts.spotify.com/api/token", qs.stringify(data),  {headers}).then((response: AxiosResponse<any>) => {
             const expira = new Date();
+            console.log(response.data)
             expira.setSeconds(expira.getSeconds() + 3600);
             response.data.expira = expira;
             resolve(response)
@@ -40,7 +41,7 @@ export const getAccessToken = async(code: string, dispatch:Dispatch<any>) => {
 export const checkToken = async (expira:any)=>{
     const date_actual = new Date();
     if(date_actual >= expira){
-        await AsyncStorage.removeItem('token');
+        await AsyncStorage.removeItem('token').then(()=>console.log('removed'));
     }else{
         await AsyncStorage.setItem('expira', expira.toString());
     }
@@ -64,7 +65,7 @@ export const refreshToken = async () : Promise<AxiosResponse<any>>=>{
                         expira.setSeconds(expira.getSeconds() + 3600 );
                         response.data.expira = expira;
                         checkToken(expira);
-                         setTimeout(refreshToken,3600000)
+                        setTimeout(refreshToken,3600000)
                         await AsyncStorage.setItem('token', response.data.access_token);
                         resolve(response)
                       })

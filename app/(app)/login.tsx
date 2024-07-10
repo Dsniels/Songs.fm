@@ -41,23 +41,21 @@ export default function login() {
   const handleResponse = async (code: string) => {
     const { data }: any = await getAccessToken(code, dispatch);
     const { refresh_token, access_token, expira } = data;
+    console.log(access_token);
     checkToken(expira);
-
-    await storeData("token", access_token);
-    await storeData("refresh_token", refresh_token);
-
-    if (access_token) {
-      router.replace("(tabs)");
-    }
+  if (access_token) {
+        
+      await storeData("token", access_token).then(()=>{router.replace("(tabs)");})
+      await storeData("refresh_token", refresh_token);
+  }
+   
   };
 
   useEffect(() => {
     if (response?.type === "success") {
 
       const { code } = response.params;
-      console.log(code);
       handleResponse(code);
-      storeData("code", code);
     }
   }, [response]);
 
