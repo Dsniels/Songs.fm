@@ -6,6 +6,7 @@ import {
   ImageBackground,
   SafeAreaView,
   RefreshControl,
+  Pressable,
 } from "react-native";
 import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { ThemedText } from "@/components/ThemedText";
@@ -17,6 +18,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { topGeneros } from "@/service/TopGeners";
 import { seedArtist,seedTracks } from "@/service/seeds";
 import { green } from "react-native-reanimated/lib/typescript/reanimated2/Colors";
+import { router } from "expo-router";
 export default function TabTwoScreen() {
   const [{ sesionUsuario }, dispatch] = useStateValue();
   const [refreshing, setRefreshing] = useState(false);
@@ -45,7 +47,12 @@ export default function TabTwoScreen() {
     }
   }, [sesionUsuario, refreshing]);
 
-
+  const getDetails =(Item:any)=>{
+    return router.push({pathname:`(app)/Detalles/[name]`, params:{id:Item.id, name:Item.name}})
+  }
+  const getSongDetails =(Item:any)=>{
+    return router.push({pathname:`(app)/songsDetails/[song]`, params:{id:Item.id, name:Item.name}})
+  }
   
   const fetchData = async () => {
     const data: any = await getTop("artists", requestArtist.offset);
@@ -78,8 +85,7 @@ export default function TabTwoScreen() {
         refreshControl={
           <RefreshControl refreshing={refreshing}  />
         }
-
-      >
+>
         <ParallaxScrollView
           headerBackgroundColor={{ light: "#D0D0D0", dark: "#353636" }}
           headerImage={
@@ -129,7 +135,7 @@ export default function TabTwoScreen() {
 
             <ScrollView
               style={{
-                height: 270,
+                              height: 270,
                 borderStyle: "solid",
                 margin: 0,
                 borderColor: "green",
@@ -139,9 +145,11 @@ export default function TabTwoScreen() {
             >
               {requestArtist.artists ? (
                 requestArtist.artists?.map((item: any) => (
-                  <ImageBackground
+                  <Pressable style={{ elevation:270}}  key={item.id} onPress={()=>getDetails(item)}>                  
+                    <ImageBackground
+                    
                     key={item.id}
-                    style={styles.TopSongs}
+                    style={[styles.TopSongs]}
                     source={{
                       uri:
                         item.images[0].url ||
@@ -180,6 +188,8 @@ export default function TabTwoScreen() {
                       </View>
                     </LinearGradient>
                   </ImageBackground>
+                  </Pressable>
+
                 ))
               ) : (
                 <Text>None</Text>
@@ -200,6 +210,9 @@ export default function TabTwoScreen() {
             >
               {requestMusic ? (
                 requestMusic.songs?.map((item: any) => (
+                  <Pressable key={item.id} onPress={()=>getSongDetails(item)}>
+
+              
                   <ImageBackground
                     key={item.id}
                     style={styles.TopSongs}
@@ -241,6 +254,7 @@ export default function TabTwoScreen() {
                       </View>
                     </LinearGradient>
                   </ImageBackground>
+                      </Pressable>
                 ))
               ) : (
                 <Text>None</Text>
