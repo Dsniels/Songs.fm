@@ -1,37 +1,37 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import axios, { AxiosResponse } from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
 import * as AuthSession from 'expo-auth-session';
-import { REACT_APP_CLIENTE_ID, REACT_APP_CLIENTE_SECRET } from '@env'; // Asegúrate de tener CLIENTE_SECRET disponible
 import { Buffer } from 'buffer'; // Importa Buffer de la librería 'buffer'
 import qs from 'querystring'
 import { Dispatch } from "react";
+import * as Linking from 'expo-linking';
 
 
 
-const instancia = axios.create();
+const instancia = axios.create({
+    headers:{
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Authorization': 'Basic ' + (Buffer.from(process.env.EXPO_PUBLIC_CLIENTE_ID + ':' + process.env.EXPO_PUBLIC_CLIENTE_SECRET).toString('base64'))
+    }
+});
 
- const headers = {
-    'Content-Type': 'application/x-www-form-urlencoded',
-    'Authorization': 'Basic ' + (Buffer.from(REACT_APP_CLIENTE_ID + ':' +REACT_APP_CLIENTE_SECRET).toString('base64'))
-  };
 
 export const getAccessToken = async(code: string, dispatch:Dispatch<any>) => {
-    const URI = AuthSession.makeRedirectUri({ native: 'myapp://', path: '/login' })
+    const URI = Linking.createURL('login');
     const data = {
-        "code" :code,
-        "redirect_uri": URI,
+        "code" : code,
+        "redirect_uri": URI || '',
         "grant_type": 'authorization_code',
     };
-
     return new Promise((resolve, reject) => {
-        instancia.post("https://accounts.spotify.com/api/token", qs.stringify(data),  {headers}).then((response: AxiosResponse<any>) => {
+        instancia.post("https://accounts.spotify.com/api/token", data).then((response: AxiosResponse<any>) => {
             const expira = new Date();
             console.log(response.data)
             expira.setSeconds(expira.getSeconds() + 3600);
             response.data.expira = expira;
             resolve(response)
-        }).catch((e: any) => {
-            console.log(e)
+        }).catch((e: AxiosError) => {
+            console.log(JSON.stringify(e.request,null,2))
             resolve(e);
         })
     })
@@ -54,11 +54,8 @@ export const refreshToken = async () : Promise<AxiosResponse<any>>=>{
         'refresh_token' : refresh,
     }
 
- 
-    console.log('peticion para refrescar token')
-
-    return new Promise((resolve, reject)  =>{
-        instancia.post('https://accounts.spotify.com/api/token',qs.stringify(body),{headers})
+     return new Promise((resolve, reject)  =>{
+        instancia.post('https://accounts.spotify.com/api/token',qs.stringify(body))
                 .then( async (response: AxiosResponse) =>{
             
                         const expira = new Date();

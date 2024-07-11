@@ -1,14 +1,15 @@
-import { Axios, AxiosResponse } from "axios";
+import { Axios, AxiosError, AxiosResponse } from "axios";
 import HttpCliente from "../service/HttpCliente";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { seeds } from "@/service/seeds";
 
 export const getTop = (
   type: string,
-  offset: number = 0
+  offset: number = 0,
+  time_range: string,
 ): Promise<AxiosResponse<any>> => {
   return new Promise((resolve, reject) => {
-    HttpCliente.get(`/me/top/${type}?offset=${offset}&time_range=long_term`)
+    HttpCliente.get(`/me/top/${type}?offset=${offset}&time_range=${time_range}`)
       .then((response: AxiosResponse) => {
         resolve(response.data);
       })
@@ -27,24 +28,25 @@ export const getRecomendations = async (): Promise<any> => {
     HttpCliente.get(
       `/recommendations?seed_tracks=${songs}&seed_genres=${generos}&seed_artists=${artists}`
     )
-      .then((response: any) => {
+      .then((response: AxiosResponse) => {
+ 
         resolve(response.data?.tracks );
       })
-      .catch((e: any) => {
-        reject([]);
-        console.log(e);
+      .catch((e: AxiosError) => {
+        resolve(e);
+        console.log(e.message);
       });
   });
 };
 
-const similarSongs =async (id : string, features:any) : Promise<any> =>{
+/* const similarSongs =async (id : string, features:any) : Promise<any> =>{
   return new Promise((resolve, reject)=>{
     HttpCliente.get(`/recommendations?seed_tracks=${id}&target_danceability=${features.danceability}&target_energy=${features.energy}&target_instrumentalness=${features.instrumentalness}`)
                 .then((response)=>{
                   resolve(response.data || [])
                 })
   })
-}
+} */
 
 
 export const getListOfSongs = (
@@ -63,8 +65,8 @@ export const getListOfSongs = (
 
 export const getSongInfo = async (id:string) =>{
   const [info, features] = await Promise.all([songInfo(id), AudioFeatures(id)]);
-  const similar_songs = await similarSongs(id,features)
-  return {Info : info, Features : features, Similar : similar_songs};
+ // const similar_songs = await similarSongs(id,features) || []
+  return {Info : info, Features : features};
 }
 
 const songInfo = (id : string) =>{
