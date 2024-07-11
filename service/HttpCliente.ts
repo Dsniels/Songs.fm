@@ -1,13 +1,12 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { AccessTokenRequest } from "expo-auth-session";
-import {REACT_APP_BASE_URL} from '@env';
 const getToken = async()=>{
     const token = await AsyncStorage.getItem('token');
     return token;    
 }
 
-axios.defaults.baseURL = REACT_APP_BASE_URL;
+axios.defaults.baseURL = process.env.EXPO_PUBLIC_BASE_URL;
 
 axios.interceptors.request.use( async (config)=>{
     const token = await getToken()

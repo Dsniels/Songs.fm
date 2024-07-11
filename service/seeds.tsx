@@ -24,7 +24,6 @@ export const seedTracks = async (data:any) =>{
         ids = [...ids,...seedArray]
         ids = new Set(ids);
         ids = Array.from(ids);
-        console.log(ids);
     }
     await AsyncStorage.setItem('seedTrack', ids.toString());
 }
@@ -35,9 +34,8 @@ export const seedArtist = async (data : any)=>{
     if(seedPrev){
         const seedArray = convertToArray(seedPrev);
         ids = [...ids,...seedArray]
-        ids = new Set(ids);
+         ids = new Set(ids);
         ids = Array.from(ids);
-        console.log(ids);
     }
     await AsyncStorage.setItem('seedArtists', ids.toString())
 }

@@ -11,7 +11,7 @@ import { Audio } from "expo-av";
 interface ITrack {
   info: any;
   audioFeatures: any;
-  similarSongs : any;
+  similarSongs? : any;
 }
 
 const SongDetails = () => {
@@ -54,12 +54,11 @@ const SongDetails = () => {
   useEffect(() => {
     navigation.setOptions({ title: name, headerBlurEffect: "regular" });
     const fetchData = async () => {
-      const { Info, Features, Similar } = await getSongInfo(id);
+      const { Info, Features } = await getSongInfo(id);
       setTrack((prev)=>({
         ...prev,
         info: Info || {},
         audioFeatures: Features || {},
-        similarSongs : Similar.tracks 
       }));
       console.log(Track.similarSongs[0].album.images[0].url)
     };
@@ -113,13 +112,7 @@ const SongDetails = () => {
 
           </View>
           <View>
-            <ThemedText type="title">Similar Songs</ThemedText>
-            {Track.similarSongs?.map((item: any, index :number)=>(
-              <Pressable onPress={()=>getSongDetails(item)} key={index}>
-                <Image source={{uri:item?.album?.images[0].url}} style={{width:50, height:50}}/>
-                <ThemedText>{item.name}</ThemedText>
-              </Pressable>
-            ))}
+            
           </View>
         </View>
       ) : (
