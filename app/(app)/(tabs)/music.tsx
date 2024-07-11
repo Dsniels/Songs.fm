@@ -30,7 +30,10 @@ export default function music() {
   }, []);
 
   const fetchData = async () => {
-    const data_response: any = await getRecomendations() || [];
+    const data_response: any = await getRecomendations() || false;
+    if(!data_response){
+      return []
+    }
     const to_process = data_response
       .filter((i: any) => i.preview_url === null)
       .map((i: any) => i.id)
