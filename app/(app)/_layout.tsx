@@ -47,11 +47,13 @@ export default function Applayout() {
         router.push("/login");
       }
       if (!servidorResponse && token) {
-        await getprofile(dispatch).then(() => setServidorResponse(true));
+        await getprofile(dispatch).then(() => {
+          router.replace('/(tabs)')
+          setServidorResponse(true)});
       }
     };
     getData();
-  }, []);
+  }, [sesionUsuario]);
 
   return (
     <Stack screenOptions={{ headerTransparent: true }}>
@@ -60,8 +62,7 @@ export default function Applayout() {
         options={{
           headerShown: false,
           headerBlurEffect: "dark",
-          contentStyle: { backgroundColor: "#024554" },
-        }}
+         }}
       />
       <Stack.Screen
         name="login"
