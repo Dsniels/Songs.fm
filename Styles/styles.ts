@@ -33,7 +33,7 @@ export const styles = StyleSheet.create({
     display:"flex",
     flexWrap:'wrap',
     padding:10,
-    height:150,
+    height:500,
     alignItems:'center',
     textAlign:'center',
     justifyContent:'space-between',
