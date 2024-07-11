@@ -46,7 +46,7 @@ useEffect(
         }}
       />
       <Tabs.Screen
-        name="index"
+        name="Home"
         options={{
           title: 'Home',
           tabBarIcon: ({ color, focused }) => (
@@ -56,7 +56,7 @@ useEffect(
       />
  
       <Tabs.Screen
-        name="perfil"
+        name="index"
         options={{
           tabBarStyle:{backgroundColor:'0B0033'},
           title: 'Perfil',
