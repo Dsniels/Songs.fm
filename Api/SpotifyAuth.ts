@@ -5,6 +5,7 @@ import { Buffer } from 'buffer'; // Importa Buffer de la librería 'buffer'
 import qs from 'querystring'
 import { Dispatch } from "react";
 import * as Linking from 'expo-linking';
+import * as SecureStorage from 'expo-secure-store';
 
 
 
@@ -32,6 +33,7 @@ export const getAccessToken = async(code: string, dispatch:Dispatch<any>) => {
             resolve(response)
         }).catch((e: AxiosError) => {
             console.log(JSON.stringify(e.request,null,2))
+            throw new Error(`${e}`);
             resolve(e);
         })
     })
@@ -41,14 +43,14 @@ export const getAccessToken = async(code: string, dispatch:Dispatch<any>) => {
 export const checkToken = async (expira:any)=>{
     const date_actual = new Date();
     if(date_actual >= expira){
-        await AsyncStorage.removeItem('token').then(()=>console.log('removed'));
+        await SecureStorage.deleteItemAsync('token');
     }else{
-        await AsyncStorage.setItem('expira', expira.toString());
+        await SecureStorage.setItemAsync('expira', expira.toString());
     }
 }
 
 export const refreshToken = async () : Promise<AxiosResponse<any>>=>{
-    const refresh = await AsyncStorage.getItem('refresh_token');
+    const refresh = await SecureStorage.getItemAsync('refresh_token');
     const body = {
         'grant_type' : 'refresh_token',
         'refresh_token' : refresh,
@@ -63,7 +65,7 @@ export const refreshToken = async () : Promise<AxiosResponse<any>>=>{
                         response.data.expira = expira;
                         checkToken(expira);
                         setTimeout(refreshToken,3600000)
-                        await AsyncStorage.setItem('token', response.data.access_token);
+                        await SecureStorage.setItemAsync('token', response.data.access_token);
                         resolve(response)
                       })
                     .catch((e)=>{

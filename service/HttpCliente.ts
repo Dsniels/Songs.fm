@@ -1,8 +1,10 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { AccessTokenRequest } from "expo-auth-session";
+import * as SecureStorage from 'expo-secure-store';
+
 const getToken = async()=>{
-    const token = await AsyncStorage.getItem('token');
+    const token = await SecureStorage.getItemAsync('token');
     return token;    
 }
 

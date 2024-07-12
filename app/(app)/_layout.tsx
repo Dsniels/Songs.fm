@@ -6,6 +6,8 @@ import { LinearGradient } from "expo-linear-gradient";
 import { router, Stack, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
+import * as SecureStorage from 'expo-secure-store';
+
 const CustomHeader = () => {
   return (
     <View style={styles.header}>
@@ -24,36 +26,47 @@ const CustomHeader = () => {
 export default function Applayout() {
   const [{ sesionUsuario }, dispatch] = useStateValue();
   const [servidorResponse, setServidorResponse] = useState(false);
+  const [tokenValido, setTokenValido] = useState<boolean>(false)
+ 
 
   useEffect(() => {
-    const getData = async () => {
-      const validToken = await AsyncStorage.getItem("expira").then(
-        (fecha: string | null) => {
-          const Today = new Date();
-          const expiracion = new Date(fecha || "");
-
-          if (Today >= expiracion) {
-            return false;
-          }
-          return true;
+  const getData = async () => {
+    try {
+      const token = (await SecureStorage.getItemAsync("token")) || false;
+      if (!token) {
+        return router.push("/login");
+      }
+      
+      const fecha = await SecureStorage.getItemAsync("expira");
+      if (fecha === null) {
+        setTokenValido(false);
+      } else {
+        const Today = new Date();
+        const expiracion = new Date(fecha);
+        if (Today >= expiracion) {
+          setTokenValido(false);
+        } else {
+          setTokenValido(true);
         }
-      );
-      if (!validToken) {
+      }
+
+      if (!tokenValido) {
         await refreshToken();
       }
 
-      const token = (await AsyncStorage.getItem("token")) || false;
-      if (!token) {
-        router.push("/login");
-      }
       if (!servidorResponse && token) {
-        await getprofile(dispatch).then(() => {
-          router.replace('/(tabs)')
-          setServidorResponse(true)});
+        await getprofile(dispatch);
+        router.replace('/(tabs)');
+        setServidorResponse(true);
       }
-    };
-    getData();
-  }, [sesionUsuario]);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  getData();
+}, [sesionUsuario, tokenValido, servidorResponse, dispatch, router]);
+
 
   return (
     <Stack screenOptions={{ headerTransparent: true }}>

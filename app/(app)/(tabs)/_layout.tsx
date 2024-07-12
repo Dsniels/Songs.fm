@@ -7,6 +7,7 @@ import { useColorScheme } from '@/hooks/useColorScheme';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { BlurView } from 'expo-blur';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as SecureStorage from 'expo-secure-store';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
@@ -15,7 +16,7 @@ useEffect(
   useCallback(() => {
 
     const fetchData = async()=>{
-      const token = await AsyncStorage.getItem('token') || false;
+      const token = await SecureStorage.getItemAsync('token') || false;
       if(!token){
         router.push('/login')
       }

@@ -5,7 +5,7 @@ import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { Link, Navigator, Redirect, router } from 'expo-router';
-
+import * as SecureStorage from 'expo-secure-store';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from '@react-navigation/native';
 import { styles } from '@/Styles/styles';
@@ -14,13 +14,10 @@ export default function HomeScreen() {
 
 
     const deleteToken=async()=>{
-       AsyncStorage.clear().then(()=>{
+       SecureStorage.deleteItemAsync('token').then(()=>{
         router.push('/login')
       });
     }
-
-
- 
 
 
   return (
@@ -37,13 +34,14 @@ export default function HomeScreen() {
         <HelloWave />
       </ThemedView>
       <ThemedView style={styles.stepContainer}>
+      <Button color='blue' title='delete token' onPress={deleteToken} />
+
         <ThemedText type='subtitle'>Conecta tu cuenta de Spotify</ThemedText>
           <Link style={styles.LinkLogin}  href='/login'>
             <Pressable >
               <Text style={{color:'white', fontStyle:'normal', fontWeight:"bold"}}>Login</Text>
             </Pressable>
           </Link>
-          <Button title='delete token' onPress={deleteToken} />
       </ThemedView>
 
     

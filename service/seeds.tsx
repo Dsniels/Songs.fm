@@ -1,4 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage"
+import * as SecureStorage from 'expo-secure-store';
 
 
 
@@ -6,7 +7,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage"
 
 export const seedGeners=async(seedGeners:string)=>{
 
-    AsyncStorage.setItem('seedGeneros',seedGeners)
+    await SecureStorage.setItemAsync('seedGeneros',seedGeners)
 
 }
 
@@ -17,7 +18,7 @@ const extractIDs =(data:any) : string[] =>{
 
 
 export const seedTracks = async (data:any) =>{ 
-    const seedPrev = await AsyncStorage.getItem('seedTrack') || false;
+    const seedPrev = await SecureStorage.getItemAsync('seedTrack') || false;
     let ids :any =extractIDs(data.items)
     if(seedPrev){
         const seedArray = convertToArray(seedPrev);
@@ -25,11 +26,11 @@ export const seedTracks = async (data:any) =>{
         ids = new Set(ids);
         ids = Array.from(ids);
     }
-    await AsyncStorage.setItem('seedTrack', ids.toString());
+    await SecureStorage.setItemAsync('seedTrack', ids.toString());
 }
 
 export const seedArtist = async (data : any)=>{
-     const seedPrev = await AsyncStorage.getItem('seedArtists') || false;
+     const seedPrev = await SecureStorage.getItemAsync('seedArtists') || false;
     let ids :any =extractIDs(data.items)
     if(seedPrev){
         const seedArray = convertToArray(seedPrev);
@@ -37,7 +38,7 @@ export const seedArtist = async (data : any)=>{
          ids = new Set(ids);
         ids = Array.from(ids);
     }
-    await AsyncStorage.setItem('seedArtists', ids.toString())
+    await SecureStorage.setItemAsync('seedArtists', ids.toString())
 }
 
 const randomIndex = (array : any[])=>{
@@ -49,7 +50,7 @@ const convertToArray =(string : string|null) =>{
 }
 
 const getRandomSeedItem = async (key: string) => {
-  const seedString = await AsyncStorage.getItem(key);
+  const seedString = await SecureStorage.getItemAsync(key);
   const seedArray = convertToArray(seedString);
   return seedArray[randomIndex(seedArray)];
 };
