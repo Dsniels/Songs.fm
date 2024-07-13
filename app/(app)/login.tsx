@@ -32,7 +32,7 @@ export default function login() {
     {
       clientId: process.env.EXPO_PUBLIC_CLIENTE_ID || "",
       clientSecret : process.env.EXPO_PUBLIC_CLIENTE_SECRET || '',
-      scopes: ["user-read-email", "user-read-private", "user-top-read"],
+      scopes: ["user-read-email", "user-read-private", "user-top-read", "user-read-recently-played"],
       responseType: "code",
       redirectUri:  Linking.createURL('login') ,
       usePKCE: false,
@@ -43,7 +43,6 @@ export default function login() {
       try {
         await SecureStorage.setItemAsync(key, data);
       } catch (error) {
-        console.log(error)
         throw new Error(`${error}`);
       }
 
