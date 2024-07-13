@@ -4,7 +4,7 @@ const { height } = Dimensions.get('window')
 
 export const styles = StyleSheet.create({
     container : {
-      backgroundColor: '#25292e',
+      backgroundColor: '#000818',
       alignItems: 'center',
       justifyContent: 'center',
     },
@@ -16,11 +16,10 @@ export const styles = StyleSheet.create({
   titleContainer: {
     display:'flex',
     justifyContent:'center',
-    top: -10,
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
-    margin:0,
+    margin:20,
     padding:0
   },
   headerImage: {
@@ -74,6 +73,13 @@ export const styles = StyleSheet.create({
       borderRadius:50
       
     },
+    TopArtist :{
+      width:'100%',
+      height:'100%',
+      margin:20,
+      borderRadius:50
+      
+    },
     card:{
       position:'absolute', top:25,
       height: 750,
@@ -102,6 +108,7 @@ export const styles = StyleSheet.create({
       height:750
     },
     CardDescription:{
+      width:300,
       justifyContent: 'flex-end',
       alignItems: 'flex-start',
       flexDirection: 'column',
@@ -118,8 +125,9 @@ export const styles = StyleSheet.create({
       textShadowRadius: 20,
     },
     scrollView: {
-    backgroundColor: 'pink',
-    alignItems: 'center',
+      flex:1,
+            margin:20,
+      alignItems: 'center',
     justifyContent: 'center',
   },
 
