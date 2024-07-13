@@ -31,7 +31,7 @@ useEffect(
   return (
     <Tabs
       screenOptions={{
-
+        tabBarStyle:{backgroundColor:'#060C19'},
         tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
         headerShown: false,
       }}>

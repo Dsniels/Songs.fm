@@ -7,8 +7,8 @@ import { router, Stack, useFocusEffect, useLocalSearchParams } from "expo-router
 import { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import * as SecureStorage from 'expo-secure-store';
-import { DiscoveryDocument, refreshAsync, RefreshTokenRequestConfig, TokenResponse, TokenResponseConfig } from "expo-auth-session";
-type TokenConfigType = {
+import { DiscoveryDocument, GrantType, refreshAsync, RefreshTokenRequestConfig, TokenResponse, TokenResponseConfig } from "expo-auth-session";
+export type TokenConfigType = {
   access_token: string;
   expires_in: number;
   refresh_token: string;
@@ -37,7 +37,7 @@ export default function Applayout() {
   const [tokenValido, setTokenValido] = useState<boolean>(false)
  
 
-  useEffect(() => {
+
   const getData = async () => {
     try {
       const token = await SecureStorage.getItemAsync('token') || false;
@@ -64,12 +64,15 @@ export default function Applayout() {
         console.log(tokenResponse.shouldRefresh());
 
         if(isTokenExpired(TokenConfig)){
-          const refresConfig : RefreshTokenRequestConfig = {clientId:process.env.EXPO_PUBLIC_CLIENTE_ID || '', refreshToken : TokenConfig.refresh_token }
+/*           const refresConfig : any= {clientId:process.env.EXPO_PUBLIC_CLIENTE_ID || '', refreshToken : TokenConfig.refresh_token, grant_type:'refresh_token'  }
           console.log(refresConfig);
           const endpointRefres : Pick<DiscoveryDocument,"tokenEndpoint"> = {tokenEndpoint: "https://accounts.spotify.com/api/token"} 
           tokenResponse = await tokenResponse.refreshAsync(refresConfig,endpointRefres);
-          console.log(tokenResponse)
-          await SecureStorage.setItemAsync('TokenConfig', JSON.stringify(tokenResponse.getRequestConfig()))
+          console.log(tokenResponse) */
+          const Response = await refreshToken()
+          console.log('Response',Response)
+          await SecureStorage.setItemAsync('TokenConfig', JSON.stringify(Response))
+          setServidorResponse(false)
 
         }
         if (!servidorResponse) {
@@ -84,9 +87,16 @@ export default function Applayout() {
       console.error("Error fetching data:", error);
     }
   };
+  useEffect(() => {
+    getData(); 
 
-  getData();
-}, [sesionUsuario, servidorResponse, dispatch]);
+    const intervalId = setInterval(() => {
+      getData();
+    }, 5 * 60 * 1000); 
+
+    return () => clearInterval(intervalId);
+  }, [servidorResponse, dispatch]);
+
  
 
   return (

@@ -6,6 +6,7 @@ import * as SecureStorage from 'expo-secure-store';
 const getToken = async()=>{
     const token = await SecureStorage.getItemAsync('token');
     return token;    
+
 }
 
 axios.defaults.baseURL = process.env.EXPO_PUBLIC_BASE_URL;
