@@ -8,7 +8,12 @@ import {
 } from "react-native";
 import React, { useCallback, useEffect, useState } from "react";
 import { ThemedText } from "@/components/ThemedText";
-import { router, useFocusEffect, useLocalSearchParams, useNavigation } from "expo-router";
+import {
+  router,
+  useFocusEffect,
+  useLocalSearchParams,
+  useNavigation,
+} from "expo-router";
 import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { getSongInfo } from "@/Api/SongsActions";
 import { ThemeProvider, useIsFocused } from "@react-navigation/native";
@@ -24,7 +29,7 @@ interface ITrack {
 
 const SongDetails = () => {
   const [currentSound, setCurrentSound] = useState<Audio.Sound | null>(null);
-  const isFocused = useIsFocused()
+  const isFocused = useIsFocused();
 
   const playSound = async (soundUri: string) => {
     if (currentSound) {
@@ -60,7 +65,7 @@ const SongDetails = () => {
     name?: string;
     id?: string;
   }>();
-useFocusEffect(
+  useFocusEffect(
     useCallback(() => {
       const onBlur = async () => {
         if (currentSound) {
@@ -93,10 +98,13 @@ useFocusEffect(
       params: { id: Item.id, name: Item.name },
     });
   };
-    const getDetails =(Item:any)=>{
-    return router.replace({pathname:`(app)/Detalles/[name]`, params:{id:Item.id, name:Item.name}})
-  }
-  
+  const getDetails = (Item: any) => {
+    return router.replace({
+      pathname: `(app)/Detalles/[name]`,
+      params: { id: Item.id, name: Item.name },
+    });
+  };
+
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: "#D0D0D0", dark: "#353636" }}
@@ -105,7 +113,7 @@ useFocusEffect(
           source={{
             uri:
               Track.info?.album?.images?.[0]?.url ||
-              "https://images.pexels.com/photos/145707/pexels-photo-145707.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+              "https://th.bing.com/th/id/OIP.dfpjYr0obWlvVKnjJ9ccyQHaHJ?rs=1&pid=ImgDetMain",
           }}
           style={{ width: "100%", height: 400 }}
         />
@@ -125,14 +133,13 @@ useFocusEffect(
               alignItems: "center",
             }}
           >
-            <ScrollView horizontal >
-            {Track.info.artists?.map((item: any, index: number) => (
-              <Pressable onPress={()=>getDetails(item)} key={index}>
+            <ScrollView horizontal>
+              {Track.info.artists?.map((item: any, index: number) => (
+                <Pressable style={{margin:10}} onPress={() => getDetails(item)} key={index}>
                   <ThemedText type="default">{item.name}</ThemedText>
-
-              </Pressable>
-            ))}
-                          </ScrollView>
+                </Pressable>
+              ))}
+            </ScrollView>
 
             {currentSound === null ? (
               <Pressable
@@ -156,7 +163,7 @@ useFocusEffect(
               flexWrap: "wrap",
             }}
           >
-            <ThemedText style={{marginBottom:10}} type="subtitle">
+            <ThemedText style={{ marginBottom: 10 }} type="subtitle">
               Caracteristicas de la cancion
             </ThemedText>
             <View style={styles.caracteristica}>
@@ -232,7 +239,7 @@ useFocusEffect(
                   style={{
                     backgroundColor: "#091F98",
                     height: "100%",
-                    width: `${Track.audioFeatures.instrumentalness * 1000}%`,
+                    width: `${Track.audioFeatures.instrumentalness * 100}%`,
                     borderRadius: 5,
                   }}
                 ></View>

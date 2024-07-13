@@ -12,7 +12,7 @@ import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { ThemedText } from "@/components/ThemedText";
 import {  useEffect, useState } from "react";
 import { useStateValue } from "@/Context/store";
-import { getTop } from "@/Api/SongsActions";
+import { getRecentlySongs, getTop } from "@/Api/SongsActions";
 import { styles } from "@/Styles/styles";
 import { LinearGradient } from "expo-linear-gradient";
 import { topGeneros } from "@/service/TopGeners";
@@ -41,11 +41,15 @@ export default function TabTwoScreen() {
     offsetSongs: 0,
   });
   const onRefresh =()=>{
-          setUsuario(sesionUsuario.usuario);
-    setRefreshing(true)
+        setRefreshing(true)
+
+    if(sesionUsuario?.usuario){
+     setUsuario(sesionUsuario.usuario);
+         setRefreshing(false)
+
+    }
   }
   useEffect(() => {
-    console.log(sesionUsuario)
     if (sesionUsuario?.usuario) {
       setUsuario(sesionUsuario.usuario);
       setRefreshing(false);
@@ -69,18 +73,26 @@ export default function TabTwoScreen() {
     const top: { name: string; value: number }[] = topGeneros(data);
     setGeneros(top);
   };
+
   const fetchSongs = async () => {
-    const data: any = await getTop("tracks", requestMusic.offsetSongs, selectDate);
+    const recently: any = await getRecentlySongs();
+    const data: any= await getTop("tracks", requestMusic.offsetSongs, selectDate);
     setRequestMusic((prev) => ({
       ...prev,
       songs: data.items,
     }));
-    seedTracks(data);
+    let newArray: any[] = []
+    recently.items.map((item : any)=>{
+      newArray.push(item.track)
+    })
+    seedTracks(newArray)
+    seedTracks(data.items);
   };
 
   useEffect(() => {
     fetchSongs();
     fetchData();
+
   }, [selectDate]);
 
   return (
@@ -97,9 +109,9 @@ export default function TabTwoScreen() {
             <View style={{margin:20,display:'flex',alignItems:'center', flexDirection:'row' }}>
               <ThemedText type="defaultSemiBold" >Estadisticas</ThemedText>
             <Picker dropdownIconColor='white'  mode="dialog" style={{color:'white',width:250}} selectedValue={selectDate} onValueChange={(value)=>setSelectDate(value)}>
-              <Picker.Item label="en el ultimo mes" value={'short_term'}/>
-              <Picker.Item label="en los ultimos 6 meses" value={'medium_term'}/>
-              <Picker.Item label="en el ultimo Año" value={'long_term'}/>
+              <Picker.Item color="#060C19" label="en el ultimo mes" value={'short_term'}/>
+              <Picker.Item color="#060C19" label="en los ultimos 6 meses" value={'medium_term'}/>
+              <Picker.Item color="#060C19" label="en el ultimo Año" value={'long_term'}/>
             </Picker>
             </View>
             <View style={{ margin: 10 }}>

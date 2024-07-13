@@ -1,6 +1,5 @@
 import { Axios, AxiosError, AxiosResponse } from "axios";
 import HttpCliente from "../service/HttpCliente";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { seeds } from "@/service/seeds";
 
 export const getTop = (
@@ -47,7 +46,15 @@ export const getRecomendations = async (): Promise<any> => {
                 })
   })
 } */
-
+export const getRecentlySongs =()=>{
+  return new Promise((resolve, reject)=>{
+    HttpCliente.get('/me/player/recently-played?limit=20').then((response)=>{
+      resolve(response.data)
+    }).catch((e)=>{
+      console.log(e);
+      resolve})
+  })
+}
 
 export const getListOfSongs = (
   tracks: string[]
