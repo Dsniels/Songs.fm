@@ -14,6 +14,7 @@ export default function HomeScreen() {
 
 
     const deleteToken=async()=>{
+     await  AsyncStorage.clear();
        SecureStorage.deleteItemAsync('token').then(()=>{
         router.push('/login')
       });

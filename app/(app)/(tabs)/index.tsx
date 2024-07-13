@@ -40,11 +40,15 @@ export default function TabTwoScreen() {
     songs: [],
     offsetSongs: 0,
   });
-
+  const onRefresh =()=>{
+          setUsuario(sesionUsuario.usuario);
+    setRefreshing(true)
+  }
   useEffect(() => {
-
+    console.log(sesionUsuario)
     if (sesionUsuario?.usuario) {
       setUsuario(sesionUsuario.usuario);
+      setRefreshing(false);
     }
   }, [sesionUsuario, refreshing]);
 
@@ -80,47 +84,39 @@ export default function TabTwoScreen() {
   }, [selectDate]);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[styles.container]}>
       <ScrollView
-        contentContainerStyle={styles.scrollView}
+        contentContainerStyle={[styles.scrollView,]}
         refreshControl={
-          <RefreshControl refreshing={refreshing}  />
-        }
->
-        <ParallaxScrollView
-          headerBackgroundColor={{ light: "#D0D0D0", dark: "#353636" }}
-          headerImage={
-            <Image
-              source={{
-                uri: "https://images.pexels.com/photos/145707/pexels-photo-145707.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-              }}
-              style={{ width: 500, height: 300 }}
-            />
-          }
-        >
-          <View>
-            <View style={styles.titleContainer}>
+          <RefreshControl onRefresh={onRefresh} refreshing={refreshing}  />
+        }>
+          <View style={{margin:10}}>
+            <View style={[styles.titleContainer, {marginTop:70}]}>
               <ThemedText type="title">Hola {usuario.display_name}!</ThemedText>
             </View>
-            <Picker dropdownIconColor='white' mode="dialog" style={{color:'white'}} selectedValue={selectDate} onValueChange={(value)=>setSelectDate(value)}>
-              <Picker.Item label="En el ultimo mes" value={'short_term'}/>
-              <Picker.Item label="En los ultimos 6 meses" value={'medium_term'}/>
-              <Picker.Item label="En el ultimo Año" value={'long_term'}/>
+            <View style={{margin:20,display:'flex',alignItems:'center', flexDirection:'row' }}>
+              <ThemedText type="defaultSemiBold" >Estadisticas</ThemedText>
+            <Picker dropdownIconColor='white'  mode="dialog" style={{color:'white',width:250}} selectedValue={selectDate} onValueChange={(value)=>setSelectDate(value)}>
+              <Picker.Item label="en el ultimo mes" value={'short_term'}/>
+              <Picker.Item label="en los ultimos 6 meses" value={'medium_term'}/>
+              <Picker.Item label="en el ultimo Año" value={'long_term'}/>
             </Picker>
+            </View>
             <View style={{ margin: 10 }}>
               <ThemedText style={{ marginBottom: 10 }} type="subtitle">
                 Generos que mas escuchas
               </ThemedText>
+
               {generos ? (
                 generos.map((item: any) => (
                   <View style={{margin:10}} key={item.name}>
                     <ThemedText type="defaultSemiBold">
                       {item.name} 
                     </ThemedText>
-                  <View style={{ height: 10, backgroundColor: 'green', width: 200, borderRadius: 5 }}>
+                  <View style={{ height: 10, backgroundColor: '#14181E', width: 200, borderRadius: 5 }}>
                       <View
                         style={{
-                          backgroundColor: 'blue',
+                          backgroundColor: '#091F98',
                           height: '100%',
                           width: `${item.value * 10}%`,
                           borderRadius: 5,
@@ -130,22 +126,22 @@ export default function TabTwoScreen() {
                   </View>
                 ))
               ) : (
-                <Text>Null</Text>
+                <View style={{height:500,}}>
+  
+                </View>
               )}
 
               <ThemedText type="default"></ThemedText>
             </View>
-            <Text style={{ color: "white", fontWeight: "bold", marginTop: 50 }}>
+            <ThemedText type="subtitle" style={{ margin:20 ,color: "white", fontWeight: "bold", marginTop: 50 }}>
               Artistas que mas escuchas
-            </Text>
+            </ThemedText>
 
             <ScrollView
               style={{
-                              height: 270,
-                borderStyle: "solid",
+                height: 270,
                 margin: 0,
-                borderColor: "green",
-                borderWidth: 1,
+
               }}
               horizontal
             >
@@ -177,6 +173,7 @@ export default function TabTwoScreen() {
                           margin: 30,
                           width: 200,
                           padding: 20,
+                          borderRadius:400
                         }}
                         key={item.id}
                       >
@@ -201,17 +198,14 @@ export default function TabTwoScreen() {
                 <Text>None</Text>
               )}
             </ScrollView>
-            <Text style={{ color: "white", fontWeight: "bold", marginTop: 50 }}>
+            <ThemedText type="subtitle" style={{ margin:20,color: "white", fontWeight: "bold", marginTop: 50 }}>
               Canciones mas escuchadas
-            </Text>
+            </ThemedText>
             <ScrollView
               style={{
                 height: 250,
-                borderStyle: "solid",
-                margin: 0,
-                borderColor: "green",
-                borderWidth: 1,
-              }}
+                margin: 'auto',
+                }}
               horizontal
             >
               {requestMusic ? (
@@ -267,7 +261,7 @@ export default function TabTwoScreen() {
               )}
             </ScrollView>
           </View>
-        </ParallaxScrollView>
+      
       </ScrollView>
     </SafeAreaView>
   );
