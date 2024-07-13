@@ -72,10 +72,11 @@ const Detalles = () => {
 
     fetchData();
   }, [name, id, navigation]);
+
   const getSongDetails = (Item: any) => {
     return router.push({
       pathname: `(app)/songsDetails/[song]`,
-      params: { id: Item.id, name: Item.name },
+      params: { id: Item.id, name: Item.name, artists: Item.artists[0].name },
     });
   };
 
@@ -99,7 +100,7 @@ const Detalles = () => {
             <ThemedText type="subtitle">Popularidad:</ThemedText>
             <View
               style={{
-                marginTop:20,
+                marginTop: 20,
                 height: 10,
                 backgroundColor: "#14181E",
                 width: 200,
