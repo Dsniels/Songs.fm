@@ -82,7 +82,7 @@ export const SwipeCard = <T,>({ children, items, setItems }: any) => {
   }, [swipe, setItems, currentSound]);
 
   const rotate = Animated.multiply(swipe.x, titlSign).interpolate({
-    inputRange: [-100, 0, 100],
+    inputRange: [-500, 0, 500],
     outputRange: ["8deg", "0deg", "-8deg"],
   });
 
@@ -121,6 +121,7 @@ export const SwipeCard = <T,>({ children, items, setItems }: any) => {
       <View>
         {items.map((item: any, index: number) => (
           <Animated.View
+          
             key={index}
             style={[index === 0 ? animatedCardStyle : {}, ]}
             {...(index === 0 ? panResponder.panHandlers : {})}

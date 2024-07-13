@@ -41,19 +41,16 @@ export default function Applayout() {
   const getData = async () => {
     try {
       const token = await SecureStorage.getItemAsync('token') || false;
-      console.log(token)
       if (!token) {
         return router.push("/login");
       }
       const tokenSTRING = await SecureStorage.getItemAsync('TokenConfig') 
-          console.log(tokenSTRING)
 
         if (!tokenSTRING) {
           throw new Error('TokenConfig is missing');
         }
 
       const TokenConfig :TokenConfigType = JSON.parse(tokenSTRING);
-      console.log('Token COnfig',TokenConfig);
         const isTokenExpired = (tokenConfig: TokenConfigType): boolean => {
           const currentTime = Date.now();
           const expirationTime = TokenConfig.issued_at + (tokenConfig.expires_in * 1000);
@@ -61,7 +58,6 @@ export default function Applayout() {
         };
       if(TokenConfig){
         var tokenResponse = new TokenResponse({accessToken:TokenConfig.access_token, issuedAt:TokenConfig.issued_at, expiresIn:TokenConfig.expires_in, refreshToken:TokenConfig.refresh_token});
-        console.log(tokenResponse.shouldRefresh());
 
         if(isTokenExpired(TokenConfig)){
 /*           const refresConfig : any= {clientId:process.env.EXPO_PUBLIC_CLIENTE_ID || '', refreshToken : TokenConfig.refresh_token, grant_type:'refresh_token'  }
@@ -70,7 +66,6 @@ export default function Applayout() {
           tokenResponse = await tokenResponse.refreshAsync(refresConfig,endpointRefres);
           console.log(tokenResponse) */
           const Response = await refreshToken()
-          console.log('Response',Response)
           await SecureStorage.setItemAsync('TokenConfig', JSON.stringify(Response))
           setServidorResponse(false)
 
