@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import * as SecureStorage from 'expo-secure-store';
 import { DiscoveryDocument, GrantType, refreshAsync, RefreshTokenRequestConfig, TokenResponse, TokenResponseConfig } from "expo-auth-session";
+import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry";
 export type TokenConfigType = {
   access_token: string;
   expires_in: number;
@@ -52,23 +53,25 @@ export default function Applayout() {
 
       const TokenConfig :TokenConfigType = JSON.parse(tokenSTRING);
         const isTokenExpired = (tokenConfig: TokenConfigType): boolean => {
-          const currentTime = Date.now();
-          const expirationTime = TokenConfig.issued_at + (tokenConfig.expires_in * 1000);
+        const currentTime = Date.now()
+          console.log(currentTime);
+          const expirationTime = TokenConfig.issued_at + (tokenConfig.expires_in);
+          console.log(expirationTime)
           return currentTime >= expirationTime;
         };
       if(TokenConfig){
         var tokenResponse = new TokenResponse({accessToken:TokenConfig.access_token, issuedAt:TokenConfig.issued_at, expiresIn:TokenConfig.expires_in, refreshToken:TokenConfig.refresh_token});
-
+        console.log(isTokenExpired(TokenConfig))
         if(isTokenExpired(TokenConfig)){
+          console.log('refreshing')
 /*           const refresConfig : any= {clientId:process.env.EXPO_PUBLIC_CLIENTE_ID || '', refreshToken : TokenConfig.refresh_token, grant_type:'refresh_token'  }
           console.log(refresConfig);
           const endpointRefres : Pick<DiscoveryDocument,"tokenEndpoint"> = {tokenEndpoint: "https://accounts.spotify.com/api/token"} 
           tokenResponse = await tokenResponse.refreshAsync(refresConfig,endpointRefres);
           console.log(tokenResponse) */
           const Response = await refreshToken()
+          console.log(Response)
           await SecureStorage.setItemAsync('TokenConfig', JSON.stringify(Response))
-          setServidorResponse(false)
-
         }
         if (!servidorResponse) {
               await getprofile(dispatch);
@@ -83,8 +86,7 @@ export default function Applayout() {
     }
   };
   useEffect(() => {
-    getData(); 
-
+  getData();
     const intervalId = setInterval(() => {
       getData();
     }, 5 * 60 * 1000); 
