@@ -7,7 +7,7 @@ import * as SecureStorage from 'expo-secure-store';
 
 export const seedGeners=async(seedGeners:string)=>{
 
-    await SecureStorage.setItemAsync('seedGeneros',seedGeners)
+    await AsyncStorage.setItem('seedGeneros',seedGeners)
 
 }
 
@@ -18,19 +18,21 @@ const extractIDs =(data:any) : string[] =>{
 
 
 export const seedTracks = async (data:any) =>{ 
-    const seedPrev = await SecureStorage.getItemAsync('seedTrack') || false;
-    let ids :any =extractIDs(data.items)
+    const seedPrev = await AsyncStorage.getItem('seedTrack') || false;
+    let ids :string[] =extractIDs(data)
+    let newIds : any = []
     if(seedPrev){
         const seedArray = convertToArray(seedPrev);
         ids = [...ids,...seedArray]
-        ids = new Set(ids);
-        ids = Array.from(ids);
+        const merge = seedArray.concat(ids)
+        newIds = new Set(merge);
+        newIds = Array.from(ids);
     }
-    await SecureStorage.setItemAsync('seedTrack', ids.toString());
+    await AsyncStorage.setItem('seedTrack', ids.toString());
 }
 
 export const seedArtist = async (data : any)=>{
-     const seedPrev = await SecureStorage.getItemAsync('seedArtists') || false;
+     const seedPrev = await AsyncStorage.getItem('seedArtists') || false;
     let ids :any =extractIDs(data.items)
     if(seedPrev){
         const seedArray = convertToArray(seedPrev);
@@ -38,7 +40,7 @@ export const seedArtist = async (data : any)=>{
          ids = new Set(ids);
         ids = Array.from(ids);
     }
-    await SecureStorage.setItemAsync('seedArtists', ids.toString())
+    await AsyncStorage.setItem('seedArtists', ids.toString())
 }
 
 const randomIndex = (array : any[])=>{
@@ -50,7 +52,7 @@ const convertToArray =(string : string|null) =>{
 }
 
 const getRandomSeedItem = async (key: string) => {
-  const seedString = await SecureStorage.getItemAsync(key);
+  const seedString = await AsyncStorage.getItem(key);
   const seedArray = convertToArray(seedString);
   return seedArray[randomIndex(seedArray)];
 };
