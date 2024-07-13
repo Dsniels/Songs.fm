@@ -2,6 +2,10 @@ import { Axios, AxiosError, AxiosResponse } from "axios";
 import HttpCliente from "../service/HttpCliente";
 import { seeds } from "@/service/seeds";
 
+
+
+
+
 export const getTop = (
   type: string,
   offset: number = 0,
@@ -93,3 +97,5 @@ const AudioFeatures = (id:string) : Promise<any> =>{
     }).catch(resolve)
   })
 }
+
+
