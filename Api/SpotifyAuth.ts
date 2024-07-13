@@ -25,11 +25,8 @@ export const getAccessToken = async(code: string, dispatch:Dispatch<any>) => {
         "grant_type": 'authorization_code',
     };
     return new Promise((resolve, reject) => {
-        instancia.post("https://accounts.spotify.com/api/token", data).then((response: AxiosResponse<any>) => {
-            const expira = new Date();
-            console.log(response.data)
-            expira.setSeconds(expira.getSeconds() + 3600);
-            response.data.expira = expira;
+        instancia.post("https://accounts.spotify.com/api/token", data).then((response: AxiosResponse<AuthSession.ServerTokenResponseConfig>) => {
+            response.data.issued_at = Date.now()
             resolve(response)
         }).catch((e: AxiosError) => {
             console.log(JSON.stringify(e.request,null,2))
@@ -50,12 +47,16 @@ export const checkToken = async (expira:any)=>{
 }
 
 export const refreshToken = async () : Promise<AxiosResponse<any>>=>{
-    const refresh = await SecureStorage.getItemAsync('refresh_token');
+    const refresh = await SecureStorage.getItemAsync('refresh_token') ||'';
     const body = {
         'grant_type' : 'refresh_token',
         'refresh_token' : refresh,
     }
-
+/*     const discovery  =  AuthSession.useAutoDiscovery("https://accounts.spotify.com/api/token") ;
+    if (discovery) {
+         const TokenResponse = await AuthSession.refreshAsync({refreshToken:refresh, clientId:process.env.EXPO_PUBLIC_CLIENTE_ID || ''},discovery);
+         console.log(TokenResponse); */
+    
      return new Promise((resolve, reject)  =>{
         instancia.post('https://accounts.spotify.com/api/token',qs.stringify(body))
                 .then( async (response: AxiosResponse) =>{

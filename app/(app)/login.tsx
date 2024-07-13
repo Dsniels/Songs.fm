@@ -23,9 +23,10 @@ export default function login() {
     native: "myapp://",
     path: "/login",
   });
-  const endpoints = {
-    authorizationEndpoint: "https://accounts.spotify.com/authorize",
-    tokenEndpoint: "https://accounts.spotify.com/api/token",
+  
+  const discovery = {
+      authorizationEndpoint: "https://accounts.spotify.com/authorize",
+      tokenEndpoint: "https://accounts.spotify.com/api/token",
   };
   const [request, response, promptAsync] = AuthSession.useAuthRequest(
     {
@@ -36,7 +37,7 @@ export default function login() {
       redirectUri:  Linking.createURL('login') ,
       usePKCE: false,
     },
-    endpoints
+    discovery
   );
     const storeData = async (key: string, data: string) => {
       try {
@@ -48,29 +49,19 @@ export default function login() {
 
   };
 
-  const handleResponse = async (code: string) => {
-    const { data } : any = await getAccessToken(code, dispatch);
-    const { refresh_token, access_token, expira } = data;
-     checkToken(expira);
+  const handleResponse = async (AccessCode: string) => {
+     const  {data } : any = await getAccessToken(AccessCode, dispatch);
+     await SecureStorage.setItemAsync('TokenConfig', JSON.stringify(data))
+    const {  access_token} = data;
   if (access_token) {
-    setToken('daniel')
       await storeData("token", access_token)
-      setToken(access_token)
-      await storeData("refresh_token", refresh_token)
       router.replace("/(tabs)");
   }
    
   };
-  useEffect(()=>{
-    console.log(Linking.createURL('login'))
-console.log(request)
 
-    console.log('daniel')
-  },[request])
 
   useEffect(() => {
-    console.log(response)
-    console.log(request)
     if (response?.type === "success") {
       const { code } = response.params;
       setCode(code)
