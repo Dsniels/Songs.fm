@@ -15,11 +15,12 @@ import {
   useNavigation,
 } from "expo-router";
 import ParallaxScrollView from "@/components/ParallaxScrollView";
-import { getSongInfo } from "@/Api/SongsActions";
+import {  getSongInfo } from "@/Api/SongsActions";
 import { ThemeProvider, useIsFocused } from "@react-navigation/native";
 import { ThemedView } from "@/components/ThemedView";
 import { Audio } from "expo-av";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { getInfo } from "@/Api/AnnotatiosActions";
 
 interface ITrack {
   info: any;
@@ -30,7 +31,7 @@ interface ITrack {
 const SongDetails = () => {
   const [currentSound, setCurrentSound] = useState<Audio.Sound | null>(null);
   const isFocused = useIsFocused();
-
+  const [informacion, setInformacion] = useState('')
   const playSound = async (soundUri: string) => {
     if (currentSound) {
       await currentSound.stopAsync();
@@ -61,9 +62,10 @@ const SongDetails = () => {
     audioFeatures: {},
     similarSongs: [],
   });
-  const { name = "", id = "" } = useLocalSearchParams<{
+  const { name = "", id = "", artists='' } = useLocalSearchParams<{
     name?: string;
     id?: string;
+    artists?:string
   }>();
   useFocusEffect(
     useCallback(() => {
@@ -78,18 +80,34 @@ const SongDetails = () => {
       return () => onBlur();
     }, [currentSound, isFocused])
   );
+
+  const extractInfo = (node:any)=>{
+    let data = [];
+    if(typeof(node) === 'string' && node !== '.'){
+      data.push(node)
+    }else if(node.children){
+      node.children.map((i:any)=>{
+        data.push(extractInfo(i));
+      })
+    }
+    return data.join('');
+
+  }
   useEffect(() => {
     navigation.setOptions({ title: name, headerBlurEffect: "regular" });
-    const fetchData = async () => {
+      const fetchData = async () => {
       const { Info, Features } = await getSongInfo(id);
       setTrack((prev) => ({
         ...prev,
         info: Info || {},
         audioFeatures: Features || {},
       }));
-      console.log(Track.similarSongs[0].album.images[0].url);
+      const description = await getInfo(name, artists);
+      const informacion = description.map((item:any)=>extractInfo(item)).join(" ")
+      setInformacion(informacion);
+      
+
     };
-    console.log(name, id);
     fetchData();
   }, [navigation]);
   const getSongDetails = (Item: any) => {
@@ -133,9 +151,9 @@ const SongDetails = () => {
               alignItems: "center",
             }}
           >
-            <ScrollView horizontal>
+            <ScrollView horizontal style={{width:80}}>
               {Track.info.artists?.map((item: any, index: number) => (
-                <Pressable style={{margin:10}} onPress={() => getDetails(item)} key={index}>
+                <Pressable style={{borderRadius:40,margin:10, paddingHorizontal:8,backgroundColor:'#1F283D'}} onPress={() => getDetails(item)} key={index}>
                   <ThemedText type="default">{item.name}</ThemedText>
                 </Pressable>
               ))}
@@ -320,6 +338,10 @@ const SongDetails = () => {
               </View>
               <ThemedText style={{ fontSize: 12 }}>valence</ThemedText>
             </View>
+          </View>
+          <View style={{marginTop:30, marginBottom:20}}>
+            <ThemedText type="title">About</ThemedText>
+            <ThemedText style={{justifyContent:'center',textAlign:"justify"}}>{informacion}</ThemedText>
           </View>
         </View>
       ) : (
