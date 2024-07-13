@@ -7,6 +7,7 @@ import Card from "@/components/Card";
 import Animated, { useAnimatedRef } from "react-native-reanimated";
 import { SwipeCard } from "@/components/SwipeCard";
 import { router } from "expo-router";
+import SkeletonCard from "@/components/Skeleton";
 
 export default function music() {
   const scrollRef = useAnimatedRef<Animated.ScrollView>();
@@ -63,7 +64,7 @@ export default function music() {
             </SwipeCard>
           </View>
         ) : (
-          <ThemedText type="subtitle">No Data</ThemedText>
+          <SkeletonCard></SkeletonCard>
         )}
     </SafeAreaView>
   );

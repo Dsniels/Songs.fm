@@ -7,6 +7,7 @@ import { getSongInfo } from "@/Api/SongsActions";
 import { ThemeProvider } from "@react-navigation/native";
 import { ThemedView } from "@/components/ThemedView";
 import { Audio } from "expo-av";
+import Ionicons from "@expo/vector-icons/Ionicons";
 
 interface ITrack {
   info: any;
@@ -82,22 +83,33 @@ const SongDetails = () => {
         />
       }
     >
+      <View style={{top:-30, left:300}}>
+      
+          </View>
       {Track.info ? (
         <View>
           {Track.info.artists?.map((item: any, index: number) => (
-            <ThemedView key={index}>
+            <ThemedView style={{display:'flex', flexDirection:'row', justifyContent:'center'}} key={index}>
               <ThemedText type="title">{item.name}</ThemedText>
+              {currentSound === null ? (
+                  <Pressable
+                    style={styles.playButton}
+                    onPress={() => playSound(Track.info?.preview_url || " ")}
+                  >
+                    <Ionicons name="play" size={30} color="white" />
+                  </Pressable>
+                    ) : (
+                      <Pressable
+                    style={styles.playButton}
+                    onPress={() => pause()}
+                  >
+                    <Ionicons name="pause" size={30} color="white" />
+                  </Pressable>
+
+              )}
             </ThemedView>
           ))}
-          {currentSound === null ? (
-            <Pressable onPress={() => playSound(Track.info?.preview_url || "")}>
-              <ThemedText> Play</ThemedText>
-            </Pressable>
-          ) : (
-            <Pressable onPress={() => pause()}>
-              <ThemedText> stop</ThemedText>
-            </Pressable>
-          )}
+          
 
           <View>
             <ThemedText>
@@ -124,4 +136,19 @@ const SongDetails = () => {
 
 export default SongDetails;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  playButton: {
+    display: 'flex',
+    backgroundColor: 'green',
+    borderRadius: 100,
+    width: 50,
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});

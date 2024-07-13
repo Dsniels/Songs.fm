@@ -4,6 +4,7 @@ import { router, useLocalSearchParams, useNavigation } from 'expo-router';
 import { getArtistInformation } from '@/Api/ArtistsActions';
 import { ThemedText } from '@/components/ThemedText';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
+import SongDetails from '../songsDetails/[song]';
 
 interface Tracks {
   album: any;
@@ -50,6 +51,10 @@ const Detalles = () => {
 
     fetchData();
   }, [name, id, navigation]);
+    const getSongDetails =(Item:any)=>{
+    return router.push({pathname:`(app)/songsDetails/[song]`, params:{id:Item.id, name:Item.name}})
+  }
+
 
   return (
     <ParallaxScrollView
@@ -87,10 +92,10 @@ const Detalles = () => {
             <ThemedText type='subtitle'>Canciones Top</ThemedText>
             {infoArtist.songs.length > 0 ? (
               infoArtist.songs.map((item: Tracks) => (
-                <View key={item.id}>
+                <Pressable onPress={()=>getSongDetails(item)} key={item.id}>
                   <Image source={{ uri: item.album?.images?.[0]?.url }} style={{ width: 50, height: 50 }} />
                   <ThemedText numberOfLines={1} ellipsizeMode='clip' >{item.name}</ThemedText>
-                </View>
+                </Pressable>
               ))
             ) : (
               <ThemedText>No hay canciones disponibles</ThemedText>
