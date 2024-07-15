@@ -1,5 +1,6 @@
 import {
   Image,
+  Linking,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -9,6 +10,8 @@ import {
 import React, { useCallback, useEffect, useState } from "react";
 import { ThemedText } from "@/components/ThemedText";
 import {
+  Link,
+  Redirect,
   router,
   useFocusEffect,
   useLocalSearchParams,
@@ -43,7 +46,9 @@ const SongDetails = () => {
       const soundLoaded = (await sound.loadAsync({ uri: soundUri })).isLoaded;
       if (soundLoaded) {
         setCurrentSound(sound);
+        await sound.setIsLoopingAsync(true)
         await sound.playAsync();
+        
       }
     } catch (error) {
       console.error("Error ", error);
@@ -342,6 +347,12 @@ const SongDetails = () => {
           <View style={{marginTop:30, marginBottom:20}}>
             <ThemedText type="title">About</ThemedText>
             <ThemedText style={{justifyContent:'center',textAlign:"justify"}}>{informacion}</ThemedText>
+          </View>
+          <View style={{marginTop:30, marginBottom:20}}>
+            <ThemedText type="title">Links</ThemedText>
+            <Pressable onPress={()=>Linking.openURL(Track.audioFeatures.uri || '')}>
+            <ThemedText type="link" style={{justifyContent:'center',textAlign:"justify"}}>Escuchar en Spotify</ThemedText>
+            </Pressable>
           </View>
         </View>
       ) : (

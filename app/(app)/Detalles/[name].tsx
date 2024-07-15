@@ -1,6 +1,7 @@
 import {
   Image,
   ImageBackground,
+  Linking,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -276,6 +277,12 @@ const Detalles = () => {
                 <ThemedText>No hay canciones disponibles</ThemedText>
               )}
             </ScrollView>
+            <View style={{marginTop:30, marginBottom:20}}>
+            <ThemedText type="title">Links</ThemedText>
+            <Pressable onPress={()=>Linking.openURL(infoArtist.info?.uri || '')}>
+            <ThemedText type="link" style={{justifyContent:'center',textAlign:"justify"}}>Escuchar en Spotify</ThemedText>
+            </Pressable>
+          </View>
           </View>
         </View>
       ) : null}
