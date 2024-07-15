@@ -55,6 +55,7 @@ export const SwipeCard = <T,>({ children, items, setItems }: any) => {
       const soundLoaded =  (await sound.loadAsync({ uri: soundUri })).isLoaded
       if(soundLoaded){
         setCurrentSound(sound);
+        await sound.setIsLoopingAsync(true)
         await sound.playAsync();
       }
 

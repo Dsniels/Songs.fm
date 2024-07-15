@@ -119,6 +119,8 @@ export const styles = StyleSheet.create({
     },
     cardContent :{
       textAlign: 'left',
+      padding:10,
+      width:200,
       fontSize: 20,
       color: 'white',
       textShadowColor: 'black',
