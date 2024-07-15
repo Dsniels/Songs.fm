@@ -31,7 +31,7 @@ export default function TabTwoScreen() {
     },
   });
   const [selectDate, setSelectDate] = useState("short_term");
-
+  const [recent, setRecent] = useState<any[]>([])
   const [requestArtist, setRequestArtist] = useState({
     artists: [],
     offset: 0,
@@ -67,6 +67,16 @@ export default function TabTwoScreen() {
       params: { id: Item.id, name: Item.name, artists: Item.artists[0].name },
     });
   };
+  const fetchRecentlySongs = async () => {
+        const recently: any = await getRecentlySongs();
+        let newArray: any[] = [];
+        recently.items.map((item: any) => {
+          newArray.push(item.track);
+        });
+
+        setRecent((prev)=>([...prev,...newArray]));
+        seedTracks(newArray);
+    };
 
   const fetchData = async () => {
     const data: any = await getTop("artists", requestArtist.offset, selectDate);
@@ -80,7 +90,6 @@ export default function TabTwoScreen() {
   };
 
   const fetchSongs = async () => {
-    const recently: any = await getRecentlySongs();
     const data: any = await getTop(
       "tracks",
       requestMusic.offsetSongs,
@@ -90,19 +99,17 @@ export default function TabTwoScreen() {
       ...prev,
       songs: data.items,
     }));
-    let newArray: any[] = [];
-    recently.items.map((item: any) => {
-      newArray.push(item.track);
-    });
-    seedTracks(newArray);
+
+
     seedTracks(data.items);
   };
-
   useEffect(() => {
-    fetchSongs();
-    fetchData();
+    fetchRecentlySongs()
+        fetchSongs();
+        fetchData();
   }, [selectDate]);
 
+    
   return (
     <SafeAreaView style={[styles.container]}>
       <ScrollView
@@ -148,18 +155,20 @@ export default function TabTwoScreen() {
               />
             </Picker>
           </View>
-          <View style={{ margin: 10 }}>
+
+          <View style={{backgroundColor:'rgba(0,28,39,15)', borderRadius:20,elevation:5 ,margin: 10 }}>
             <ThemedText style={{ marginBottom: 10 }} type="subtitle">
               Generos que mas escuchas
             </ThemedText>
 
             {generos ? (
               generos.map((item: any) => (
-                <View style={{ margin: 10 }} key={item.name}>
-                  <ThemedText type="defaultSemiBold">{item.name}</ThemedText>
+                <View style={{margin: 10 }} key={item.name}>
+                    <ThemedText type="defaultSemiBold">{item.name}</ThemedText>
+
                   <View
                     style={{
-                      height: 10,
+                      height: 15,
                       backgroundColor: "#14181E",
                       width: 200,
                       borderRadius: 5,
@@ -172,7 +181,10 @@ export default function TabTwoScreen() {
                         width: `${item.value * 10}%`,
                         borderRadius: 5,
                       }}
-                    ></View>
+                    >
+
+                    </View>
+
                   </View>
                 </View>
               ))
@@ -180,7 +192,6 @@ export default function TabTwoScreen() {
               <View style={{ height: 500 }}></View>
             )}
 
-            <ThemedText type="default"></ThemedText>
           </View>
           <ThemedText
             type="subtitle"
@@ -323,7 +334,41 @@ export default function TabTwoScreen() {
             ) : (
               <Text>None</Text>
             )}
+            
           </ScrollView>
+          <ThemedText type="subtitle" style={{margin : 20,marginTop:30}}>Escuchadas Recientemente</ThemedText>
+          <View style={{backgroundColor:'rgba(0,28,39,15)', borderRadius:20,elevation:5}}>
+            {recent.length > 0 ? (
+              recent.map((item:any) => (
+                <Pressable
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "flex-start",
+                    alignContent: "center",
+                    alignItems: "center",
+                    margin: 10,
+                  }}
+                  onPress={() => getSongDetails(item)}
+                  key={item.id}
+                >
+                  <Image
+                    source={{ uri: item.album?.images?.[0]?.url }}
+                    style={{ width: 50, height: 50 }}
+                  />
+                  <ThemedText
+                    numberOfLines={1}
+                    ellipsizeMode="clip"
+                    style={{ marginLeft: 10, width: 200 }}
+                  >
+                    {item.name}
+                  </ThemedText>
+                </Pressable>
+              ))
+            ) : (
+              <ThemedText>No hay canciones disponibles</ThemedText>
+            )}
+            </View>
         </View>
       </ScrollView>
     </SafeAreaView>
