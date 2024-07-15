@@ -1,5 +1,4 @@
 import axios, { AxiosResponse } from 'axios';
-import qs from "querystring";
 const GeniusApi = axios.create({
     baseURL:process.env.EXPO_PUBLIC_BASE_URL_GENIUS,
     headers :{
@@ -9,17 +8,22 @@ const GeniusApi = axios.create({
 
 export const getInfo = async (search:string,artists:string)=>{
 
-  const {status,data} = await GeniusApi.get(`/search?q=${search+artists}`);
+  const changed = search.replace(/\s*\(.*?\)\s*/g, '').trim();
+
+  const {status,data} = await GeniusApi.get(`/search?q=${changed+artists}`);
   if(status !== 200){
     throw new Error('Sin info')
   }
+  
   const {response} = data;
-  const id = response.hits[0].result.id;
+  const {result}= response.hits.find((i:any)=>(
+    i.result.artist_names.toLocaleLowerCase().includes(artists.toLocaleLowerCase())
+  ))
+  console.log(JSON.stringify(result,null,2))
+  const id = result.id;
   
   const annotations : any = await getAnnotations(id);
-  if(annotations.response.song.artist_names.includes(artists)){
-
-}
+  console.log(annotations.response.song.description.dom.children)
     return annotations.response.song.description.dom.children
 }
 
