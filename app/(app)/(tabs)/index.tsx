@@ -156,7 +156,7 @@ export default function TabTwoScreen() {
             </Picker>
           </View>
 
-          <View style={{backgroundColor:'rgba(0,28,39,15)', borderRadius:20,elevation:5 ,margin: 10 }}>
+          <View style={{backgroundColor:'rgba(0,28,39,15)', borderRadius:20,elevation:5 ,margin: 10, padding:20 }}>
             <ThemedText style={{ marginBottom: 10 }} type="subtitle">
               Generos que mas escuchas
             </ThemedText>
@@ -339,7 +339,8 @@ export default function TabTwoScreen() {
           <ThemedText type="subtitle" style={{margin : 20,marginTop:30}}>Escuchadas Recientemente</ThemedText>
           <View style={{backgroundColor:'rgba(0,28,39,15)', borderRadius:20,elevation:5}}>
             {recent.length > 0 ? (
-              recent.map((item:any) => (
+              recent.map((item:any, index: number) => (
+                
                 <Pressable
                   style={{
                     display: "flex",
@@ -350,7 +351,7 @@ export default function TabTwoScreen() {
                     margin: 10,
                   }}
                   onPress={() => getSongDetails(item)}
-                  key={item.id}
+                  key={index}
                 >
                   <Image
                     source={{ uri: item.album?.images?.[0]?.url }}

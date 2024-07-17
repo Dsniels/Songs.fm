@@ -60,10 +60,7 @@ export const refreshToken = async (): Promise<AxiosResponse<TokenConfigType>> =>
     grant_type: "refresh_token",
     refresh_token: refresh,
   };
-  /*     const discovery  =  AuthSession.useAutoDiscovery("https://accounts.spotify.com/api/token") ;
-    if (discovery) {
-         const TokenResponse = await AuthSession.refreshAsync({refreshToken:refresh, clientId:process.env.EXPO_PUBLIC_CLIENTE_ID || ''},discovery);
-         console.log(TokenResponse); */
+
 
   return new Promise((resolve, reject) => {
     instancia

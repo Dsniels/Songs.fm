@@ -33,6 +33,7 @@ interface ITrack {
 
 const SongDetails = () => {
   const [currentSound, setCurrentSound] = useState<Audio.Sound | null>(null);
+  const [showAbout, setShowAbout] = useState<boolean>(false)
   const isFocused = useIsFocused();
   const [informacion, setInformacion] = useState('')
   const playSound = async (soundUri: string) => {
@@ -142,10 +143,18 @@ const SongDetails = () => {
         />
       }
     >
-      <View style={{ top: -30, left: 300 }}></View>
-      {Track.info ? (
+      <View style={{ marginBottom:40, marginTop:10,display:'flex', justifyContent:'space-evenly', flexWrap:'wrap', flexDirection:"row",alignContent:'space-between'}}>
+        <Pressable  style={{backgroundColor: !showAbout ? '#14181E':'transparent'}} onPress={()=>setShowAbout(false)}>
+          <ThemedText type="subtitle">Caracteristicas</ThemedText>
+        </Pressable>
+        <Pressable style={{backgroundColor:showAbout ? '#14181E':'transparent'}} onPress={()=>setShowAbout(true)}>
+          <ThemedText type="subtitle">About</ThemedText>
+        </Pressable>
+      </View>
+      
+      {showAbout === false && Track.info ? (
         <View>
-          <ThemedText type="subtitle">Artistas</ThemedText>
+          <ThemedText type="defaultSemiBold">Artistas</ThemedText>
 
           <ThemedView
             style={{
@@ -344,20 +353,16 @@ const SongDetails = () => {
               <ThemedText style={{ fontSize: 12 }}>valence</ThemedText>
             </View>
           </View>
-          <View style={{marginTop:30, marginBottom:20}}>
-            <ThemedText type="title">About</ThemedText>
-            <ThemedText style={{justifyContent:'center',textAlign:"justify"}}>{informacion}</ThemedText>
-          </View>
-          <View style={{marginTop:30, marginBottom:20}}>
-            <ThemedText type="title">Links</ThemedText>
-            <Pressable onPress={()=>Linking.openURL(Track.audioFeatures.uri || '')}>
-            <ThemedText type="link" style={{justifyContent:'center',textAlign:"justify"}}>Escuchar en Spotify</ThemedText>
-            </Pressable>
-          </View>
+          
         </View>
-      ) : (
-        <ThemedText> undefined </ThemedText>
-      )}
+      ): showAbout && informacion ? (<><View style={{ marginTop: 30, marginBottom: 20 }}>
+        <ThemedText style={{ justifyContent: 'center', textAlign: "justify" }}>{informacion}</ThemedText>
+      </View><View style={{ marginTop: 30, marginBottom: 20 }}>
+          <ThemedText type="title">Links</ThemedText>
+          <Pressable onPress={() => Linking.openURL(Track.audioFeatures.uri || '')}>
+            <ThemedText type="link" style={{ justifyContent: 'center', textAlign: "justify" }}>Escuchar en Spotify</ThemedText>
+          </Pressable>
+        </View></>): <><ThemedText>Cargando....</ThemedText></>}
     </ParallaxScrollView>
   );
 };

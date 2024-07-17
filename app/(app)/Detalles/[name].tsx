@@ -97,26 +97,9 @@ const Detalles = () => {
     >
       {infoArtist.info?.images?.[0]?.url ? (
         <View>
-          <View>
+          <View style={{margin:30}}>
             <ThemedText type="subtitle">Popularidad:</ThemedText>
-            <View
-              style={{
-                marginTop: 20,
-                height: 10,
-                backgroundColor: "#14181E",
-                width: 200,
-                borderRadius: 5,
-              }}
-            >
-              <View
-                style={{
-                  backgroundColor: "#091F98",
-                  height: "100%",
-                  width: `${infoArtist.info?.popularity}%`,
-                  borderRadius: 5,
-                }}
-              ></View>
-            </View>
+            <ThemedText type="subtitle">{infoArtist.info?.popularity}</ThemedText>
 
             <ThemedText style={{ marginTop: 20 }} type="subtitle">
               Géneros
