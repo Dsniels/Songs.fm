@@ -115,7 +115,8 @@ export const SwipeCard = <T,>({ children, items, setItems }: any) => {
     }, [currentSound, isFocused])
   );
   const getSongDetails =(Item:any)=>{
-    return router.push({pathname:`(app)/songsDetails/[song]`, params:{id:Item.id, name:Item.name}})
+
+    return router.push({pathname:`(app)/songsDetails/[song]`, params:{id:Item.id, name:Item.name, artists:Item.artist}})
   }
   return (
     <View>

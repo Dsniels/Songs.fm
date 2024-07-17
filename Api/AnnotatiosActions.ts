@@ -16,10 +16,14 @@ export const getInfo = async (search:string,artists:string)=>{
   }
   
   const {response} = data;
-  const {result}= response.hits.find((i:any)=>(
-    i.result.artist_names.toLocaleLowerCase().includes(artists.toLocaleLowerCase())
-  ))
-  console.log(JSON.stringify(result,null,2))
+  console.log(response.length)
+  const {result}= response.hits.find((i:any, index:number)=>{
+    console.log(artists.toLocaleLowerCase())
+    console.log(i.result.artist_names.toLocaleLowerCase())
+    const artistName : string = i.result.artist_names.toLocaleLowerCase()
+    console.log(artistName.includes(artists.toLocaleLowerCase()), index)
+    return i.result.artist_names.toLocaleLowerCase().includes(artists.toLocaleLowerCase())
+  })
   const id = result.id;
   
   const annotations : any = await getAnnotations(id);
