@@ -26,10 +26,14 @@ export const getTop = (
 export const getRecomendations = async (): Promise<any> => {
 
   const {songs, artists, generos} = await seeds();
-
+  const randomDanceability =Math.random();
+  const randomPopularity = Math.floor(Math.random() * 100);
+  const randomValence = Math.random();
+  const randomEnergy = Math.random();
+  console.log(randomDanceability, randomPopularity, randomValence, randomEnergy)
   return new Promise((resolve, reject) => {
     HttpCliente.get(
-      `/recommendations?seed_tracks=${songs}&seed_genres=${generos}&seed_artists=${artists}`
+      `/recommendations?seed_tracks=${songs}&seed_genres=${generos}&min_energy=${randomEnergy}&seed_artists=${artists}&target_danceability=${randomDanceability}&target_popularity=${randomPopularity}&min_valence${randomValence}`
     )
       .then((response: AxiosResponse) => {
  
