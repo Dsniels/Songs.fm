@@ -36,7 +36,7 @@ export const getRecomendations = async (): Promise<any> => {
       `/recommendations?seed_tracks=${songs}&seed_genres=${generos}&min_energy=${randomEnergy}&seed_artists=${artists}&target_danceability=${randomDanceability}&target_popularity=${randomPopularity}&min_valence${randomValence}`
     )
       .then((response: AxiosResponse) => {
- 
+        console.log(JSON.stringify(response.data, null, 2))
         resolve(response.data?.tracks );
       })
       .catch((e: AxiosError) => {

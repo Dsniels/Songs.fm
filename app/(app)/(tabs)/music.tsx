@@ -1,17 +1,14 @@
-import { ActivityIndicator, Pressable, RefreshControl, SafeAreaView, View } from "react-native";
+import { ActivityIndicator,SafeAreaView, View } from "react-native";
 import React, { useCallback, useEffect, useState } from "react";
-import { ThemedText } from "@/components/ThemedText";
 import { styles } from "@/Styles/styles";
 import { getListOfSongs, getRecomendations } from "@/Api/SongsActions";
 import Card from "@/components/Card";
 import Animated, { useAnimatedRef } from "react-native-reanimated";
 import { SwipeCard } from "@/components/SwipeCard";
-import { router } from "expo-router";
-import SkeletonCard from "@/components/Skeleton";
+
 
 export default function music() {
   const scrollRef = useAnimatedRef<Animated.ScrollView>();
-  const [refreshing, setRefreshing] = useState(false);
   const [data, setData] = useState<any[]>([]);
 
   useEffect(() => {
@@ -23,17 +20,16 @@ export default function music() {
   }, [data]);
 
   const onRefresh = useCallback(() => {
-    setRefreshing(true);
+    
     fetchData().then((tracks: any) => {
       setData(tracks);
-      setRefreshing(false);
     });
   }, []);
 
   const fetchData = async () => {
-    const data_response: any = await getRecomendations() || false;
-    if(!data_response){
-      return []
+    const data_response: any = await getRecomendations();
+    if(data_response.length === 0){
+      await onRefresh()
     }
     const to_process = data_response
       .filter((i: any) => i.preview_url === null)

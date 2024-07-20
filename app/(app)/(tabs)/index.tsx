@@ -21,6 +21,9 @@ import { seedArtist, seedTracks } from "@/service/seeds";
 import { green } from "react-native-reanimated/lib/typescript/reanimated2/Colors";
 import { router } from "expo-router";
 import { Picker } from "@react-native-picker/picker";
+
+
+
 export default function TabTwoScreen() {
   const [{ sesionUsuario }, dispatch] = useStateValue();
   const [refreshing, setRefreshing] = useState(false);
@@ -186,7 +189,7 @@ export default function TabTwoScreen() {
           </ThemedText>
 
           <ScrollView className=" h-60 m-auto" horizontal>
-            {requestArtist.artists.length >= 0 && !loading? (
+            {requestArtist.artists?.length >= 0 && !loading? (
               requestArtist.artists?.map((item: any) => (
                 <Pressable
                   style={{ elevation: 270 }}
@@ -272,7 +275,7 @@ export default function TabTwoScreen() {
             Escuchadas Recientemente
           </ThemedText>
           <View className="bg-cyan-950 rounded-3xl p-5">
-            {recent.length > 0  && !loading? (
+            {recent?.length > 0  && !loading? (
               recent.map((item: any, index: number) => (
                 <Pressable
                   className="flex flex-row justify-start items-center border-2 bg-sky-900 p-2 bg-opacity-7 align-middle content-center m-3 rounded-md border-sky-950"
