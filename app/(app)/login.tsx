@@ -48,12 +48,15 @@ export default function login() {
 
   };
 
-  const handleResponse = async (AccessCode: string) => {
-     const  {data } : any = await getAccessToken(AccessCode, dispatch);
-     await SecureStorage.setItemAsync('TokenConfig', JSON.stringify(data))
-    const {  access_token} = data;
+const handleResponse = async (AccessCode: string) => {
+   const  {data } : any = await getAccessToken(AccessCode, dispatch);
+	await SecureStorage.setItemAsync('TokenConfig', JSON.stringify(data))
+	const { refresh_token, access_token, expira } = data;
+   checkToken(expira);
+
   if (access_token) {
       await storeData("token", access_token)
+		await storeData("refresh_token", refresh_token);
       router.replace("/(tabs)");
   }
    

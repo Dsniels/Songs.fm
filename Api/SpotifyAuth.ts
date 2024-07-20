@@ -6,7 +6,6 @@ import qs from "querystring";
 import { Dispatch } from "react";
 import * as Linking from "expo-linking";
 import * as SecureStorage from "expo-secure-store";
-import { TokenConfigType } from "@/app/(app)/_layout";
 
 const instancia = axios.create({
   headers: {
@@ -31,12 +30,12 @@ export const getAccessToken = async (code: string, dispatch: Dispatch<any>) => {
   return new Promise((resolve, reject) => {
     instancia
       .post("https://accounts.spotify.com/api/token", data)
-      .then(
-        (response: AxiosResponse<AuthSession.ServerTokenResponseConfig>) => {
-          response.data.issued_at = Date.now();
-          resolve(response);
-        }
-      )
+      .then((response: AxiosResponse) => {
+        const expira = new Date();
+        expira.setSeconds(expira.getSeconds() + 3600);
+        response.data.expira = expira;
+        resolve(response);
+      })
       .catch((e: AxiosError) => {
         console.log(JSON.stringify(e.request, null, 2));
         throw new Error(`${e}`);
@@ -54,20 +53,24 @@ export const checkToken = async (expira: any) => {
   }
 };
 
-export const refreshToken = async (): Promise<AxiosResponse<TokenConfigType>> => {
+export const refreshToken = async (): Promise<
+  AxiosResponse
+> => {
   const refresh = (await SecureStorage.getItemAsync("refresh_token")) || "";
   const body = {
     grant_type: "refresh_token",
     refresh_token: refresh,
   };
 
-
   return new Promise((resolve, reject) => {
     instancia
       .post("https://accounts.spotify.com/api/token", qs.stringify(body))
       .then(async (response: AxiosResponse) => {
-        response.data.issued_at = Date.now();
-
+        let expira = new Date();
+        expira.setSeconds(expira.getSeconds() + 3600);
+        response.data.expira = expira;
+        checkToken(expira);
+        setTimeout(refreshToken, 3600000);
         await SecureStorage.setItemAsync("token", response.data.access_token);
         resolve(response.data);
       })
