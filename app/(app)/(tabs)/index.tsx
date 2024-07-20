@@ -31,7 +31,7 @@ export default function TabTwoScreen() {
     },
   });
   const [selectDate, setSelectDate] = useState("short_term");
-  const [recent, setRecent] = useState<any[]>([])
+  const [recent, setRecent] = useState<any[]>([]);
   const [requestArtist, setRequestArtist] = useState({
     artists: [],
     offset: 0,
@@ -42,7 +42,7 @@ export default function TabTwoScreen() {
   });
   const onRefresh = () => {
     setRefreshing(true);
-
+    Promise.all([fetchData(),fetchRecentlySongs(),fetchSongs()])
     if (sesionUsuario?.usuario) {
       setUsuario(sesionUsuario.usuario);
       setRefreshing(false);
@@ -68,15 +68,15 @@ export default function TabTwoScreen() {
     });
   };
   const fetchRecentlySongs = async () => {
-        const recently: any = await getRecentlySongs();
-        let newArray: any[] = [];
-        recently.items.map((item: any) => {
-          newArray.push(item.track);
-        });
+    const recently: any = await getRecentlySongs();
+    let newArray: any[] = [];
+    recently.items.map((item: any) => {
+      newArray.push(item.track);
+    });
 
-        setRecent((prev)=>([...prev,...newArray]));
-        seedTracks(newArray);
-    };
+    setRecent([...newArray]);
+    seedTracks(newArray);
+  };
 
   const fetchData = async () => {
     const data: any = await getTop("artists", requestArtist.offset, selectDate);
@@ -100,16 +100,14 @@ export default function TabTwoScreen() {
       songs: data.items,
     }));
 
-
     seedTracks(data.items);
   };
   useEffect(() => {
-    fetchRecentlySongs()
-        fetchSongs();
-        fetchData();
+    fetchRecentlySongs();
+    fetchSongs();
+    fetchData();
   }, [selectDate]);
 
-    
   return (
     <SafeAreaView style={[styles.container]}>
       <ScrollView
@@ -118,23 +116,16 @@ export default function TabTwoScreen() {
           <RefreshControl onRefresh={onRefresh} refreshing={refreshing} />
         }
       >
-        <View style={{ margin: 10 }}>
-          <View style={[styles.titleContainer, { marginTop: 70 }]}>
+        <View className="m-1">
+          <View style={[styles.titleContainer]} className="mt-16">
             <ThemedText type="title">Hola {usuario.display_name}!</ThemedText>
           </View>
-          <View
-            style={{
-              margin: 20,
-              display: "flex",
-              alignItems: "center",
-              flexDirection: "row",
-            }}
-          >
+          <View className="m-3 flex text-center items-center justify-center flex-row">
             <ThemedText type="defaultSemiBold">Estadisticas</ThemedText>
             <Picker
               dropdownIconColor="white"
               mode="dialog"
-              style={{ color: "white", width: 250 }}
+              style={{ color: "white", width: 225 }}
               selectedValue={selectDate}
               onValueChange={(value) => setSelectDate(value)}
             >
@@ -156,62 +147,41 @@ export default function TabTwoScreen() {
             </Picker>
           </View>
 
-          <View style={{backgroundColor:'rgba(0,28,39,15)', borderRadius:20,elevation:5 ,margin: 10, padding:20 }}>
-            <ThemedText style={{ marginBottom: 10 }} type="subtitle">
+          <View className="bg-cyan-700 bg-opacity-100 rounded-lg m-35 p-3">
+            <ThemedText
+              className="m-3 border-blue-950  opacity-2 rounded-full text-center p-5 mb-3"
+              type="subtitle"
+            >
               Generos que mas escuchas
             </ThemedText>
 
             {generos ? (
               generos.map((item: any) => (
-                <View style={{margin: 10 }} key={item.name}>
-                    <ThemedText type="defaultSemiBold">{item.name}</ThemedText>
+                <View className="m-3 rounded-lg" key={item.name}>
+                  <ThemedText type="defaultSemiBold">{item.name}</ThemedText>
 
-                  <View
-                    style={{
-                      height: 15,
-                      backgroundColor: "#14181E",
-                      width: 200,
-                      borderRadius: 5,
-                    }}
-                  >
+                  <View className="bg-cyan-900 h-4 w-60 rounded-lg">
                     <View
+                      className="bg-cyan-950 h-full rounded-md"
                       style={{
-                        backgroundColor: "#091F98",
-                        height: "100%",
                         width: `${item.value * 10}%`,
-                        borderRadius: 5,
                       }}
-                    >
-
-                    </View>
-
+                    ></View>
                   </View>
                 </View>
               ))
             ) : (
               <View style={{ height: 500 }}></View>
             )}
-
           </View>
           <ThemedText
             type="subtitle"
-            style={{
-              margin: 20,
-              color: "white",
-              fontWeight: "bold",
-              marginTop: 50,
-            }}
+            className=" m-5 text-white font-bold mt-8"
           >
             Artistas que mas escuchas
           </ThemedText>
 
-          <ScrollView
-            style={{
-              height: 270,
-              margin: 0,
-            }}
-            horizontal
-          >
+          <ScrollView className=" h-56 m-0" horizontal>
             {requestArtist.artists ? (
               requestArtist.artists?.map((item: any) => (
                 <Pressable
@@ -235,27 +205,10 @@ export default function TabTwoScreen() {
                       end={{ x: 0, y: 0 }}
                     >
                       <View
-                        style={{
-                          display: "flex",
-                          zIndex: 0,
-                          top: 100,
-                          right: 30,
-                          margin: 30,
-                          width: 200,
-                          padding: 20,
-                          borderRadius: 400,
-                        }}
+                        className=" flex z-0 top-28 right-8 m-8 w-64 p-6 rounded-3xl"
                         key={item.id}
                       >
-                        <Text
-                          style={{
-                            textTransform: "capitalize",
-                            color: "white",
-                            fontSize: 18,
-                            fontStyle: "normal",
-                            fontWeight: "bold",
-                          }}
-                        >
+                        <Text className="capitalize text-white font-bold  ">
                           {item.name}
                         </Text>
                       </View>
@@ -269,22 +222,11 @@ export default function TabTwoScreen() {
           </ScrollView>
           <ThemedText
             type="subtitle"
-            style={{
-              margin: 20,
-              color: "white",
-              fontWeight: "bold",
-              marginTop: 50,
-            }}
+            className=" m-5 text-white font-bold mt-8"
           >
             Canciones mas escuchadas
           </ThemedText>
-          <ScrollView
-            style={{
-              height: 250,
-              margin: "auto",
-            }}
-            horizontal
-          >
+          <ScrollView className="h-60 m-auto" horizontal>
             {requestMusic ? (
               requestMusic.songs?.map((item: any) => (
                 <Pressable key={item.id} onPress={() => getSongDetails(item)}>
@@ -304,26 +246,10 @@ export default function TabTwoScreen() {
                       end={{ x: 0, y: 0 }}
                     >
                       <View
-                        style={{
-                          display: "flex",
-                          zIndex: 0,
-                          top: 95,
-                          right: 30,
-                          margin: 30,
-                          width: 200,
-                          padding: 20,
-                        }}
+                        className=" flex z-0 top-28 right-8 m-8 w-56 p-6 rounded-3xl"
                         key={item.id}
                       >
-                        <Text
-                          style={{
-                            textTransform: "capitalize",
-                            color: "white",
-                            fontSize: 18,
-                            fontStyle: "normal",
-                            fontWeight: "bold",
-                          }}
-                        >
+                        <Text lineBreakMode="clip" numberOfLines={1}  className="capitalize text-white font-bold  ">
                           {item.name}
                         </Text>
                       </View>
@@ -334,28 +260,24 @@ export default function TabTwoScreen() {
             ) : (
               <Text>None</Text>
             )}
-            
           </ScrollView>
-          <ThemedText type="subtitle" style={{margin : 20,marginTop:30}}>Escuchadas Recientemente</ThemedText>
-          <View style={{backgroundColor:'rgba(0,28,39,15)', borderRadius:20,elevation:5}}>
+          <ThemedText
+            type="subtitle"
+            className="m-5 m-t-6 text-center p-2 "
+          >
+            Escuchadas Recientemente
+          </ThemedText>
+          <View className="bg-cyan-950 rounded-3xl p-5">
             {recent.length > 0 ? (
-              recent.map((item:any, index: number) => (
-                
+              recent.map((item: any, index: number) => (
                 <Pressable
-                  style={{
-                    display: "flex",
-                    flexDirection: "row",
-                    justifyContent: "flex-start",
-                    alignContent: "center",
-                    alignItems: "center",
-                    margin: 10,
-                  }}
+                  className="flex flex-row justify-start items-center border-2 bg-sky-900 p-2 bg-opacity-7 align-middle content-center m-3 rounded-md border-sky-950"
                   onPress={() => getSongDetails(item)}
                   key={index}
                 >
                   <Image
                     source={{ uri: item.album?.images?.[0]?.url }}
-                    style={{ width: 50, height: 50 }}
+                    className="w-14 h-14"
                   />
                   <ThemedText
                     numberOfLines={1}
@@ -369,7 +291,7 @@ export default function TabTwoScreen() {
             ) : (
               <ThemedText>No hay canciones disponibles</ThemedText>
             )}
-            </View>
+          </View>
         </View>
       </ScrollView>
     </SafeAreaView>

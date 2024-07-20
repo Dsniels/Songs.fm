@@ -1,4 +1,4 @@
-import { Button, Text } from "react-native";
+import { Button, Pressable, Text } from "react-native";
 import * as AuthSession from "expo-auth-session";
 import { useEffect, useState } from "react";
 import * as WebBrowser from "expo-web-browser";
@@ -61,6 +61,7 @@ export default function login() {
 
 
   useEffect(() => {
+    console.log(response)
     if (response?.type === "success") {
       const { code } = response.params;
       setCode(code)
@@ -70,10 +71,15 @@ export default function login() {
   }, [response]);
 
   return (
-    <ThemedView style={styles.stepContainer}>
+    <ThemedView  style={styles.stepContainer}>
       <ThemedText type="subtitle">Conecta tu cuenta de Spotify</ThemedText>
-      <Button title="Conectar" onPress={() => promptAsync()} />
-      <Text>Hola</Text>
+    <Pressable className="flex bg-green-500" onPress={()=>promptAsync()}>
+        <Text className="text-cyan-100 ">
+          Iniciar Sesion
+        </Text>
+      </Pressable>
+
+      <Text  >Hola</Text>
        <ThemedText>Token:{TOKEN}</ThemedText>
        <ThemedText>code:{CODE}</ThemedText>
 

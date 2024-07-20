@@ -143,31 +143,26 @@ const SongDetails = () => {
         />
       }
     >
-      <View style={{ marginBottom:40, marginTop:10,display:'flex', justifyContent:'space-evenly', flexWrap:'wrap', flexDirection:"row",alignContent:'space-between'}}>
-        <Pressable  style={{backgroundColor: !showAbout ? '#14181E':'transparent'}} onPress={()=>setShowAbout(false)}>
-          <ThemedText type="subtitle">Caracteristicas</ThemedText>
+      <View  className='mb-0 mt-3 flex justify-evenly flex-wrap flex-row content-evenly w-fit'  >
+        <Pressable className="w-44 p-2"  style={{backgroundColor: !showAbout ? '#0284c7':'transparent'}} onPress={()=>setShowAbout(false)}>
+          <ThemedText className="flex w-full justify-center text-center" type="subtitle">Caracteristicas</ThemedText>
         </Pressable>
-        <Pressable style={{backgroundColor:showAbout ? '#14181E':'transparent'}} onPress={()=>setShowAbout(true)}>
-          <ThemedText type="subtitle">About</ThemedText>
+        <Pressable className=" flex flex-wrap w-40 text-center align-middle justify-items-center content-center justify-center " style={{backgroundColor:showAbout ? '#0284c7':'transparent'}} onPress={()=>setShowAbout(true)}>
+          <ThemedText className="flex w-20  justify-center content-center text-center" type="subtitle">About</ThemedText>
         </Pressable>
       </View>
       
       {showAbout === false && Track.info ? (
-        <View>
+        <View className="bg-sky-600 m-1 mt-0 pt-0 -top-4 w-full p-7 ">
           <ThemedText type="defaultSemiBold">Artistas</ThemedText>
 
           <ThemedView
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignContent: "center",
-              alignItems: "center",
-            }}
+          className=" flex flex-row justify-center content-center items-center bg-sky-600"
           >
-            <ScrollView horizontal style={{width:80}}>
+            <ScrollView className="bg-sky-600" horizontal style={{width:80}}>
               {Track.info.artists?.map((item: any, index: number) => (
-                <Pressable style={{borderRadius:40,margin:10, paddingHorizontal:8,backgroundColor:'#1F283D'}} onPress={() => getDetails(item)} key={index}>
+                <Pressable className="rounded-3xl m-3 px-2 bg-[#1F283D]" 
+                onPress={() => getDetails(item)} key={index}>
                   <ThemedText type="default">{item.name}</ThemedText>
                 </Pressable>
               ))}
@@ -175,6 +170,7 @@ const SongDetails = () => {
 
             {currentSound === null ? (
               <Pressable
+              className="bg-sky-600"
                 style={styles.playButton}
                 onPress={() => playSound(Track.info?.preview_url || " ")}
               >
@@ -188,12 +184,7 @@ const SongDetails = () => {
           </ThemedView>
 
           <View
-            style={{
-              marginTop: 30,
-              flexDirection: "row",
-              display: "flex",
-              flexWrap: "wrap",
-            }}
+          className=" flex flex-wrap mt-8 flex-row "
           >
             <ThemedText style={{ marginBottom: 10 }} type="subtitle">
               Caracteristicas de la cancion
@@ -355,8 +346,8 @@ const SongDetails = () => {
           </View>
           
         </View>
-      ): showAbout && informacion ? (<><View style={{ marginTop: 30, marginBottom: 20 }}>
-        <ThemedText style={{ justifyContent: 'center', textAlign: "justify" }}>{informacion}</ThemedText>
+      ): showAbout && informacion ? (<><View className="bg-sky-600 m-1 mt-0 pt-0 -top-4 w-fit ">
+        <ThemedText className="p-7" style={{ justifyContent: 'center', textAlign: "justify" }}>{informacion}</ThemedText>
       </View><View style={{ marginTop: 30, marginBottom: 20 }}>
           <ThemedText type="title">Links</ThemedText>
           <Pressable onPress={() => Linking.openURL(Track.audioFeatures.uri || '')}>

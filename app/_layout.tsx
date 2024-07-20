@@ -31,7 +31,7 @@ export default function RootLayout() {
   }
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+    <ThemeProvider  value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <StateProvider initialState={initialState} reducer={mainReducer} >
         <Slot/>
       </StateProvider>
