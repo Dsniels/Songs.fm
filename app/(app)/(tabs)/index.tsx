@@ -25,6 +25,7 @@ export default function TabTwoScreen() {
   const [{ sesionUsuario }, dispatch] = useStateValue();
   const [refreshing, setRefreshing] = useState(false);
   const [generos, setGeneros] = useState<{ name: string; value: number }[]>([]);
+  const [loading, setLoading] = useState(false);
   const [usuario, setUsuario] = useState({
     display_name: "",
     images: {
@@ -104,9 +105,12 @@ export default function TabTwoScreen() {
     seedTracks(data.items);
   };
   useEffect(() => {
+    setLoading(true);
     setTimeout(() => {
       Promise.all([fetchRecentlySongs(),fetchSongs(),fetchData()])
-    }, 10);
+              .then(()=>setLoading(false))
+    }, 5);
+    console.log(generos.length <= 0,requestArtist.artists.length)
   }, [selectDate]);
 
   return (
@@ -155,8 +159,7 @@ export default function TabTwoScreen() {
             >
               Generos que mas escuchas
             </ThemedText>
-
-            {generos ? (
+            {generos && !loading ? (
               generos.map((item: any) => (
                 <View className="m-3 rounded-lg" key={item.name}>
                   <ThemedText type="defaultSemiBold">{item.name}</ThemedText>
@@ -182,8 +185,8 @@ export default function TabTwoScreen() {
             Artistas que mas escuchas
           </ThemedText>
 
-          <ScrollView className=" h-56 m-0" horizontal>
-            {requestArtist.artists ? (
+          <ScrollView className=" h-60 m-auto" horizontal>
+            {requestArtist.artists.length >= 0 && !loading? (
               requestArtist.artists?.map((item: any) => (
                 <Pressable
                   style={{ elevation: 270 }}
@@ -228,7 +231,7 @@ export default function TabTwoScreen() {
             Canciones mas escuchadas
           </ThemedText>
           <ScrollView className="h-60 m-auto" horizontal>
-            {requestMusic ? (
+            {requestMusic && !loading ? (
               requestMusic.songs?.map((item: any) => (
                 <Pressable key={item.id} onPress={() => getSongDetails(item)}>
                   <ImageBackground
@@ -269,7 +272,7 @@ export default function TabTwoScreen() {
             Escuchadas Recientemente
           </ThemedText>
           <View className="bg-cyan-950 rounded-3xl p-5">
-            {recent.length > 0 ? (
+            {recent.length > 0  && !loading? (
               recent.map((item: any, index: number) => (
                 <Pressable
                   className="flex flex-row justify-start items-center border-2 bg-sky-900 p-2 bg-opacity-7 align-middle content-center m-3 rounded-md border-sky-950"

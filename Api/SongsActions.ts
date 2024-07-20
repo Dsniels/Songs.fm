@@ -46,14 +46,6 @@ export const getRecomendations = async (): Promise<any> => {
   });
 };
 
-/* const similarSongs =async (id : string, features:any) : Promise<any> =>{
-  return new Promise((resolve, reject)=>{
-    HttpCliente.get(`/recommendations?seed_tracks=${id}&target_danceability=${features.danceability}&target_energy=${features.energy}&target_instrumentalness=${features.instrumentalness}`)
-                .then((response)=>{
-                  resolve(response.data || [])
-                })
-  })
-} */
 export const getRecentlySongs =()=>{
   return new Promise((resolve, reject)=>{
     HttpCliente.get('/me/player/recently-played?limit=20').then((response)=>{

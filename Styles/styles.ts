@@ -4,6 +4,7 @@ const { height } = Dimensions.get('window')
 
 export const styles = StyleSheet.create({
     container : {
+      display: 'flex',
       backgroundColor: '#000818',
       alignItems: 'center',
       justifyContent: 'center',

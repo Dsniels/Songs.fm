@@ -1,4 +1,4 @@
-import { Pressable, RefreshControl, SafeAreaView, View } from "react-native";
+import { ActivityIndicator, Pressable, RefreshControl, SafeAreaView, View } from "react-native";
 import React, { useCallback, useEffect, useState } from "react";
 import { ThemedText } from "@/components/ThemedText";
 import { styles } from "@/Styles/styles";
@@ -64,8 +64,9 @@ export default function music() {
             </SwipeCard>
           </View>
         ) : (
-          <SkeletonCard></SkeletonCard>
+          <ActivityIndicator size='large' />
         )}
+
     </SafeAreaView>
   );
 }

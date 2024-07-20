@@ -179,7 +179,7 @@ const SongDetails = () => {
 
           <ThemedView className=" flex flex-row justify-center content-center items-center bg-sky-600">
             <ScrollView className="bg-sky-600" horizontal style={{ width: 80 }}>
-              {Track.info.artists?.map((item: any, index: number) => (
+              {Track.info.artists? Track.info.artists.map((item: any, index: number) => (
                 <Pressable
                   className="rounded-3xl m-3 px-2 bg-[#1F283D]"
                   onPress={() => getDetails(item)}
@@ -187,7 +187,7 @@ const SongDetails = () => {
                 >
                   <ThemedText type="default">{item.name}</ThemedText>
                 </Pressable>
-              ))}
+              )) : (<ActivityIndicator size='large' />)}
             </ScrollView>
 
             {currentSound === null ? (
@@ -378,9 +378,9 @@ const SongDetails = () => {
 
         </>
       ) : (
-        <>
-        <ActivityIndicator size='large'/>
-        </>
+        <View className="bg-sky-600 flex justify-stretch content-center items-center align-middle m-1 mt-0 pt-0 -top-4 w-fit h-36 ">
+        <ActivityIndicator className="m-8" size='large'/>
+        </View>
       )}
                 <View style={{ marginTop: 30, marginBottom: 20 }}>
             <ThemedText type="title">Links</ThemedText>
