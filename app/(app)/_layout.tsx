@@ -26,7 +26,7 @@ const CustomHeader = () => {
 export default function Applayout() {
   const [{ sesionUsuario }, dispatch] = useStateValue();
   const [servidorResponse, setServidorResponse] = useState(false);
-  const [tokenValido, setTokenValido] = useState<boolean>(false)
+  const [tokenValido, setTokenValido] = useState<boolean>(true)
  
 
   useEffect(() => {
@@ -38,20 +38,30 @@ export default function Applayout() {
       }
       
       const fecha = await SecureStorage.getItemAsync("expira");
+
       if (fecha === null) {
-        setTokenValido(false);
+        return router.push("/login");
       } else {
         const Today = new Date();
         const expiracion = new Date(fecha);
-        if (Today >= expiracion) {
-          setTokenValido(false);
-        } else {
+        console.log('Today',Today,"Expiracion", expiracion)
+
+        console.log('if',Today < expiracion)
+        console.log('valid', tokenValido)
+
+        if (Today < expiracion) {
           setTokenValido(true);
+          console.log('validooo', tokenValido)   
+        }else{
+           setTokenValido(false)
+          
         }
       }
 
       if (!tokenValido) {
+        console.log('refres if')
         await refreshToken();
+        setTokenValido(true);
       }
 
       if (!servidorResponse && token) {
@@ -65,7 +75,7 @@ export default function Applayout() {
   };
 
   getData();
-}, [sesionUsuario, tokenValido, servidorResponse, dispatch, router]);
+}, [sesionUsuario]);
 
 
   return (

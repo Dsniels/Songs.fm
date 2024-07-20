@@ -34,6 +34,7 @@ export const getAccessToken = async (code: string, dispatch: Dispatch<any>) => {
         const expira = new Date();
         expira.setSeconds(expira.getSeconds() + 3600);
         response.data.expira = expira;
+        console.log(response.data)
         resolve(response);
       })
       .catch((e: AxiosError) => {
@@ -61,13 +62,14 @@ export const refreshToken = async (): Promise<
     grant_type: "refresh_token",
     refresh_token: refresh,
   };
-
+console.log("refresh")
   return new Promise((resolve, reject) => {
     instancia
       .post("https://accounts.spotify.com/api/token", qs.stringify(body))
       .then(async (response: AxiosResponse) => {
         let expira = new Date();
         expira.setSeconds(expira.getSeconds() + 3600);
+        console.log(expira)
         response.data.expira = expira;
         checkToken(expira);
         setTimeout(refreshToken, 3600000);
