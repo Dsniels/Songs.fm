@@ -23,7 +23,7 @@ export default function login() {
     native: "myapp://",
     path: "/login",
   });
-  
+  console.log(Linking.createURL('login'))
   const discovery = {
       authorizationEndpoint: "https://accounts.spotify.com/authorize",
       tokenEndpoint: "https://accounts.spotify.com/api/token",
@@ -50,7 +50,6 @@ export default function login() {
 
 const handleResponse = async (AccessCode: string) => {
    const  {data } : any = await getAccessToken(AccessCode, dispatch);
-	await SecureStorage.setItemAsync('TokenConfig', JSON.stringify(data))
 	const { refresh_token, access_token, expira } = data;
    checkToken(expira);
 

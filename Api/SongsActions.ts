@@ -26,10 +26,10 @@ export const getTop = (
 export const getRecomendations = async (): Promise<any> => {
 
   const {songs, artists, generos} = await seeds();
-  const randomDanceability =Math.random();
+  const randomDanceability =Math.random()*0.5+0.5;
   const randomPopularity = Math.floor(Math.random() * 100);
-  const randomValence = Math.random();
-  const randomEnergy = Math.random();
+  const randomValence = Math.random()*0.5+0.5;
+  const randomEnergy = Math.random()*0.5+0.5;
   console.log(randomDanceability, randomPopularity, randomValence, randomEnergy)
   return new Promise((resolve, reject) => {
     HttpCliente.get(

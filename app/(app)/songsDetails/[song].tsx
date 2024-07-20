@@ -1,4 +1,5 @@
 import {
+  ActivityIndicator,
   Image,
   Linking,
   Pressable,
@@ -18,7 +19,7 @@ import {
   useNavigation,
 } from "expo-router";
 import ParallaxScrollView from "@/components/ParallaxScrollView";
-import {  getSongInfo } from "@/Api/SongsActions";
+import { getSongInfo } from "@/Api/SongsActions";
 import { ThemeProvider, useIsFocused } from "@react-navigation/native";
 import { ThemedView } from "@/components/ThemedView";
 import { Audio } from "expo-av";
@@ -33,9 +34,9 @@ interface ITrack {
 
 const SongDetails = () => {
   const [currentSound, setCurrentSound] = useState<Audio.Sound | null>(null);
-  const [showAbout, setShowAbout] = useState<boolean>(false)
+  const [showAbout, setShowAbout] = useState<boolean>(false);
   const isFocused = useIsFocused();
-  const [informacion, setInformacion] = useState('')
+  const [informacion, setInformacion] = useState("");
   const playSound = async (soundUri: string) => {
     if (currentSound) {
       await currentSound.stopAsync();
@@ -47,9 +48,8 @@ const SongDetails = () => {
       const soundLoaded = (await sound.loadAsync({ uri: soundUri })).isLoaded;
       if (soundLoaded) {
         setCurrentSound(sound);
-        await sound.setIsLoopingAsync(true)
+        await sound.setIsLoopingAsync(true);
         await sound.playAsync();
-        
       }
     } catch (error) {
       console.error("Error ", error);
@@ -68,10 +68,14 @@ const SongDetails = () => {
     audioFeatures: {},
     similarSongs: [],
   });
-  const { name = "", id = "", artists='' } = useLocalSearchParams<{
+  const {
+    name = "",
+    id = "",
+    artists = "",
+  } = useLocalSearchParams<{
     name?: string;
     id?: string;
-    artists?:string
+    artists?: string;
   }>();
   useFocusEffect(
     useCallback(() => {
@@ -87,21 +91,20 @@ const SongDetails = () => {
     }, [currentSound, isFocused])
   );
 
-  const extractInfo = (node:any)=>{
+  const extractInfo = (node: any) => {
     let data = [];
-    if(typeof(node) === 'string' && node !== '.'){
-      data.push(node)
-    }else if(node.children){
-      node.children.map((i:any)=>{
+    if (typeof node === "string" && node !== ".") {
+      data.push(node);
+    } else if (node.children) {
+      node.children.map((i: any) => {
         data.push(extractInfo(i));
-      })
+      });
     }
-    return data.join('');
-
-  }
+    return data.join("");
+  };
   useEffect(() => {
     navigation.setOptions({ title: name, headerBlurEffect: "regular" });
-      const fetchData = async () => {
+    const fetchData = async () => {
       const { Info, Features } = await getSongInfo(id);
       setTrack((prev) => ({
         ...prev,
@@ -109,10 +112,10 @@ const SongDetails = () => {
         audioFeatures: Features || {},
       }));
       const description = await getInfo(name, artists);
-      const informacion = description.map((item:any)=>extractInfo(item)).join(" ")
+      const informacion = description
+        .map((item: any) => extractInfo(item))
+        .join(" ");
       setInformacion(informacion);
-      
-
     };
     fetchData();
   }, [navigation]);
@@ -143,26 +146,45 @@ const SongDetails = () => {
         />
       }
     >
-      <View  className='mb-0 mt-3 flex justify-evenly flex-wrap flex-row content-evenly w-fit'  >
-        <Pressable className="w-44 p-2"  style={{backgroundColor: !showAbout ? '#0284c7':'transparent'}} onPress={()=>setShowAbout(false)}>
-          <ThemedText className="flex w-full justify-center text-center" type="subtitle">Caracteristicas</ThemedText>
+      <View className="mb-0 mt-3 flex justify-evenly flex-wrap flex-row content-evenly w-fit">
+        <Pressable
+          className="w-44 p-2"
+          style={{ backgroundColor: !showAbout ? "#0284c7" : "transparent" }}
+          onPress={() => setShowAbout(false)}
+        >
+          <ThemedText
+            className="flex w-full justify-center text-center"
+            type="subtitle"
+          >
+            Caracteristicas
+          </ThemedText>
         </Pressable>
-        <Pressable className=" flex flex-wrap w-40 text-center align-middle justify-items-center content-center justify-center " style={{backgroundColor:showAbout ? '#0284c7':'transparent'}} onPress={()=>setShowAbout(true)}>
-          <ThemedText className="flex w-20  justify-center content-center text-center" type="subtitle">About</ThemedText>
+        <Pressable
+          className=" flex flex-wrap w-40 text-center align-middle justify-items-center content-center justify-center "
+          style={{ backgroundColor: showAbout ? "#0284c7" : "transparent" }}
+          onPress={() => setShowAbout(true)}
+        >
+          <ThemedText
+            className="flex w-20  justify-center content-center text-center"
+            type="subtitle"
+          >
+            About
+          </ThemedText>
         </Pressable>
       </View>
-      
+
       {showAbout === false && Track.info ? (
         <View className="bg-sky-600 m-1 mt-0 pt-0 -top-4 w-full p-7 ">
           <ThemedText type="defaultSemiBold">Artistas</ThemedText>
 
-          <ThemedView
-          className=" flex flex-row justify-center content-center items-center bg-sky-600"
-          >
-            <ScrollView className="bg-sky-600" horizontal style={{width:80}}>
+          <ThemedView className=" flex flex-row justify-center content-center items-center bg-sky-600">
+            <ScrollView className="bg-sky-600" horizontal style={{ width: 80 }}>
               {Track.info.artists?.map((item: any, index: number) => (
-                <Pressable className="rounded-3xl m-3 px-2 bg-[#1F283D]" 
-                onPress={() => getDetails(item)} key={index}>
+                <Pressable
+                  className="rounded-3xl m-3 px-2 bg-[#1F283D]"
+                  onPress={() => getDetails(item)}
+                  key={index}
+                >
                   <ThemedText type="default">{item.name}</ThemedText>
                 </Pressable>
               ))}
@@ -170,7 +192,7 @@ const SongDetails = () => {
 
             {currentSound === null ? (
               <Pressable
-              className="bg-sky-600"
+                className="bg-sky-600"
                 style={styles.playButton}
                 onPress={() => playSound(Track.info?.preview_url || " ")}
               >
@@ -183,9 +205,7 @@ const SongDetails = () => {
             )}
           </ThemedView>
 
-          <View
-          className=" flex flex-wrap mt-8 flex-row "
-          >
+          <View className=" flex flex-wrap mt-8 flex-row ">
             <ThemedText style={{ marginBottom: 10 }} type="subtitle">
               Caracteristicas de la cancion
             </ThemedText>
@@ -344,16 +364,37 @@ const SongDetails = () => {
               <ThemedText style={{ fontSize: 12 }}>valence</ThemedText>
             </View>
           </View>
-          
         </View>
-      ): showAbout && informacion ? (<><View className="bg-sky-600 m-1 mt-0 pt-0 -top-4 w-fit ">
-        <ThemedText className="p-7" style={{ justifyContent: 'center', textAlign: "justify" }}>{informacion}</ThemedText>
-      </View><View style={{ marginTop: 30, marginBottom: 20 }}>
-          <ThemedText type="title">Links</ThemedText>
-          <Pressable onPress={() => Linking.openURL(Track.audioFeatures.uri || '')}>
-            <ThemedText type="link" style={{ justifyContent: 'center', textAlign: "justify" }}>Escuchar en Spotify</ThemedText>
-          </Pressable>
-        </View></>): <><ThemedText>Cargando....</ThemedText></>}
+      ) : showAbout && informacion ? (
+        <>
+          <View className="bg-sky-600 m-1 mt-0 pt-0 -top-4 w-fit ">
+            <ThemedText
+              className="p-7"
+              style={{ justifyContent: "center", textAlign: "justify" }}
+            >
+              {informacion}
+            </ThemedText>
+          </View>
+
+        </>
+      ) : (
+        <>
+        <ActivityIndicator size='large'/>
+        </>
+      )}
+                <View style={{ marginTop: 30, marginBottom: 20 }}>
+            <ThemedText type="title">Links</ThemedText>
+            <Pressable
+              onPress={() => Linking.openURL(Track.audioFeatures.uri || "")}
+            >
+              <ThemedText
+                type="link"
+                style={{ justifyContent: "center", textAlign: "justify" }}
+              >
+                Escuchar en Spotify
+              </ThemedText>
+            </Pressable>
+          </View>
     </ParallaxScrollView>
   );
 };

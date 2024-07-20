@@ -7,6 +7,7 @@ import {
   SafeAreaView,
   RefreshControl,
   Pressable,
+  ActivityIndicator,
 } from "react-native";
 import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { ThemedText } from "@/components/ThemedText";
@@ -103,9 +104,9 @@ export default function TabTwoScreen() {
     seedTracks(data.items);
   };
   useEffect(() => {
-    fetchRecentlySongs();
-    fetchSongs();
-    fetchData();
+    setTimeout(() => {
+      Promise.all([fetchRecentlySongs(),fetchSongs(),fetchData()])
+    }, 10);
   }, [selectDate]);
 
   return (
@@ -171,7 +172,7 @@ export default function TabTwoScreen() {
                 </View>
               ))
             ) : (
-              <View style={{ height: 500 }}></View>
+              <ActivityIndicator size='large'/>
             )}
           </View>
           <ThemedText
@@ -217,7 +218,7 @@ export default function TabTwoScreen() {
                 </Pressable>
               ))
             ) : (
-              <Text>None</Text>
+              <ActivityIndicator size='large'/>
             )}
           </ScrollView>
           <ThemedText
@@ -258,7 +259,7 @@ export default function TabTwoScreen() {
                 </Pressable>
               ))
             ) : (
-              <Text>None</Text>
+              <ActivityIndicator size='large'/>
             )}
           </ScrollView>
           <ThemedText
@@ -289,8 +290,8 @@ export default function TabTwoScreen() {
                 </Pressable>
               ))
             ) : (
-              <ThemedText>No hay canciones disponibles</ThemedText>
-            )}
+              <ActivityIndicator size='large'/>
+              )}
           </View>
         </View>
       </ScrollView>
