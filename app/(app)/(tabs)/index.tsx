@@ -11,14 +11,13 @@ import {
 } from "react-native";
 import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { ThemedText } from "@/components/ThemedText";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useStateValue } from "@/Context/store";
 import { getRecentlySongs, getTop } from "@/Api/SongsActions";
 import { styles } from "@/Styles/styles";
 import { LinearGradient } from "expo-linear-gradient";
 import { topGeneros } from "@/service/TopGeners";
 import { seedArtist, seedTracks } from "@/service/seeds";
-import { green } from "react-native-reanimated/lib/typescript/reanimated2/Colors";
 import { router } from "expo-router";
 import { Picker } from "@react-native-picker/picker";
 
@@ -26,7 +25,6 @@ import { Picker } from "@react-native-picker/picker";
 
 export default function TabTwoScreen() {
   const [{ sesionUsuario }, dispatch] = useStateValue();
-  const [refreshing, setRefreshing] = useState(false);
   const [generos, setGeneros] = useState<{ name: string; value: number }[]>([]);
   const [loading, setLoading] = useState(false);
   const [usuario, setUsuario] = useState({
@@ -45,83 +43,76 @@ export default function TabTwoScreen() {
     songs: [],
     offsetSongs: 0,
   });
-  const onRefresh = () => {
-    setRefreshing(true);
-    Promise.all([fetchData(),fetchRecentlySongs(),fetchSongs()])
-    if (sesionUsuario?.usuario) {
-      setUsuario(sesionUsuario.usuario);
-      setRefreshing(false);
-    }
-  };
-  useEffect(() => {
-    if (sesionUsuario?.usuario) {
-      setUsuario(sesionUsuario.usuario);
-      setRefreshing(false);
-    }
-  }, [sesionUsuario, refreshing]);
 
-  const getDetails = (Item: any) => {
-    return router.push({
+  
+
+  const getDetails = useCallback((Item: any) => {
+    router.push({
       pathname: `(app)/Detalles/[name]`,
       params: { id: Item.id, name: Item.name },
     });
-  };
-  const getSongDetails = (Item: any) => {
-    return router.push({
+  }, []);
+
+  const getSongDetails = useCallback((Item: any) => {
+    router.push({
       pathname: `(app)/songsDetails/[song]`,
       params: { id: Item.id, name: Item.name, artists: Item.artists[0].name },
     });
-  };
-  const fetchRecentlySongs = async () => {
+  }, []);
+
+  const fetchRecentlySongs = useCallback(async () => {
     const recently: any = await getRecentlySongs();
-    let newArray: any[] = [];
-    recently.items.map((item: any) => {
-      newArray.push(item.track);
-    });
-
-    setRecent([...newArray]);
+    const newArray = recently.items.map((item: any) => item.track);
+    setRecent(newArray);
     seedTracks(newArray);
-  };
+  }, []);
 
-  const fetchData = async () => {
-    const data: any = await getTop("artists", requestArtist.offset, selectDate);
-    setRequestArtist((prev) => ({
-      ...prev,
-      artists: data.items,
-    }));
-    seedArtist(data);
-    const top: { name: string; value: number }[] = topGeneros(data);
-    setGeneros(top);
-  };
-
-  const fetchSongs = async () => {
-    const data: any = await getTop(
-      "tracks",
-      requestMusic.offsetSongs,
-      selectDate
-    );
-    setRequestMusic((prev) => ({
-      ...prev,
-      songs: data.items,
-    }));
-
-    seedTracks(data.items);
-  };
-  useEffect(() => {
+  const fetchData = useCallback(async () => {
     setLoading(true);
-    setTimeout(() => {
-      Promise.all([fetchRecentlySongs(),fetchSongs(),fetchData()])
-              .then(()=>setLoading(false))
-    }, 5);
-    console.log(generos.length <= 0,requestArtist.artists.length)
-  }, [selectDate]);
+    try {
+      const [data, dataTopSongs ] : any  = await Promise.all([
+        getTop("artists", requestArtist.offset, selectDate),
+        getTop("tracks", requestMusic.offsetSongs, selectDate),
+      ]);
+
+      setRequestArtist((prev) => ({
+        ...prev,
+        artists: data.items,
+      }));
+
+      setRequestMusic((prev) => ({
+        ...prev,
+        songs: dataTopSongs.items,
+      }));
+
+      const top = topGeneros(data);
+      setGeneros(top);
+
+      seedTracks(dataTopSongs.items);
+      seedArtist(data);
+    } finally {
+      setLoading(false);
+    }
+  }, [requestArtist.offset, requestMusic.offsetSongs, selectDate]);
+const onRefresh = useCallback(() => {
+  console.log(sesionUsuario)
+      if (sesionUsuario) {
+        setUsuario(sesionUsuario.usuario);
+      }
+    Promise.all([fetchData(), fetchRecentlySongs()])
+  }, [selectDate,fetchData, fetchRecentlySongs, sesionUsuario]);
+
+
+  useEffect(() => {
+    onRefresh();
+  }, [onRefresh, selectDate]);
 
   return (
     <SafeAreaView style={[styles.container]}>
       <ScrollView
         contentContainerStyle={[styles.scrollView]}
         refreshControl={
-          <RefreshControl onRefresh={onRefresh} refreshing={refreshing} />
+          <RefreshControl  onRefresh={onRefresh} refreshing={false} />
         }
       >
         <View className="m-1">
