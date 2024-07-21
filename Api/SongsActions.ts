@@ -1,6 +1,7 @@
 import { Axios, AxiosError, AxiosResponse } from "axios";
 import HttpCliente from "../service/HttpCliente";
 import { seeds } from "@/service/seeds";
+import { refreshToken } from "./SpotifyAuth";
 
 
 
@@ -14,6 +15,7 @@ export const getTop = (
   return new Promise((resolve, reject) => {
     HttpCliente.get(`/me/top/${type}?offset=${offset}&time_range=${time_range}`)
       .then((response: AxiosResponse) => {
+        console.log(response.status)
         resolve(response.data);
       })
       .catch((e: any) => {
@@ -30,13 +32,13 @@ export const getRecomendations = async (): Promise<any> => {
   const randomPopularity = Math.floor(Math.random() * 100);
   const randomValence = Math.random()*0.5+0.5;
   const randomEnergy = Math.random()*0.5+0.5;
-  console.log(randomDanceability, randomPopularity, randomValence, randomEnergy)
+  console.log(randomDanceability, randomPopularity, randomValence, randomEnergy, generos.replaceAll(' ','-'))
   return new Promise((resolve, reject) => {
     HttpCliente.get(
-      `/recommendations?seed_tracks=${songs}&seed_genres=${generos}&min_energy=${randomEnergy}&seed_artists=${artists}&target_danceability=${randomDanceability}&target_popularity=${randomPopularity}&min_valence${randomValence}`
+      `/recommendations?seed_tracks=${songs}&seed_genres=${generos.replaceAll(' ','-')}&min_energy=${randomEnergy}&seed_artists=${artists}&target_danceability=${randomDanceability}&target_popularity=${randomPopularity}&min_valence${randomValence}`
     )
       .then((response: AxiosResponse) => {
-        console.log(JSON.stringify(response.data, null, 2))
+         console.log(JSON.stringify(response.data.seeds, null, 2))
         resolve(response.data?.tracks );
       })
       .catch((e: AxiosError) => {
@@ -65,6 +67,7 @@ export const getListOfSongs = (
         resolve(response.data.tracks);
       })
       .catch((e: any) => {
+        refreshToken()
         resolve(e);
       });
   });
