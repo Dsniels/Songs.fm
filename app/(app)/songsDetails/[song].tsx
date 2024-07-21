@@ -8,7 +8,7 @@ import {
   Text,
   View,
 } from "react-native";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { ThemedText } from "@/components/ThemedText";
 import {
   Link,
@@ -25,6 +25,7 @@ import { ThemedView } from "@/components/ThemedView";
 import { Audio } from "expo-av";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { getInfo } from "@/Api/AnnotatiosActions";
+import { extractInfo } from "@/service/FormatData";
 
 interface ITrack {
   info: any;
@@ -91,17 +92,7 @@ const SongDetails = () => {
     }, [currentSound, isFocused])
   );
 
-  const extractInfo = (node: any) => {
-    let data = [];
-    if (typeof node === "string" && node !== ".") {
-      data.push(node);
-    } else if (node.children) {
-      node.children.map((i: any) => {
-        data.push(extractInfo(i));
-      });
-    }
-    return data.join("");
-  };
+
   useEffect(() => {
     navigation.setOptions({ title: name, headerBlurEffect: "regular" });
     const fetchData = async () => {
@@ -111,26 +102,21 @@ const SongDetails = () => {
         info: Info || {},
         audioFeatures: Features || {},
       }));
-      const description = await getInfo(name, artists);
-      const informacion = description
+      const description = await getInfo(name, artists, true);
+      const informacion =  description
         .map((item: any) => extractInfo(item))
-        .join(" ");
+        .join("   ");
       setInformacion(informacion);
     };
     fetchData();
   }, [navigation]);
-  const getSongDetails = (Item: any) => {
-    return router.push({
-      pathname: `(app)/songsDetails/[song]`,
-      params: { id: Item.id, name: Item.name },
-    });
-  };
-  const getDetails = (Item: any) => {
+
+  const getDetails = useCallback((Item: any) => {
     return router.replace({
       pathname: `(app)/Detalles/[name]`,
       params: { id: Item.id, name: Item.name },
     });
-  };
+  },[]);
 
   return (
     <ParallaxScrollView
@@ -148,7 +134,7 @@ const SongDetails = () => {
     >
       <View className="mb-0 mt-3 flex justify-evenly flex-wrap flex-row content-evenly w-fit">
         <Pressable
-          className="w-44 p-2"
+          className="w-44 p-2 bg-opacity-70"
           style={{ backgroundColor: !showAbout ? "#0284c7" : "transparent" }}
           onPress={() => setShowAbout(false)}
         >
@@ -160,7 +146,7 @@ const SongDetails = () => {
           </ThemedText>
         </Pressable>
         <Pressable
-          className=" flex flex-wrap w-40 text-center align-middle justify-items-center content-center justify-center "
+          className=" flex flex-wrap w-40 text-center align-middle justify-items-center content-center justify-center bg-opacity-70 "
           style={{ backgroundColor: showAbout ? "#0284c7" : "transparent" }}
           onPress={() => setShowAbout(true)}
         >
@@ -174,7 +160,7 @@ const SongDetails = () => {
       </View>
 
       {showAbout === false && Track.info ? (
-        <View className="bg-sky-600 m-1 mt-0 pt-0 -top-4 w-full p-7 ">
+        <View className=" bg-opacity-80 bg-sky-600 m-1 mt-0 pt-0 -top-4 w-full p-7 ">
           <ThemedText type="defaultSemiBold">Artistas</ThemedText>
 
           <ThemedView className=" flex flex-row justify-center content-center items-center bg-sky-600">
@@ -367,7 +353,7 @@ const SongDetails = () => {
         </View>
       ) : showAbout && informacion ? (
         <>
-          <View className="bg-sky-600 m-1 mt-0 pt-0 -top-4 w-fit ">
+          <View className=" bg-opacity-80 bg-sky-600 m-1 mt-0 pt-0 -top-4 w-fit ">
             <ThemedText
               className="p-7"
               style={{ justifyContent: "center", textAlign: "justify" }}
@@ -378,7 +364,7 @@ const SongDetails = () => {
 
         </>
       ) : (
-        <View className="bg-sky-600 flex justify-stretch content-center items-center align-middle m-1 mt-0 pt-0 -top-4 w-fit h-36 ">
+        <View className="bg-opacity-80 bg-sky-600 flex justify-stretch content-center items-center align-middle m-1 mt-0 pt-0 -top-4 w-fit h-36 ">
         <ActivityIndicator className="m-8" size='large'/>
         </View>
       )}

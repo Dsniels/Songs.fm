@@ -3,14 +3,14 @@ import { seedGeners } from "./seeds";
 export const topGeneros = (data: any) => {
   const generos_data = data.items?.map((item: any) => item.genres).flat() || [];
   const frec = generos_data?.reduce(
-    (acumulador: [string, number][], item: string) => {
-      const encontrado = acumulador.find((subArray) => subArray[0] === item);
+    (sum: [string, number][], item: string) => {
+      const encontrado = sum.find((subArray) => subArray[0] === item);
       if (encontrado) {
         encontrado[1] += 1;
       } else {
-        acumulador.push([item, 1]);
+        sum.push([item, 1]);
       }
-      return acumulador;
+      return sum;
     },
     []
   );

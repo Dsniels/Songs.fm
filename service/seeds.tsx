@@ -6,6 +6,7 @@ import * as SecureStorage from 'expo-secure-store';
 
 
 export const seedGeners=async(seedGeners:string)=>{
+    console.log(seedGeners)
 
     await AsyncStorage.setItem('seedGeneros',seedGeners)
 
