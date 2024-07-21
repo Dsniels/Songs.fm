@@ -1,4 +1,6 @@
 import {
+  ActivityIndicator,
+  ActivityIndicatorBase,
   Image,
   ImageBackground,
   Linking,
@@ -13,9 +15,10 @@ import { router, useLocalSearchParams, useNavigation } from "expo-router";
 import { getArtistInformation } from "@/Api/ArtistsActions";
 import { ThemedText } from "@/components/ThemedText";
 import ParallaxScrollView from "@/components/ParallaxScrollView";
-import SongDetails from "../songsDetails/[song]";
 import { LinearGradient } from "expo-linear-gradient";
 import { styles } from "@/Styles/styles";
+import { getInfo } from "@/Api/AnnotatiosActions";
+import { extractInfo } from "@/service/FormatData";
 
 interface Tracks {
   album: any;
@@ -24,7 +27,7 @@ interface Tracks {
 }
 
 interface ArtistInfo {
-  info: any;
+  info: undefined | any;
   songs: Tracks[];
   albums: any[];
   artists: any[];
@@ -32,16 +35,19 @@ interface ArtistInfo {
 
 const Detalles = () => {
   const navigation = useNavigation();
+  const [informacion, setInformacion] = useState<string | undefined>(undefined);
+  const [ShowMore, setShowMore] = useState(false);
   const { name = "", id = "" } = useLocalSearchParams<{
     name?: string;
     id?: string;
   }>();
   const [infoArtist, setInfo] = useState<ArtistInfo>({
-    info: {},
+    info: undefined,
     songs: [],
     albums: [],
     artists: [],
   });
+
   const getDetails = (Item: any) => {
     return router.push({
       pathname: `(app)/Detalles/[name]`,
@@ -66,6 +72,9 @@ const Detalles = () => {
           albums: Albums || [],
           artists: Artists,
         });
+        const description = await getInfo(name, name, false);
+        const info = description?.map((i: any) => extractInfo(i)).join(" ");
+        setInformacion(info);
       } catch (error) {
         console.error("Error fetching artist information:", error);
       }
@@ -95,11 +104,35 @@ const Detalles = () => {
         />
       }
     >
-      {infoArtist.info?.images?.[0]?.url ? (
+      {informacion === undefined && <ActivityIndicator size="large" />}
+      {informacion !== undefined && (
+        <View className="flex m-5 ">
+          <ThemedText type="subtitle">Who is {name}?</ThemedText>
+          <Pressable
+            className="flex"
+            onPress={() => (ShowMore ? setShowMore(false) : setShowMore(true))}
+          >
+            <ThemedText
+              className="text-justify mb-0 mt-3 h-auto"
+              numberOfLines={ShowMore ? undefined : 2}
+              lineBreakMode="clip"
+            >
+              {informacion}
+            </ThemedText>
+            <ThemedText className="mt-0" type="link">
+              {" "}
+              ...{ShowMore ? "show less" : "show more"}
+            </ThemedText>
+          </Pressable>
+        </View>
+      )}
+      {infoArtist.info?.genres ? (
         <View>
-          <View style={{margin:30}}>
+          <View style={{ margin: 30 }}>
             <ThemedText type="subtitle">Popularidad:</ThemedText>
-            <ThemedText type="subtitle">{infoArtist.info?.popularity}</ThemedText>
+            <ThemedText type="subtitle">
+              {infoArtist.info?.popularity}
+            </ThemedText>
 
             <ThemedText style={{ marginTop: 20 }} type="subtitle">
               Géneros
@@ -127,10 +160,16 @@ const Detalles = () => {
                   onPress={() => getSongDetails(item)}
                   key={item.id}
                 >
-                  <Image
-                    source={{ uri: item.album?.images?.[0]?.url }}
-                    style={{ width: 50, height: 50 }}
-                  />
+                  {item.album?.images?.[0]?.url && (
+                    <Image
+                      source={{
+                        uri:
+                          item.album?.images?.[0]?.url ||
+                          "https://th.bing.com/th/id/OIP.dfpjYr0obWlvVKnjJ9ccyQHaHJ?rs=1&pid=ImgDetMain",
+                      }}
+                      style={{ width: 50, height: 50 }}
+                    />
+                  )}
                   <ThemedText
                     numberOfLines={1}
                     ellipsizeMode="clip"
@@ -148,13 +187,13 @@ const Detalles = () => {
             </ThemedText>
             <ScrollView horizontal>
               {infoArtist.albums.length > 0 ? (
-                infoArtist.albums.map((item: any) => (
+                infoArtist.albums?.map((item: any) => (
                   <ImageBackground
                     key={item.id}
                     style={styles.TopSongs}
                     source={{
                       uri:
-                        item.images[0].url ||
+                        item?.images?.[0]?.url ||
                         "https://images.pexels.com/photos/145707/pexels-photo-145707.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
                     }}
                   >
@@ -195,8 +234,9 @@ const Detalles = () => {
                 <ThemedText>No hay canciones disponibles</ThemedText>
               )}
             </ScrollView>
+
             <ThemedText style={{ marginTop: 20 }} type="subtitle">
-              Te podria interasar...
+              Te podría interesar...
             </ThemedText>
             <ScrollView horizontal>
               {infoArtist.artists.length > 0 ? (
@@ -217,7 +257,7 @@ const Detalles = () => {
                       style={[styles.TopArtist]}
                       source={{
                         uri:
-                          item.images[0].url ||
+                          item.images?.[0]?.url ||
                           "https://images.pexels.com/photos/145707/pexels-photo-145707.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
                       }}
                     >
@@ -257,18 +297,27 @@ const Detalles = () => {
                   </Pressable>
                 ))
               ) : (
-                <ThemedText>No hay canciones disponibles</ThemedText>
+                <ThemedText>No hay artistas disponibles</ThemedText>
               )}
             </ScrollView>
-            <View style={{marginTop:30, marginBottom:20}}>
-            <ThemedText type="title">Links</ThemedText>
-            <Pressable onPress={()=>Linking.openURL(infoArtist.info?.uri || '')}>
-            <ThemedText type="link" style={{justifyContent:'center',textAlign:"justify"}}>Escuchar en Spotify</ThemedText>
-            </Pressable>
-          </View>
+            <View style={{ marginTop: 30, marginBottom: 20 }}>
+              <ThemedText type="title">Links</ThemedText>
+              <Pressable
+                onPress={() => Linking.openURL(infoArtist.info?.uri || "")}
+              >
+                <ThemedText
+                  type="link"
+                  style={{ justifyContent: "center", textAlign: "justify" }}
+                >
+                  Escuchar en Spotify
+                </ThemedText>
+              </Pressable>
+            </View>
           </View>
         </View>
-      ) : null}
+      ) : (
+        <ActivityIndicator size="large" />
+      )}
     </ParallaxScrollView>
   );
 };

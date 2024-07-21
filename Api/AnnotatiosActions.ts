@@ -6,37 +6,46 @@ const GeniusApi = axios.create({
     }
 })
 
-export const getInfo = async (search:string,artists:string)=>{
+export const getInfo = async (search:string,artists:string, song : boolean)=>{
 
   const changed = search.replace(/\s*\(.*?\)\s*/g, '').trim();
-
-  const {status,data} = await GeniusApi.get(`/search?q=${changed+artists}`);
+  const query = song ? changed+artists : search
+  const {status,data} = await GeniusApi.get(`/search?q=${query}`);
   if(status !== 200){
     throw new Error('Sin info')
   }
   
   const {response} = data;
-  console.log(response.length)
-  const {result}= response.hits.find((i:any, index:number)=>{
-    console.log(artists.toLocaleLowerCase())
-    console.log(i.result.artist_names.toLocaleLowerCase())
-    const artistName : string = i.result.artist_names.toLocaleLowerCase()
-    console.log(artistName.includes(artists.toLocaleLowerCase()), index)
+  const {result}= response.hits.find((i:any)=>{
+    // console.log(JSON.stringify(response,null,2))
     return i.result.artist_names.toLocaleLowerCase().includes(artists.toLocaleLowerCase())
   })
-  const id = result.id;
+  let id = result.id;
+  if(song){
+    id = result.id;
+  }else{
+    id = result.primary_artist.id
+  }
   
-  const annotations : any = await getAnnotations(id);
-  console.log(annotations.response.song.description.dom.children)
-    return annotations.response.song.description.dom.children
+  const annotations : any = await getAnnotations(id, song? 'songs' :'artists');
+  // console.log(annotations)
+
+    return annotations || ["?"]
 }
 
 
-const getAnnotations =(id:string)=>{
+const getAnnotations =(id:string, term : "songs" | "artists")=>{
+  console.log(term)
   return new Promise((resolve, reject)=>{
-    GeniusApi.get(`/songs/${id}`).then((response : AxiosResponse)=>{
+    GeniusApi.get(`/${term}/${id}`).then((response : AxiosResponse)=>{
       if(response.status === 200){
-        resolve(response.data)
+        if(term === 'songs') {
+          resolve(response.data.response.song.description.dom.children)
+
+        }else{
+          resolve(response.data.response.artist.description_annotation.annotations[0].body.dom.children)
+        }
+
       }else{
         throw new Error('No Informacion')
       }
