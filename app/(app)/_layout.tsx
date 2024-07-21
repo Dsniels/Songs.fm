@@ -7,6 +7,7 @@ import { router, Stack, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import * as SecureStorage from 'expo-secure-store';
+import { useAuth } from "@/hooks/useAuth";
 
 const CustomHeader = () => {
   return (
@@ -25,57 +26,10 @@ const CustomHeader = () => {
 
 export default function Applayout() {
   const [{ sesionUsuario }, dispatch] = useStateValue();
-  const [servidorResponse, setServidorResponse] = useState(false);
-  const [tokenValido, setTokenValido] = useState<boolean>(true)
- 
 
-  useEffect(() => {
-  const getData = async () => {
-    try {
-      const token = (await SecureStorage.getItemAsync("token")) || false;
-      if (!token) {
-        return router.push("/login");
-      }
-      
-      const fecha = await SecureStorage.getItemAsync("expira");
+    useAuth(dispatch);
 
-      if (fecha === null) {
-        return router.push("/login");
-      } else {
-        const Today = new Date();
-        const expiracion = new Date(fecha);
-        console.log('Today',Today,"Expiracion", expiracion)
 
-        console.log('if',Today < expiracion)
-        console.log('valid', tokenValido)
-
-        if (Today < expiracion) {
-          setTokenValido(true);
-          console.log('validooo', tokenValido)   
-        }else{
-           setTokenValido(false)
-          
-        }
-      }
-
-      if (!tokenValido) {
-        console.log('refres if')
-        await refreshToken();
-        setTokenValido(true);
-      }
-
-      if (!servidorResponse && token) {
-        await getprofile(dispatch);
-        router.replace('/(tabs)');
-        setServidorResponse(true);
-      }
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
-
-  getData();
-}, [sesionUsuario]);
 
 
   return (
