@@ -82,7 +82,8 @@ export const styles = StyleSheet.create({
       
     },
     card:{
-      position:'absolute', top:25,
+      position:'absolute', 
+      flex:1,
       height: 750,
       display:'flex',
       justifyContent: 'center',
@@ -95,6 +96,7 @@ export const styles = StyleSheet.create({
         width: 0,
         height: 2,
       },
+      marginTop:40,
       margin:30,
       width:350,
       shadowRadius: 8,
@@ -121,15 +123,14 @@ export const styles = StyleSheet.create({
     cardContent :{
       textAlign: 'left',
       padding:10,
-      width:200,
+      width:250,
       fontSize: 20,
       color: 'white',
       textShadowColor: 'black',
       textShadowRadius: 20,
     },
     scrollView: {
-      flex:1,
-            margin:20,
+             margin:20,
       alignItems: 'center',
     justifyContent: 'center',
   },
