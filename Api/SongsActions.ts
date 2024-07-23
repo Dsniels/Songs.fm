@@ -15,11 +15,9 @@ export const getTop = (
   return new Promise((resolve, reject) => {
     HttpCliente.get(`/me/top/${type}?offset=${offset}&time_range=${time_range}`)
       .then((response: AxiosResponse) => {
-        console.log(response.status)
         resolve(response.data);
       })
       .catch((e: any) => {
-        console.log("ErrorGetTop", e);
         resolve(e);
       });
   });
@@ -32,18 +30,16 @@ export const getRecomendations = async (): Promise<any> => {
   const randomPopularity = Math.floor(Math.random() * 100);
   const randomValence = Math.random()*0.5+0.5;
   const randomEnergy = Math.random()*0.5+0.5;
-  console.log(randomDanceability, randomPopularity, randomValence, randomEnergy, generos.replaceAll(' ','-'))
+  
   return new Promise((resolve, reject) => {
     HttpCliente.get(
       `/recommendations?seed_tracks=${songs}&seed_genres=${generos.replaceAll(' ','-')}&min_energy=${randomEnergy}&seed_artists=${artists}&target_danceability=${randomDanceability}&target_popularity=${randomPopularity}&min_valence${randomValence}`
     )
       .then((response: AxiosResponse) => {
-         console.log(JSON.stringify(response.data.seeds, null, 2))
         resolve(response.data?.tracks );
       })
       .catch((e: AxiosError) => {
         resolve(e);
-        console.log(e.message);
       });
   });
 };
@@ -53,7 +49,6 @@ export const getRecentlySongs =()=>{
     HttpCliente.get('/me/player/recently-played?limit=20').then((response)=>{
       resolve(response.data)
     }).catch((e)=>{
-      console.log(e);
       resolve})
   })
 }

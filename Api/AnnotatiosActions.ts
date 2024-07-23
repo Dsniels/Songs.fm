@@ -10,16 +10,16 @@ export const getInfo = async (search:string,artists:string, song : boolean)=>{
 
   const changed = search.replace(/\s*\(.*?\)\s*/g, '').trim();
   const query = song ? changed+artists : search
-  const {status,data} = await GeniusApi.get(`/search?q=${query}`);
+  const {status,data} = await GeniusApi.get(`/search?q=${query.replace(' ', '-')}`);
   if(status !== 200){
     throw new Error('Sin info')
   }
   
   const {response} = data;
   const {result}= response.hits.find((i:any)=>{
-    // console.log(JSON.stringify(response,null,2))
-    return i.result.artist_names.toLocaleLowerCase().includes(artists.toLocaleLowerCase())
-  })
+    return i.result.artist_names.toLocaleLowerCase().includes(artists.toLocaleLowerCase()) 
+  }) || false
+  if(!result) return ["?"]
   let id = result.id;
   if(song){
     id = result.id;
@@ -28,14 +28,12 @@ export const getInfo = async (search:string,artists:string, song : boolean)=>{
   }
   
   const annotations : any = await getAnnotations(id, song? 'songs' :'artists');
-  // console.log(annotations)
 
     return annotations || ["?"]
 }
 
 
 const getAnnotations =(id:string, term : "songs" | "artists")=>{
-  console.log(term)
   return new Promise((resolve, reject)=>{
     GeniusApi.get(`/${term}/${id}`).then((response : AxiosResponse)=>{
       if(response.status === 200){

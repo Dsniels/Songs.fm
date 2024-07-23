@@ -12,7 +12,6 @@ export const getprofile =(dispatch : Dispatch<any>):Promise<AxiosResponse<any>>=
                      })
             resolve(response)
         }).catch((e:any)=>{
-            console.log('Error get Profile',e);
             resolve(e)})
     })
 }
