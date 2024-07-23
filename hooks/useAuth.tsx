@@ -14,7 +14,6 @@ const [servidorResponse, setServidorResponse] = useState(false);
 const getData = useCallback(async () => {
     try {
       const token = (await SecureStorage.getItemAsync("token")) || false;
-      console.log('checkins')
       if (!token) {
         return router.push("/login");
       }
@@ -26,9 +25,7 @@ const getData = useCallback(async () => {
       } else {
         const Today = new Date();
         const expiracion = new Date(fecha);
-        console.log('Today',Today,"Expiracion", expiracion)
 
-        console.log('if',Today.getTime() > expiracion.getTime())
 
         if (Today.getTime() > expiracion.getTime()) {      
             await refreshToken();
