@@ -1,6 +1,7 @@
 import {
   ActivityIndicator,
   ActivityIndicatorBase,
+  FlatList,
   Image,
   ImageBackground,
   Linking,
@@ -19,6 +20,8 @@ import { LinearGradient } from "expo-linear-gradient";
 import { styles } from "@/Styles/styles";
 import { getInfo } from "@/Api/AnnotatiosActions";
 import { extractInfo } from "@/service/FormatData";
+import { ListOfArtists } from "@/components/ListOfArtists";
+import { SmallListSongs } from "@/components/SmallListSongs";
 
 interface Tracks {
   album: any;
@@ -76,7 +79,6 @@ const Detalles = () => {
         const info = description?.map((i: any) => extractInfo(i)).join(" ");
         setInformacion(info);
       } catch (error) {
-        console.error("Error fetching artist information:", error);
       }
     };
 
@@ -146,38 +148,9 @@ const Detalles = () => {
               Canciones Top
             </ThemedText>
             {infoArtist.songs.length > 0 ? (
-              infoArtist.songs.map((item: Tracks) => (
-                <Pressable
-                  style={{
-                    backgroundColor: "#060C19",
-                    display: "flex",
-                    flexDirection: "row",
-                    justifyContent: "flex-start",
-                    alignContent: "center",
-                    alignItems: "center",
-                    margin: 10,
-                  }}
-                  onPress={() => getSongDetails(item)}
-                  key={item.id}
-                >
-                  {item.album?.images?.[0]?.url && (
-                    <Image
-                      source={{
-                        uri:
-                          item.album?.images?.[0]?.url ||
-                          "https://th.bing.com/th/id/OIP.dfpjYr0obWlvVKnjJ9ccyQHaHJ?rs=1&pid=ImgDetMain",
-                      }}
-                      style={{ width: 50, height: 50 }}
-                    />
-                  )}
-                  <ThemedText
-                    numberOfLines={1}
-                    ellipsizeMode="clip"
-                    style={{ marginLeft: 10, width: 200 }}
-                  >
-                    {item.name}
-                  </ThemedText>
-                </Pressable>
+              infoArtist.songs.map((item: Tracks, index:number) => (
+                <SmallListSongs key={index} item={item} getSongDetails={getSongDetails}/>
+                
               ))
             ) : (
               <ThemedText>No hay canciones disponibles</ThemedText>
@@ -238,68 +211,18 @@ const Detalles = () => {
             <ThemedText style={{ marginTop: 20 }} type="subtitle">
               Te podría interesar...
             </ThemedText>
-            <ScrollView horizontal>
-              {infoArtist.artists.length > 0 ? (
-                infoArtist.artists.map((item: any) => (
-                  <Pressable
-                    style={{
-                      height: 200,
-                      width: 200,
-                      margin: 20,
-                      marginTop: 10,
-                      borderRadius: 100,
-                    }}
-                    key={item.id}
-                    onPress={() => getDetails(item)}
-                  >
-                    <ImageBackground
-                      key={item.id}
-                      style={[styles.TopArtist]}
-                      source={{
-                        uri:
-                          item.images?.[0]?.url ||
-                          "https://images.pexels.com/photos/145707/pexels-photo-145707.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-                      }}
-                    >
-                      <LinearGradient
-                        colors={["rgba(0,0,0,0.8)", "transparent"]}
-                        style={styles.linearGradient}
-                        start={{ x: 0, y: 1 }}
-                        end={{ x: 0, y: 0 }}
-                      >
-                        <View
-                          style={{
-                            display: "flex",
-                            zIndex: 0,
-                            top: 100,
-                            right: 30,
-                            margin: 30,
-                            width: 200,
-                            padding: 20,
-                            borderRadius: 400,
-                          }}
-                          key={item.id}
-                        >
-                          <Text
-                            style={{
-                              textTransform: "capitalize",
-                              color: "white",
-                              fontSize: 18,
-                              fontStyle: "normal",
-                              fontWeight: "bold",
-                            }}
-                          >
-                            {item.name}
-                          </Text>
-                        </View>
-                      </LinearGradient>
-                    </ImageBackground>
-                  </Pressable>
-                ))
-              ) : (
-                <ThemedText>No hay artistas disponibles</ThemedText>
-              )}
-            </ScrollView>
+            {infoArtist.artists.length > 0 ? (
+              <FlatList
+                horizontal
+                data={infoArtist.artists}
+                renderItem={({ item }) => (
+                  <ListOfArtists item={item} getDetails={getDetails} />
+                )}
+              />
+            ) : (
+              <ActivityIndicator />
+            )}
+
             <View style={{ marginTop: 30, marginBottom: 20 }}>
               <ThemedText type="title">Links</ThemedText>
               <Pressable
