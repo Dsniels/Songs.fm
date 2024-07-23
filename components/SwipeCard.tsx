@@ -105,9 +105,9 @@ export const SwipeCard = <T,>({ children, items, setItems }: any) => {
   );
 
   const playCurrentSound = async () => {
-    const status = await currentSound?.getStatusAsync().catch(console.log);
+    const status = await currentSound?.getStatusAsync()
     if (status?.isLoaded && !status.isPlaying) {
-      await currentSound?.playAsync().catch(console.log);
+      await currentSound?.playAsync()
     }
   };
   useFocusEffect(

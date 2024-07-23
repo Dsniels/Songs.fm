@@ -23,7 +23,6 @@ export default function login() {
     native: "myapp://",
     path: "/login",
   });
-  console.log(Linking.createURL('login'))
   const discovery = {
       authorizationEndpoint: "https://accounts.spotify.com/authorize",
       tokenEndpoint: "https://accounts.spotify.com/api/token",
@@ -63,7 +62,6 @@ const handleResponse = async (AccessCode: string) => {
 
 
   useEffect(() => {
-    console.log(response)
     if (response?.type === "success") {
       const { code } = response.params;
       setCode(code)
