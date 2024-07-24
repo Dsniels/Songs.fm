@@ -2,6 +2,7 @@ import { Axios, AxiosError, AxiosResponse } from "axios";
 import HttpCliente from "../service/HttpCliente";
 import { seeds } from "@/service/seeds";
 import { refreshToken } from "./SpotifyAuth";
+import { ToastAndroid } from "react-native";
 
 
 
@@ -24,7 +25,6 @@ export const getTop = (
 };
 
 export const getRecomendations = async (): Promise<any> => {
-
   const {songs, artists, generos} = await seeds();
   const randomDanceability =Math.random()*0.5+0.5;
   const randomPopularity = Math.floor(Math.random() * 100);
@@ -39,6 +39,8 @@ export const getRecomendations = async (): Promise<any> => {
         resolve(response.data?.tracks );
       })
       .catch((e: AxiosError) => {
+        ToastAndroid.showWithGravity('Ocurrio un error con el servidor', ToastAndroid.SHORT, ToastAndroid.CENTER);
+        console.log(e)
         resolve(e);
       });
   });
@@ -69,19 +71,27 @@ export const getListOfSongs = (
 };
 
 export const getSongInfo = async (id:string) =>{
-  const [info, features] = await Promise.all([songInfo(id), AudioFeatures(id)]);
- // const similar_songs = await similarSongs(id,features) || []
-  return {Info : info, Features : features};
+  const [info, features, like] = await Promise.all([songInfo(id), AudioFeatures(id), checkLikeTrack(id)]);
+  console.log(typeof like)
+  return {Info : info, Features : features, Like : like};
 }
 
 const songInfo = (id : string) =>{
-
   return new Promise ((resolve, reject) =>{
     HttpCliente.get(`/tracks/${id}`).then((response : any) =>{
       resolve(response.data || {})
     }).catch((e)=>resolve(e))
   })
 }
+
+const checkLikeTrack = (id:string) =>{
+  return new Promise((resolve, reject)=>{
+    HttpCliente.get(`/me/tracks/contains?ids=${id}`).then((response:any)=>{
+      resolve(response.data[0])
+    }).catch(resolve)
+  })
+}
+
 
 
 const AudioFeatures = (id:string) : Promise<any> =>{

@@ -1,6 +1,5 @@
 export const generos = [
   "acoustic",
-  "afrobeat",
   "alternative",
   "blues",
   "chill",
@@ -10,7 +9,6 @@ export const generos = [
   "jazz",
   "movies",
   "pop",
-  "pop-film",
   "r-n-b",
   "rock",
   "rock-n-roll",

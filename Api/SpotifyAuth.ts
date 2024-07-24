@@ -63,13 +63,12 @@ export const refreshToken = async (): Promise<
   return new Promise((resolve, reject) => {
     instancia
       .post("https://accounts.spotify.com/api/token", qs.stringify(body))
-      .then(async (response: AxiosResponse) => {
+      .then((response: AxiosResponse) => {
         let expira = new Date();
         expira.setSeconds(expira.getSeconds() + 3600);
         response.data.expira = expira;
         checkToken(expira);
-        setTimeout(refreshToken, 3600000);
-        await SecureStorage.setItemAsync("token", response.data.access_token);
+        SecureStorage.setItemAsync("token", response.data.access_token);
         resolve(response.data);
       })
       .catch((e) => {

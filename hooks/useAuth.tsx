@@ -1,4 +1,4 @@
-import { View, Text } from 'react-native'
+import { View, Text, ToastAndroid } from 'react-native'
 import React, { Dispatch, useCallback, useEffect, useState } from 'react'
 import * as SecureStorage from 'expo-secure-store';
 import { router } from 'expo-router';
@@ -12,41 +12,31 @@ const [servidorResponse, setServidorResponse] = useState(false);
 
 
 const getData = useCallback(async () => {
-    try {
-      const token = (await SecureStorage.getItemAsync("token")) || false;
-      if (!token) {
+      const [token, fecha] : any = await Promise.allSettled([SecureStorage.getItemAsync("token"), SecureStorage.getItemAsync("expira")]);
+      if (token.value == null || fecha.value === null) {
         return router.push("/login");
       }
       
-      const fecha = await SecureStorage.getItemAsync("expira");
 
-      if (fecha === null) {
-        return router.push("/login");
-      } else {
         const Today = new Date();
-        const expiracion = new Date(fecha);
-
+        const expiracion = new Date(fecha.value);
 
         if (Today.getTime() > expiracion.getTime()) {      
-            await refreshToken();
+            await Promise.all([refreshToken(), getprofile(dispatch)]).then(()=>setServidorResponse(true));
+            
         }
-      }
 
-
-
-      if (!servidorResponse && token) {
-        await getprofile(dispatch);
+      if (!servidorResponse && token.value) {
+        await getprofile(dispatch).then(()=>console.log('perfil cargado'));
         setServidorResponse(true);
+      }
           setInterval(() => {
           getData()
           }, 3600000); 
-      }
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
   },[dispatch]);
   useEffect(()=>{
-     getData()
+
+     getData().catch((e)=>ToastAndroid.showWithGravity(e, ToastAndroid.SHORT, ToastAndroid.CENTER));
 
 
 
