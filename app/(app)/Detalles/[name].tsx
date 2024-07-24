@@ -63,7 +63,6 @@ const Detalles = () => {
     navigation.setOptions({ title: name, headerBlurEffect: "regular" });
 
     const fetchData = async () => {
-      const start = performance.now();
         const [{
           Info,
           Songs = [],
@@ -81,7 +80,6 @@ const Detalles = () => {
         });
         const info = description?.map((i: any) => extractInfo(i)).join(" ");
         setInformacion(info);
-       console.log("Time to fetch data", (performance.now() - start) / 1000);
     };
 
     fetchData().catch((e)=>ToastAndroid.showWithGravity(e, ToastAndroid.SHORT, ToastAndroid.CENTER)); 

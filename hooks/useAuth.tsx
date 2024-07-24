@@ -27,7 +27,7 @@ const getData = useCallback(async () => {
         }
 
       if (!servidorResponse && token.value) {
-        await getprofile(dispatch).then(()=>console.log('perfil cargado'));
+        await getprofile(dispatch)
         setServidorResponse(true);
       }
           setInterval(() => {

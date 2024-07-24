@@ -105,7 +105,6 @@ const SongDetails = () => {
         info: Info || {},
         audioFeatures: Features || {},
       }));
-      console.log(Like, typeof Like);
       setLike(Like);
       const informacion = description
         .map((item: any) => extractInfo(item))

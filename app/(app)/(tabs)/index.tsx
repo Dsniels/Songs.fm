@@ -87,25 +87,21 @@ export default function TabTwoScreen() {
   }, [selectDate]);
 
   const onRefresh = useCallback(async() => {
-    console.log('refreshing')
     setLoading(true);
     if (sesionUsuario?.usuario) {
       setUsuario(sesionUsuario.usuario);
     }
     Promise.all([fetchData(), fetchRecentlySongs()]).then(() => { 
-      console.log('refreshed')
       setLoading(false);
     });
   }, [sesionUsuario]);
 
   useEffect(() => {
    
-    const start = performance.now();
-      onRefresh().then(() => {
-        const end = performance.now();
-        console.log(`Time to load: ${(end - start)/1000}ms`);
-      })  
-  }, [selectDate]);
+      onRefresh()
+    
+    }, [selectDate]);
+
 
 
   const renderGeneroItem = ({ item }: any) => (

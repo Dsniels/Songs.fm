@@ -55,6 +55,5 @@ export const seeds = async () => {
   const seedTrack = await getRandomSeedItem("seedTrack");
   const seedArtist = await getRandomSeedItem("seedArtists");
   const seedGeneros = generos[randomIndex(generos)];
-  console.log(seedTrack, seedArtist, seedGeneros);
   return { songs: seedTrack, artists: seedArtist, generos: seedGeneros };
 };
