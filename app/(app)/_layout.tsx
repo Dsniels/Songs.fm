@@ -3,11 +3,10 @@ import { getprofile } from "@/Api/UserAction";
 import { useStateValue } from "@/Context/store";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { LinearGradient } from "expo-linear-gradient";
-import { router, Stack, useLocalSearchParams } from "expo-router";
-import { useEffect, useState } from "react";
-import { StyleSheet, View } from "react-native";
-import * as SecureStorage from 'expo-secure-store';
+import { Stack } from "expo-router";
+import { AppState, AppStateEvent, StyleSheet, View } from "react-native";
 import { useAuth } from "@/hooks/useAuth";
+import { useEffect } from "react";
 
 const CustomHeader = () => {
   return (
@@ -26,6 +25,16 @@ const CustomHeader = () => {
 
 export default function Applayout() {
   const [{ sesionUsuario }, dispatch] = useStateValue();
+  useEffect(() => {
+    AppState.addEventListener("change", (state)=>{
+      if(state === 'inactive'){
+         AsyncStorage.clear().then(()=>console.log('clear'));
+      }
+
+
+    });
+
+  },[])
 
     useAuth(dispatch);
 

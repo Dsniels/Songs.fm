@@ -61,8 +61,7 @@ export default function TabTwoScreen() {
   }, []);
 
   const fetchData = useCallback(async () => {
-    setLoading(true);
-    try {
+
       const [data, dataTopSongs]: any = await Promise.all([
         getTop("artists", requestArtist.offset, selectDate),
         getTop("tracks", requestMusic.offsetSongs, selectDate),
@@ -78,26 +77,36 @@ export default function TabTwoScreen() {
         songs: dataTopSongs.items,
       }));
 
-      const top = topGeneros(data);
+      const top =topGeneros(data);
       setGeneros(top);
 
       seedTracks(dataTopSongs.items);
       seedArtist(data);
-    } finally {
-      setLoading(false);
-    }
-  }, [requestArtist.offset, requestMusic.offsetSongs, selectDate]);
 
-  const onRefresh = useCallback(() => {
-    if (sesionUsuario) {
+    
+  }, [selectDate]);
+
+  const onRefresh = useCallback(async() => {
+    console.log('refreshing')
+    setLoading(true);
+    if (sesionUsuario?.usuario) {
       setUsuario(sesionUsuario.usuario);
     }
-    Promise.all([fetchData(), fetchRecentlySongs()]);
-  }, [selectDate, fetchData, fetchRecentlySongs, sesionUsuario]);
+    Promise.all([fetchData(), fetchRecentlySongs()]).then(() => { 
+      console.log('refreshed')
+      setLoading(false);
+    });
+  }, [sesionUsuario]);
 
   useEffect(() => {
-    onRefresh();
-  }, [onRefresh, selectDate]);
+   
+    const start = performance.now();
+      onRefresh().then(() => {
+        const end = performance.now();
+        console.log(`Time to load: ${(end - start)/1000}ms`);
+      })  
+  }, [selectDate]);
+
 
   const renderGeneroItem = ({ item }: any) => (
     <View className="m-3 rounded-lg" key={item.name}>
@@ -155,7 +164,7 @@ export default function TabTwoScreen() {
               >
                 Generos que mas escuchas
               </ThemedText>
-              {generos && !loading ? (
+              { !loading ? (
                 <FlatList
                   data={generos}
                   keyExtractor={(item) => item.name}

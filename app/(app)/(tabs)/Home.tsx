@@ -1,21 +1,23 @@
-import { Image, StyleSheet, Platform, Button, Pressable, Text, View } from 'react-native';
-
+import { Image,  Button, Pressable, Text, ToastAndroid } from 'react-native';
+import * as Network from 'expo-network';
 import { HelloWave } from '@/components/HelloWave';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
-import { Link, Navigator, Redirect, router } from 'expo-router';
+import { Link,  router } from 'expo-router';
 import * as SecureStorage from 'expo-secure-store';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useFocusEffect } from '@react-navigation/native';
 import { styles } from '@/Styles/styles';
-import { useStateValue } from '@/Context/store';
+
 export default function HomeScreen() {
+
 
 
     const deleteToken=async()=>{
      await  AsyncStorage.clear();
        SecureStorage.deleteItemAsync('token').then(()=>{
+        ToastAndroid.show('Token eliminado', ToastAndroid.SHORT);
+        
         router.push('/login')
       });
     }

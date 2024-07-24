@@ -9,6 +9,7 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  ToastAndroid,
   View,
 } from "react-native";
 import React, { useEffect, useState } from "react";
@@ -62,27 +63,28 @@ const Detalles = () => {
     navigation.setOptions({ title: name, headerBlurEffect: "regular" });
 
     const fetchData = async () => {
-      try {
-        const {
+      const start = performance.now();
+        const [{
           Info,
           Songs = [],
           Albums = [],
           Artists = [],
-        } = await getArtistInformation(id);
+        }, description] = await Promise.all([getArtistInformation(id), getInfo(name, name, false)])
+
+        
+        
         setInfo({
           info: Info || {},
           songs: Songs || [],
           albums: Albums || [],
           artists: Artists,
         });
-        const description = await getInfo(name, name, false);
         const info = description?.map((i: any) => extractInfo(i)).join(" ");
         setInformacion(info);
-      } catch (error) {
-      }
+       console.log("Time to fetch data", (performance.now() - start) / 1000);
     };
 
-    fetchData();
+    fetchData().catch((e)=>ToastAndroid.showWithGravity(e, ToastAndroid.SHORT, ToastAndroid.CENTER)); 
   }, [name, id, navigation]);
 
   const getSongDetails = (Item: any) => {

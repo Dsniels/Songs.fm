@@ -6,6 +6,7 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  ToastAndroid,
   View,
 } from "react-native";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
@@ -38,6 +39,8 @@ const SongDetails = () => {
   const [showAbout, setShowAbout] = useState<boolean>(false);
   const isFocused = useIsFocused();
   const [informacion, setInformacion] = useState("");
+  const [like, setLike] = useState<boolean>(false);
+
   const playSound = async (soundUri: string) => {
     if (currentSound) {
       await currentSound.stopAsync();
@@ -50,7 +53,7 @@ const SongDetails = () => {
       if (soundLoaded) {
         setCurrentSound(sound);
         await sound.setIsLoopingAsync(true);
-        await sound.playAsync();
+        sound.playAsync().catch((e)=>ToastAndroid.showWithGravity(e, ToastAndroid.SHORT, ToastAndroid.CENTER));
       }
     } catch (error) {
       console.error("Error ", error);
@@ -92,23 +95,24 @@ const SongDetails = () => {
     }, [currentSound, isFocused])
   );
 
-
   useEffect(() => {
     navigation.setOptions({ title: name, headerBlurEffect: "regular" });
     const fetchData = async () => {
-      const { Info, Features } = await getSongInfo(id);
+      const [{ Info, Features, Like }, description]: any[] =
+        await Promise.all([getSongInfo(id), getInfo(name, artists, true)]);
       setTrack((prev) => ({
         ...prev,
         info: Info || {},
         audioFeatures: Features || {},
       }));
-      const description = await getInfo(name, artists, true);
-      const informacion =  description
+      console.log(Like, typeof Like);
+      setLike(Like);
+      const informacion = description
         .map((item: any) => extractInfo(item))
         .join("   ");
       setInformacion(informacion);
     };
-    fetchData();
+    fetchData().catch((e)=>ToastAndroid.showWithGravity(e, ToastAndroid.SHORT, ToastAndroid.CENTER));
   }, [navigation]);
 
   const getDetails = useCallback((Item: any) => {
@@ -116,7 +120,7 @@ const SongDetails = () => {
       pathname: `(app)/Detalles/[name]`,
       params: { id: Item.id, name: Item.name },
     });
-  },[]);
+  }, []);
 
   return (
     <ParallaxScrollView
@@ -164,17 +168,30 @@ const SongDetails = () => {
           <ThemedText type="defaultSemiBold">Artistas</ThemedText>
 
           <ThemedView className=" flex flex-row justify-center content-center items-center bg-cyan-950">
-            <ScrollView className="bg-cyan-950" horizontal style={{ width: 80 }}>
-              {Track.info.artists? Track.info.artists.map((item: any, index: number) => (
-                <Pressable
-                  className="rounded-3xl m-3 px-2 bg-[#1F283D]"
-                  onPress={() => getDetails(item)}
-                  key={index}
-                >
-                  <ThemedText type="default">{item.name}</ThemedText>
-                </Pressable>
-              )) : (<ActivityIndicator size='large' />)}
+            <ScrollView
+              className="bg-cyan-950"
+              horizontal
+              style={{ width: 80 }}
+            >
+              {Track.info.artists ? (
+                Track.info.artists.map((item: any, index: number) => (
+                  <Pressable
+                    className="rounded-3xl m-3 px-2 bg-[#1F283D]"
+                    onPress={() => getDetails(item)}
+                    key={index}
+                  >
+                    <ThemedText type="default">{item.name}</ThemedText>
+                  </Pressable>
+                ))
+              ) : (
+                <ActivityIndicator size="large" />
+              )}
             </ScrollView>
+            {like ? (
+              <Ionicons name="heart" size={30} color="red" />
+            ) : (
+              <Ionicons name="heart-outline" size={30} color="red" />
+            )}
 
             {currentSound === null ? (
               <Pressable
@@ -361,26 +378,25 @@ const SongDetails = () => {
               {informacion}
             </ThemedText>
           </View>
-
         </>
       ) : (
         <View className="bg-opacity-80 bg-cyan-950 flex justify-stretch content-center items-center align-middle m-1 mt-0 pt-0 -top-4 w-fit h-36 ">
-        <ActivityIndicator className="m-8" size='large'/>
+          <ActivityIndicator className="m-8" size="large" />
         </View>
       )}
-                <View style={{ marginTop: 30, marginBottom: 20 }}>
-            <ThemedText type="title">Links</ThemedText>
-            <Pressable
-              onPress={() => Linking.openURL(Track.audioFeatures.uri || "")}
-            >
-              <ThemedText
-                type="link"
-                style={{ justifyContent: "center", textAlign: "justify" }}
-              >
-                Escuchar en Spotify
-              </ThemedText>
-            </Pressable>
-          </View>
+      <View style={{ marginTop: 30, marginBottom: 20 }}>
+        <ThemedText type="title">Links</ThemedText>
+        <Pressable
+          onPress={() => Linking.openURL(Track.audioFeatures.uri || "")}
+        >
+          <ThemedText
+            type="link"
+            style={{ justifyContent: "center", textAlign: "justify" }}
+          >
+            Escuchar en Spotify
+          </ThemedText>
+        </Pressable>
+      </View>
     </ParallaxScrollView>
   );
 };

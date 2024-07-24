@@ -1,14 +1,20 @@
 import { router, Tabs, useFocusEffect } from 'expo-router';
 import React, { useCallback, useEffect } from 'react';
-
+import NetInfo from '@react-native-community/netinfo';
 import { TabBarIcon } from '@/components/navigation/TabBarIcon';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import * as SecureStorage from 'expo-secure-store';
+import { ToastAndroid } from 'react-native';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
   
+  NetInfo.addEventListener(state => {
+    if(!(state.isConnected || state.isWifiEnabled)){
+      ToastAndroid.show('No tienes conexion a internet', ToastAndroid.SHORT);
+    }
+});
 useEffect(
   useCallback(() => {
 
@@ -19,10 +25,8 @@ useEffect(
       }
     }
     fetchData();
-    //deleteToken();
 
-    return () => {
-    };
+    return  
   }, [])
 );
   return (
@@ -37,18 +41,18 @@ useEffect(
        <Tabs.Screen
         name='music'
         options={{
-          title : 'Music',
+          title : 'Discover',
           tabBarIcon : ({color, focused}) => (
-            <TabBarIcon name={focused? 'musical-note' : 'musical-note-outline'} color={color}/>
+            <TabBarIcon name={focused? 'compass' : 'compass-outline'} color={color}/>
           )
         }}
       />
       <Tabs.Screen
         name="Home"
         options={{
-          title: 'Home',
+          title: 'Search',
           tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'home' : 'home-outline'} color={color} />
+            <TabBarIcon name={focused ? 'search' : 'search-outline'} color={color} />
           ),
         }}
       />

@@ -1,43 +1,42 @@
 import { ActivityIndicator,SafeAreaView, View } from "react-native";
 import React, { useCallback, useEffect, useState } from "react";
 import { styles } from "@/Styles/styles";
-import { getListOfSongs, getRecomendations } from "@/Api/SongsActions";
+import {  getRecomendations } from "@/Api/SongsActions";
 import Card from "@/components/Card";
 import { SwipeCard } from "@/components/SwipeCard";
+import * as Network from 'expo-network';
+
 
 
 export default function music() {
   const [data, setData] = useState<any[]>([]);
 
+  
   useEffect(() => {
-    if (data.length <= 10) {
-      fetchData().then((traks: any) =>
+
+    if (data.length <= 5) {
+      fetchData().then((traks: any) =>{
         setData((prev: any) => [...prev, ...traks])
-      );
+      }
+
+      )
     }
   }, [data]);
 
   const onRefresh = useCallback(() => {
    fetchData().then((tracks: any) => {
       setData((prev)=>[...prev, tracks]);
-    });
+    })
   }, []);
 
   const fetchData = useCallback(async () => {
-    const data_response: any = await getRecomendations();
+    const data_response: any[] = await Promise.all([getRecomendations(), getRecomendations()]) 
     if(data_response.length === 0){
-       onRefresh()
+       return onRefresh()
     }
-    const to_process = data_response
-      .filter((i: any) => i.preview_url === null)
-      .map((i: any) => i.id)
-      .toString();
-    const newTracksData: any = await getListOfSongs(to_process);
-      const mergedData = data_response.map((track:any) => 
-      newTracksData[track.id] ? { ...track, ...newTracksData[track.id] } : track
-    );
     
-    const data_result = Object.values(mergedData).filter((i:any)=>i.preview_url !== null);
+        
+    const data_result = data_response.flat().filter((i:any)=>i.preview_url !== null);
     const extractedData = data_result.map((track: any) => ({
       id: track.id,
       name: track.name,
