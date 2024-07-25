@@ -60,18 +60,20 @@ export const refreshToken = async (): Promise<
     grant_type: "refresh_token",
     refresh_token: refresh,
   };
+  console.log('refresh')
   return new Promise((resolve, reject) => {
     instancia
       .post("https://accounts.spotify.com/api/token", qs.stringify(body))
-      .then((response: AxiosResponse) => {
+      .then(async (response: AxiosResponse) => {
         let expira = new Date();
         expira.setSeconds(expira.getSeconds() + 3600);
         response.data.expira = expira;
         checkToken(expira);
-        SecureStorage.setItemAsync("token", response.data.access_token);
-        resolve(response.data);
+        await SecureStorage.setItemAsync("token", response.data.access_token);
+        resolve(response);
       })
       .catch((e) => {
+        console.log('Error en refreshToken', e)
         resolve(e);
       });
   });

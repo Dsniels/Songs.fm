@@ -28,7 +28,7 @@ export default function Applayout() {
   useEffect(() => {
     AppState.addEventListener("change", (state)=>{
       if(state === 'inactive'){
-         AsyncStorage.clear().then(()=>console.log('clear'));
+         AsyncStorage.clear()
       }
 
 
@@ -36,7 +36,7 @@ export default function Applayout() {
 
   },[])
 
-    useAuth(dispatch);
+     useAuth(dispatch);
 
 
 
