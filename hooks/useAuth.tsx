@@ -1,5 +1,5 @@
-import { View, Text, ToastAndroid } from 'react-native'
-import React, { Dispatch, useCallback, useEffect, useState } from 'react'
+import {  ToastAndroid } from 'react-native'
+import  { Dispatch, useCallback, useEffect, useState } from 'react'
 import * as SecureStorage from 'expo-secure-store';
 import { router } from 'expo-router';
 import { refreshToken } from '@/Api/SpotifyAuth';
@@ -20,9 +20,9 @@ const getData = useCallback(async () => {
 
         const Today = new Date();
         const expiracion = new Date(fecha.value);
-
-        if (Today.getTime() > expiracion.getTime()) {      
-            await Promise.all([refreshToken(), getprofile(dispatch)]).then(()=>setServidorResponse(true));
+          
+        if (Today.getTime() >= expiracion.getTime()) {      
+            refreshToken().then(()=>getprofile(dispatch)).then(()=>setServidorResponse(true));
             
         }
 
@@ -30,9 +30,9 @@ const getData = useCallback(async () => {
         await getprofile(dispatch)
         setServidorResponse(true);
       }
-          setInterval(() => {
+        setInterval(() => {
           getData()
-          }, 3600000); 
+          }, 360000); 
   },[dispatch]);
   useEffect(()=>{
 
