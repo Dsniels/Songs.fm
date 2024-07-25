@@ -77,7 +77,7 @@ export default function TabTwoScreen() {
         songs: dataTopSongs.items,
       }));
 
-      const top =topGeneros(data);
+      const top = topGeneros(data);
       setGeneros(top);
 
       seedTracks(dataTopSongs.items);
@@ -94,7 +94,7 @@ export default function TabTwoScreen() {
     Promise.all([fetchData(), fetchRecentlySongs()]).then(() => { 
       setLoading(false);
     });
-  }, [sesionUsuario]);
+  }, [sesionUsuario, fetchData, fetchRecentlySongs]);
 
   useEffect(() => {
    
