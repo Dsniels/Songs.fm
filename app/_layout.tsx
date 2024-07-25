@@ -35,10 +35,11 @@ export default function RootLayout() {
   }
 
   return (
-    <StateProvider initialState={initialState} reducer={mainReducer}>
-      <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+            <StateProvider initialState={initialState} reducer={mainReducer}>
+
         <Slot />
-      </ThemeProvider>
-    </StateProvider>
+      </StateProvider>
+      
+    
   );
 }
