@@ -86,22 +86,24 @@ export default function TabTwoScreen() {
     
   }, [selectDate]);
 
-  const onRefresh = useCallback(async() => {
-    setLoading(true);
-    if (sesionUsuario?.usuario) {
+  useEffect(() => {
+    
+    if(sesionUsuario?.usuario){
       setUsuario(sesionUsuario.usuario);
     }
+  }, [sesionUsuario ]);
+
+  const onRefresh = useCallback(async() => {
+    setLoading(true);
     Promise.all([fetchData(), fetchRecentlySongs()]).then(() => { 
       setLoading(false);
     });
-  }, [sesionUsuario, fetchData, fetchRecentlySongs]);
+  }, [fetchData]);
 
-  useEffect(() => {
-   
-      onRefresh()
-    
-    }, [selectDate]);
-
+useEffect(() => {
+    onRefresh();
+  
+}, [selectDate]);
 
 
   const renderGeneroItem = ({ item }: any) => (
@@ -160,15 +162,14 @@ export default function TabTwoScreen() {
               >
                 Generos que mas escuchas
               </ThemedText>
-              { !loading ? (
+              {loading && <ActivityIndicator size="large" />}
+              { !loading && (
                 <FlatList
                   data={generos}
                   keyExtractor={(item) => item.name}
                   renderItem={renderGeneroItem}
                 />
-              ) : (
-                <ActivityIndicator size="large" />
-              )}
+              ) }
             </View>
             <ThemedText
               type="subtitle"

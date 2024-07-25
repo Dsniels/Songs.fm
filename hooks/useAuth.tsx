@@ -4,10 +4,10 @@ import * as SecureStorage from 'expo-secure-store';
 import { router } from 'expo-router';
 import { refreshToken } from '@/Api/SpotifyAuth';
 import { getprofile } from '@/Api/UserAction';
+import { useStateValue } from '@/Context/store';
 
 
-export const useAuth = (dispatch : Dispatch<any>, ) => {
-    
+export const useAuth = (dispatch : Dispatch<any>, sesionUsuario:any ) => {
 const [servidorResponse, setServidorResponse] = useState(false);
 
 
@@ -30,18 +30,17 @@ const getData = useCallback(async () => {
         await getprofile(dispatch)
         setServidorResponse(true);
       }
+
         setInterval(() => {
           getData()
           }, 360000); 
-  },[dispatch]);
+  },[]);
   useEffect(()=>{
-
      getData().catch((e)=>ToastAndroid.showWithGravity(e, ToastAndroid.SHORT, ToastAndroid.CENTER));
-
+    
 
 
 },[getData])
-  return null
 
 }
 
