@@ -4,7 +4,7 @@ import { useStateValue } from "@/Context/store";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { LinearGradient } from "expo-linear-gradient";
 import { Stack } from "expo-router";
-import { AppState, AppStateEvent, StyleSheet, View } from "react-native";
+import { ActivityIndicator, AppState, AppStateEvent, StyleSheet, View } from "react-native";
 import { useAuth } from "@/hooks/useAuth";
 import { useEffect } from "react";
 
@@ -30,24 +30,24 @@ export default function Applayout() {
       if(state === 'inactive'){
          AsyncStorage.clear()
       }
-
-
     });
+
 
   },[])
 
-     useAuth(dispatch);
-
+     useAuth(dispatch, sesionUsuario);
+ 
 
 
 
   return (
-    <Stack screenOptions={{ headerTransparent: true }}>
+    <Stack  screenOptions={{ headerTransparent: false  }}>
       <Stack.Screen
         name="(tabs)"
         options={{
           headerShown: false,
           headerBlurEffect: "dark",
+          
          }}
       />
       <Stack.Screen

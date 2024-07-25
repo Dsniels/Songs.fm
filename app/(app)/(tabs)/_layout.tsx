@@ -8,7 +8,7 @@ import * as SecureStorage from 'expo-secure-store';
 import { ToastAndroid } from 'react-native';
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
+  const colorScheme = 'dark';
   
   NetInfo.addEventListener(state => {
     if(!(state.isConnected || state.isWifiEnabled)){
@@ -32,7 +32,7 @@ useEffect(
   return (
     <Tabs
       screenOptions={{
-        tabBarStyle:{backgroundColor:'#060C19'},
+          tabBarStyle :{backgroundColor:'#060C19', zIndex: 1000, borderColor:'#060C19', borderStyle:'solid', borderWidth: 1},
         tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
         headerShown: false,
       }}>
@@ -60,7 +60,6 @@ useEffect(
       <Tabs.Screen
         name="index"
         options={{
-          tabBarStyle:{backgroundColor:'0B0033'},
           title: 'Perfil',
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon name={focused ? 'person-circle' : 'person-circle-outline'} color={color} />
