@@ -31,15 +31,17 @@ export const getRecomendations = async (): Promise<any> => {
   const randomPopularity = Math.floor(Math.random() * 100);
   const randomValence = Math.random()*0.5+0.5;
   const randomEnergy = Math.random()*0.5+0.5;
-  
+ const randomAcousticness = Math.random()*0.5+0.5; 
+ const randomSpeechiness = Math.random()*0.5+0.5;
   return new Promise((resolve, reject) => {
     HttpCliente.get(
-      `/recommendations?seed_tracks=${songs}&seed_genres=${generos.replaceAll(' ','-')}&min_energy=${randomEnergy}&seed_artists=${artists}&target_danceability=${randomDanceability}&target_popularity=${randomPopularity}&min_valence${randomValence}`
+      `/recommendations?limit=30&seed_tracks=${songs}&seed_genres=${generos}&min_acousticness=${randomAcousticness}&min_energy=${randomEnergy}&min_speechiness${randomSpeechiness}&seed_artists=${artists}&target_danceability=${randomDanceability}&target_popularity=${randomPopularity}&min_valence${randomValence}`
     )
       .then((response: AxiosResponse) => {
         resolve(response.data?.tracks );
       })
       .catch((e: AxiosError) => {
+        
         ToastAndroid.showWithGravity(`Ocurrio un error: ${e.code}`, ToastAndroid.SHORT, ToastAndroid.CENTER);
         resolve(e);
       });
