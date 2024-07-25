@@ -20,7 +20,7 @@ import {
   useNavigation,
 } from "expo-router";
 import ParallaxScrollView from "@/components/ParallaxScrollView";
-import { getSongInfo } from "@/Api/SongsActions";
+import { AddToFav, deleteFromFav, getSongInfo } from "@/Api/SongsActions";
 import { ThemeProvider, useIsFocused } from "@react-navigation/native";
 import { ThemedView } from "@/components/ThemedView";
 import { Audio } from "expo-av";
@@ -120,6 +120,15 @@ const SongDetails = () => {
       params: { id: Item.id, name: Item.name },
     });
   }, []);
+  const handleLike = async (id : string) => {
+    await AddToFav(id);
+    setLike(true);
+  }
+    const handleUnLike = async (id : string) => {
+    await deleteFromFav(id);
+    setLike(false);
+  }
+
 
   return (
     <ParallaxScrollView
@@ -187,9 +196,14 @@ const SongDetails = () => {
               )}
             </ScrollView>
             {like ? (
+              <Pressable onPress={_=>handleUnLike(Track.info?.id)}>
               <Ionicons name="heart" size={30} color="red" />
+              </Pressable>
             ) : (
+              <Pressable onPress={_=>handleLike(Track.info?.id)}>
               <Ionicons name="heart-outline" size={30} color="red" />
+
+              </Pressable>
             )}
 
             {currentSound === null ? (
