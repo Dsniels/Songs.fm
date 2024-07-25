@@ -25,31 +25,7 @@ axios.interceptors.request.use(
   }
 );
 
-// axios.interceptors.response.use(
-//   (response) => response,
-//   async (error: AxiosError) => {
-//     const status = error.response ? error.response.status : null;
-//     console.log(status);
-//     if (status === 401) {
-//       const originalRequest : any = error.config || null ;
-//       if (!originalRequest._retry) {
-//         originalRequest._retry = true;
-//         try {
-//           await refreshToken();
-//           const token = await SecureStorage.getItemAsync("token");
-//           if (token) {
-//             originalRequest.headers.Authorization = `Bearer ${token}`;
-//             console.log(token);
-//             return await axios(originalRequest);
-//           }
-//         } catch (err) {
-//           console.log(err);
-//         }
-//       }
-//     }
-//     return Promise.reject(error);
-//   }
-// );
+
 
 const requestGenerico = {
   get: (url: string) => axios.get(url),

@@ -40,7 +40,6 @@ export const getRecomendations = async (): Promise<any> => {
         resolve(response.data?.tracks );
       })
       .catch((e: AxiosError) => {
-        console.log(e)
         ToastAndroid.showWithGravity(`Ocurrio un error: ${e.code}`, ToastAndroid.SHORT, ToastAndroid.CENTER);
         resolve(e);
       });
@@ -110,7 +109,6 @@ export const AddToFav = (id:string) =>{
       notificationAsync(NotificationFeedbackType.Success)
       resolve(response)
     }).catch(e=>{
-      console.log(e)
       ToastAndroid.showWithGravity(`Ocurrio un error: ${e.code}`, ToastAndroid.SHORT, ToastAndroid.TOP);
       reject(e)
     })
@@ -125,7 +123,6 @@ export const deleteFromFav = (id:string) =>{
       notificationAsync(NotificationFeedbackType.Success)
       resolve(response)
     }).catch(e=>{
-      console.log(e)
       ToastAndroid.showWithGravity(`Ocurrio un error: ${e.code}`, ToastAndroid.SHORT, ToastAndroid.TOP);
       reject(e)
     })
