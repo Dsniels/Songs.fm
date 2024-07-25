@@ -3,6 +3,7 @@ import HttpCliente from "../service/HttpCliente";
 import { seeds } from "@/service/seeds";
 import { refreshToken } from "./SpotifyAuth";
 import { ToastAndroid } from "react-native";
+import { notificationAsync, NotificationFeedbackType } from "expo-haptics";
 
 
 
@@ -39,8 +40,8 @@ export const getRecomendations = async (): Promise<any> => {
         resolve(response.data?.tracks );
       })
       .catch((e: AxiosError) => {
-        ToastAndroid.showWithGravity('Ocurrio un error con el servidor', ToastAndroid.SHORT, ToastAndroid.CENTER);
         console.log(e)
+        ToastAndroid.showWithGravity(`Ocurrio un error: ${e.code}`, ToastAndroid.SHORT, ToastAndroid.CENTER);
         resolve(e);
       });
   });
@@ -72,7 +73,6 @@ export const getListOfSongs = (
 
 export const getSongInfo = async (id:string) =>{
   const [info, features, like] = await Promise.all([songInfo(id), AudioFeatures(id), checkLikeTrack(id)]);
-  console.log(typeof like)
   return {Info : info, Features : features, Like : like};
 }
 
@@ -103,3 +103,31 @@ const AudioFeatures = (id:string) : Promise<any> =>{
 }
 
 
+export const AddToFav = (id:string) =>{
+  return new Promise((resolve, reject)=>{
+    HttpCliente.put(`/me/tracks?ids=${id}`, id).then((response:any)=>{
+      ToastAndroid.showWithGravity('Cancion agregada a favoritos', ToastAndroid.SHORT, ToastAndroid.TOP);
+      notificationAsync(NotificationFeedbackType.Success)
+      resolve(response)
+    }).catch(e=>{
+      console.log(e)
+      ToastAndroid.showWithGravity(`Ocurrio un error: ${e.code}`, ToastAndroid.SHORT, ToastAndroid.TOP);
+      reject(e)
+    })
+  })
+}
+
+
+export const deleteFromFav = (id:string) =>{
+  return new Promise((resolve, reject)=>{
+    HttpCliente.delete(`/me/tracks?ids=${id}`, id).then((response:any)=>{
+      ToastAndroid.showWithGravity('Cancion eliminada de favoritos', ToastAndroid.SHORT, ToastAndroid.TOP);
+      notificationAsync(NotificationFeedbackType.Success)
+      resolve(response)
+    }).catch(e=>{
+      console.log(e)
+      ToastAndroid.showWithGravity(`Ocurrio un error: ${e.code}`, ToastAndroid.SHORT, ToastAndroid.TOP);
+      reject(e)
+    })
+  })
+}
