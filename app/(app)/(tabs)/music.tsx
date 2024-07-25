@@ -37,6 +37,7 @@ export default function music() {
     
         
     const data_result = data_response.flat().filter((i:any)=>i.preview_url !== null);
+
     const extractedData = data_result.map((track: any) => ({
       id: track.id,
       name: track.name,

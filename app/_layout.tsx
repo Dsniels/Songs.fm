@@ -35,11 +35,8 @@ export default function RootLayout() {
   }
 
   return (
-            <StateProvider initialState={initialState} reducer={mainReducer}>
-
-        <Slot />
-      </StateProvider>
-      
-    
+    <StateProvider initialState={initialState} reducer={mainReducer}>
+      <Slot />
+    </StateProvider>
   );
 }
