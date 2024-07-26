@@ -38,7 +38,7 @@ export const seedArtist = async (data: any) => {
 };
 
 const randomIndex = (array: any[]) => {
-  console.log(Math.floor(Math.random() * array.length));
+  // console.log(Math.floor(Math.random() * array.length));
   return Math.floor(Math.random() * array.length);
 };
 
@@ -53,8 +53,14 @@ const getRandomSeedItem = async (key: string) => {
 };
 
 export const seeds = async () => {
+  let songSeeds : string[] = []
+  let artistSeeds : string[] = []
   const seedTrack = await getRandomSeedItem("seedTrack");
+  const seedTrack2 = await getRandomSeedItem("seedTrack")
+  songSeeds = [seedTrack, seedTrack2]
   const seedArtist = await getRandomSeedItem("seedArtists");
+  const seedArtist2= await getRandomSeedItem("seedArtists");
+  artistSeeds = [seedArtist, seedArtist2]
   const seedGeneros = generos[randomIndex(generos)];
-  return { songs: seedTrack, artists: seedArtist, generos: seedGeneros };
+  return { songs: songSeeds , artists: artistSeeds, generos: seedGeneros };
 };
