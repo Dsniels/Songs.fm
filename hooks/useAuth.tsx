@@ -32,7 +32,7 @@ export const useAuth = (dispatch: Dispatch<any>, sesionUsuario: any) => {
 
       setInterval(() => {
         getData();
-      }, 36000000);
+      }, 3600000);
     };
     getData().catch((e) =>
       ToastAndroid.showWithGravity(e, ToastAndroid.SHORT, ToastAndroid.CENTER)

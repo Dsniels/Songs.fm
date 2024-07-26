@@ -216,7 +216,7 @@ const SongDetails = () => {
               </Pressable>
             )}
 
-            {currentSound === null ? (
+            {currentSound === null && Track.info.preview_url ? (
               <Pressable
                 className="bg-cyan-950"
                 style={styles.playButton}

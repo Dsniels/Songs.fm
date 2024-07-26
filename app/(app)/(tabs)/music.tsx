@@ -24,10 +24,9 @@ export default function music() {
   }, []);
 
   const fetchData = useCallback(async () => {
-    const data_response: any[] = await Promise.all([
-      getRecomendations(),
-      getRecomendations(),
-    ]);
+    const data_response: any[] = await getRecomendations();
+      
+    
     if (data_response.length === 0) {
       return onRefresh();
     }

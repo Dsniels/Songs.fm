@@ -38,7 +38,6 @@ export const getAccessToken = async (code: string, dispatch: Dispatch<any>) => {
       })
       .catch((e: AxiosError) => {
         throw new Error(`${e}`);
-        resolve(e);
       });
   });
 };
@@ -58,7 +57,6 @@ export const refreshToken = async (): Promise<AxiosResponse> => {
     grant_type: "refresh_token",
     refresh_token: refresh,
   };
-  console.log("refresh");
   return new Promise((resolve, reject) => {
     instancia
       .post("https://accounts.spotify.com/api/token", qs.stringify(body))
