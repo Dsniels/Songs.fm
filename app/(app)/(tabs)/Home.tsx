@@ -26,6 +26,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { styles } from "@/Styles/styles";
 import { useEffect, useState } from "react";
 import { search } from "@/Api/SongsActions";
+import { ListSongs } from "@/components/ListSongs";
+import { SmallListSongs } from "@/components/SmallListSongs";
 
 export default function HomeScreen() {
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
@@ -37,13 +39,8 @@ export default function HomeScreen() {
         setKeyboardVisible(true);
       }
     );
-    Keyboard.addListener(
-      "keyboardDidHide",
-      () => {
-        setItems(undefined);
-        setKeyboardVisible(false);
-      }
-    );
+
+    
   }, []);
 
   const deleteToken = async () => {
@@ -58,17 +55,22 @@ export default function HomeScreen() {
   const [items, setItems] = useState<any | undefined>(undefined);
 
   const handleSearch = () => {
-    console.log(text);
     if (!text) setItems(undefined);
     search(text).then((data) => {
       setItems(data);
-      console.log(items);
     });
   };
 
   const handleTextChange = (t: string) => {
     setText(t);
     if (t === " ") setItems(undefined);
+  };
+
+  const getSongDetails = (Item: any) => {
+    return router.push({
+      pathname: `(app)/songsDetails/[song]`,
+      params: { id: Item.id, name: Item.name, artists: Item.artists[0].name },
+    });
   };
 
   return (
@@ -89,26 +91,19 @@ export default function HomeScreen() {
             className="bg-green-800 text-white p-3"
             value={text}
             clearTextOnFocus
-            onBlur={() => setItems(undefined)}
             onTextInput={handleSearch}
             onChangeText={handleTextChange}
           />
         </ThemedView>
 
         {items?.tracks ? (
-          <ScrollView>
-            {items.tracks.items.map((item: any, index: number) => (
-              <Text
-                className="text-white w-60"
-                numberOfLines={1}
-                lineBreakMode="clip"
-                textBreakStrategy="simple"
-                key={index}
-              >
-                {item.name}
-              </Text>
-            ))}
-          </ScrollView>
+            <FlatList
+              data={items.tracks.items}
+              renderItem={({ item }) => (
+                <SmallListSongs item={item} getSongDetails={getSongDetails} />
+              )}
+              keyExtractor={(item) => item.id} />
+
         ) : null}
         {!isKeyboardVisible && (
           <Link style={styles.LinkLogin} href="/login">
