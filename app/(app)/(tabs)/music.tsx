@@ -42,7 +42,6 @@ export default function music() {
       artist: track.artists[0]?.name || "",
       preview_url: track.preview_url,
     }));
-    console.log(extractedData.length);
     return extractedData;
   }, []);
 

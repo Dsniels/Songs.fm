@@ -38,7 +38,6 @@ export const seedArtist = async (data: any) => {
 };
 
 const randomIndex = (array: any[]) => {
-  // console.log(Math.floor(Math.random() * array.length));
   return Math.floor(Math.random() * array.length);
 };
 

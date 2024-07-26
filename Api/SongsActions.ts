@@ -27,7 +27,6 @@ export const search = (t: string): Promise<object> => {
       .then((response) => {
         resolve(response.data);
       })
-      .catch(console.log);
   });
 };
 
@@ -39,18 +38,14 @@ export const getRecomendations = async (): Promise<any> => {
   const randomEnergy = Math.random();
   const randomAcousticness = Math.random();
   const randomSpeechiness = Math.random();
-  // console.log(songs.toString());
-  //  console.log(randomDanceability, randomAcousticness, randomEnergy, randomPopularity, randomValence, randomEnergy, randomSpeechiness)
   return new Promise((resolve, reject) => {
     HttpCliente.get(
       `/recommendations?limit=40&seed_tracks=${songs.toString()}&seed_genres=${generos}&target_acousticness=${randomAcousticness}&target_energy=${randomEnergy}&target_speechiness${randomSpeechiness}&seed_artists=${artists.toString()}&target_danceability=${randomDanceability}&target_popularity=${randomPopularity}&target_valence${randomValence}`
     )
       .then((response: AxiosResponse) => {
-        // console.log(JSON.stringify(response.data.seeds, null, 2));
         resolve(response.data?.tracks);
       })
       .catch((e: AxiosError) => {
-        console.log(e);
         ToastAndroid.showWithGravity(
           `Ocurrio un error: ${e.code}`,
           ToastAndroid.SHORT,
@@ -68,7 +63,6 @@ export const getRecentlySongs = () => {
         resolve(response.data);
       })
       .catch((e) => {
-        console.log(e);
         reject(e);
       });
   });
