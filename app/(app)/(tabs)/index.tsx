@@ -61,50 +61,48 @@ export default function TabTwoScreen() {
   }, []);
 
   const fetchData = useCallback(async () => {
+    const [data, dataTopSongs]: any = await Promise.all([
+      getTop("artists", requestArtist.offset, selectDate),
+      getTop("tracks", requestMusic.offsetSongs, selectDate),
+    ]);
 
-      const [data, dataTopSongs]: any = await Promise.all([
-        getTop("artists", requestArtist.offset, selectDate),
-        getTop("tracks", requestMusic.offsetSongs, selectDate),
-      ]);
+    setRequestArtist((prev) => ({
+      ...prev,
+      artists: data.items,
+    }));
 
-      setRequestArtist((prev) => ({
-        ...prev,
-        artists: data.items,
-      }));
+    setRequestMusic((prev) => ({
+      ...prev,
+      songs: dataTopSongs.items,
+    }));
 
-      setRequestMusic((prev) => ({
-        ...prev,
-        songs: dataTopSongs.items,
-      }));
+    const top = topGeneros(data);
+    setGeneros(top);
 
-      const top = topGeneros(data);
-      setGeneros(top);
-
-      seedTracks(dataTopSongs.items);
-      seedArtist(data);
-
-    
+    seedTracks(dataTopSongs.items);
+    seedArtist(data);
   }, [selectDate]);
 
   useEffect(() => {
-    
-    if(sesionUsuario?.usuario){
+    if (sesionUsuario?.usuario) {
       setUsuario(sesionUsuario.usuario);
     }
-  }, [sesionUsuario ]);
+  }, [sesionUsuario]);
 
-  const onRefresh = useCallback(async() => {
+  const onRefresh = useCallback(async () => {
     setLoading(true);
-    Promise.all([fetchData(), fetchRecentlySongs()]).then(() => { 
+
+    if (usuario.display_name === "" && sesionUsuario?.usuario) {
+      setUsuario(sesionUsuario.usuario);
+    }
+    Promise.all([fetchData(), fetchRecentlySongs()]).then(() => {
       setLoading(false);
     });
   }, [fetchData]);
 
-useEffect(() => {
+  useEffect(() => {
     onRefresh();
-  
-}, [selectDate]);
-
+  }, [selectDate, sesionUsuario]);
 
   const renderGeneroItem = ({ item }: any) => (
     <View className="m-3 rounded-lg" key={item.name}>
@@ -163,13 +161,13 @@ useEffect(() => {
                 Generos que mas escuchas
               </ThemedText>
               {loading && <ActivityIndicator size="large" />}
-              { !loading && (
+              {!loading && (
                 <FlatList
                   data={generos}
                   keyExtractor={(item) => item.name}
                   renderItem={renderGeneroItem}
                 />
-              ) }
+              )}
             </View>
             <ThemedText
               type="subtitle"
@@ -195,7 +193,7 @@ useEffect(() => {
             </ThemedText>
             <FlatList
               data={requestMusic.songs}
-              keyExtractor={(item: any, index :number) => index.toString()}
+              keyExtractor={(item: any, index: number) => index.toString()}
               renderItem={({ item }) => (
                 <ListSongs item={item} getSongDetails={getSongDetails} />
               )}

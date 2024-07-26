@@ -63,26 +63,25 @@ const Detalles = () => {
     navigation.setOptions({ title: name, headerBlurEffect: "regular" });
 
     const fetchData = async () => {
-        const [{
-          Info,
-          Songs = [],
-          Albums = [],
-          Artists = [],
-        }, description] = await Promise.all([getArtistInformation(id), getInfo(name, name, false)])
+      const [{ Info, Songs = [], Albums = [], Artists = [] }, description] =
+        await Promise.all([
+          getArtistInformation(id),
+          getInfo(name, name, false),
+        ]);
 
-        
-        
-        setInfo({
-          info: Info || {},
-          songs: Songs || [],
-          albums: Albums || [],
-          artists: Artists,
-        });
-        const info = description?.map((i: any) => extractInfo(i)).join(" ");
-        setInformacion(info);
+      setInfo({
+        info: Info || {},
+        songs: Songs || [],
+        albums: Albums || [],
+        artists: Artists,
+      });
+      const info = description?.map((i: any) => extractInfo(i)).join(" ");
+      setInformacion(info);
     };
 
-    fetchData().catch((e)=>ToastAndroid.showWithGravity(e, ToastAndroid.SHORT, ToastAndroid.CENTER)); 
+    fetchData().catch((e) =>
+      ToastAndroid.showWithGravity(e, ToastAndroid.SHORT, ToastAndroid.CENTER)
+    );
   }, [name, id, navigation]);
 
   const getSongDetails = (Item: any) => {
@@ -148,9 +147,12 @@ const Detalles = () => {
               Canciones Top
             </ThemedText>
             {infoArtist.songs.length > 0 ? (
-              infoArtist.songs.map((item: Tracks, index:number) => (
-                <SmallListSongs key={index} item={item} getSongDetails={getSongDetails}/>
-                
+              infoArtist.songs.map((item: Tracks, index: number) => (
+                <SmallListSongs
+                  key={index}
+                  item={item}
+                  getSongDetails={getSongDetails}
+                />
               ))
             ) : (
               <ThemedText>No hay canciones disponibles</ThemedText>

@@ -9,7 +9,7 @@ import { router } from "expo-router";
 import { useStateValue } from "@/Context/store";
 import * as Linking from "expo-linking";
 import * as SecureStorage from "expo-secure-store";
-import * as Haptics from 'expo-haptics';
+import * as Haptics from "expo-haptics";
 
 import { checkToken, getAccessToken } from "@/Api/SpotifyAuth";
 
@@ -62,8 +62,13 @@ export default function login() {
         storeData("refresh_token", refresh_token),
       ]).then(() => {
         Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-        ToastAndroid.showWithGravity("Sesion Iniciada", ToastAndroid.SHORT, ToastAndroid.CENTER);
-        return router.replace("/(tabs)")});
+        ToastAndroid.showWithGravity(
+          "Sesion Iniciada",
+          ToastAndroid.SHORT,
+          ToastAndroid.CENTER
+        );
+        return router.replace("/(tabs)");
+      });
     }
   };
 

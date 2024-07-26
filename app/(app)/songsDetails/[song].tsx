@@ -53,7 +53,15 @@ const SongDetails = () => {
       if (soundLoaded) {
         setCurrentSound(sound);
         await sound.setIsLoopingAsync(true);
-        sound.playAsync().catch((e)=>ToastAndroid.showWithGravity(e, ToastAndroid.SHORT, ToastAndroid.CENTER));
+        sound
+          .playAsync()
+          .catch((e) =>
+            ToastAndroid.showWithGravity(
+              e,
+              ToastAndroid.SHORT,
+              ToastAndroid.CENTER
+            )
+          );
       }
     } catch (error) {
       console.error("Error ", error);
@@ -98,8 +106,10 @@ const SongDetails = () => {
   useEffect(() => {
     navigation.setOptions({ title: name, headerBlurEffect: "regular" });
     const fetchData = async () => {
-      const [{ Info, Features, Like }, description]: any[] =
-        await Promise.all([getSongInfo(id), getInfo(name, artists, true)]);
+      const [{ Info, Features, Like }, description]: any[] = await Promise.all([
+        getSongInfo(id),
+        getInfo(name, artists, true),
+      ]);
       setTrack((prev) => ({
         ...prev,
         info: Info || {},
@@ -111,7 +121,9 @@ const SongDetails = () => {
         .join("   ");
       setInformacion(informacion);
     };
-    fetchData().catch((e)=>ToastAndroid.showWithGravity(e, ToastAndroid.SHORT, ToastAndroid.CENTER));
+    fetchData().catch((e) =>
+      ToastAndroid.showWithGravity(e, ToastAndroid.SHORT, ToastAndroid.CENTER)
+    );
   }, [navigation]);
 
   const getDetails = useCallback((Item: any) => {
@@ -120,15 +132,14 @@ const SongDetails = () => {
       params: { id: Item.id, name: Item.name },
     });
   }, []);
-  const handleLike = async (id : string) => {
+  const handleLike = async (id: string) => {
     await AddToFav(id);
     setLike(true);
-  }
-    const handleUnLike = async (id : string) => {
+  };
+  const handleUnLike = async (id: string) => {
     await deleteFromFav(id);
     setLike(false);
-  }
-
+  };
 
   return (
     <ParallaxScrollView
@@ -196,13 +207,12 @@ const SongDetails = () => {
               )}
             </ScrollView>
             {like ? (
-              <Pressable onPress={_=>handleUnLike(Track.info?.id)}>
-              <Ionicons name="heart" size={30} color="red" />
+              <Pressable onPress={(_) => handleUnLike(Track.info?.id)}>
+                <Ionicons name="heart" size={30} color="red" />
               </Pressable>
             ) : (
-              <Pressable onPress={_=>handleLike(Track.info?.id)}>
-              <Ionicons name="heart-outline" size={30} color="red" />
-
+              <Pressable onPress={(_) => handleLike(Track.info?.id)}>
+                <Ionicons name="heart-outline" size={30} color="red" />
               </Pressable>
             )}
 

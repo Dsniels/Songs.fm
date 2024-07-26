@@ -1,10 +1,14 @@
 import { refreshToken } from "@/Api/SpotifyAuth";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import axios, { AxiosError, AxiosRequestHeaders, AxiosResponse, InternalAxiosRequestConfig } from "axios";
+import axios, {
+  AxiosError,
+  AxiosRequestHeaders,
+  AxiosResponse,
+  InternalAxiosRequestConfig,
+} from "axios";
 import * as SecureStorage from "expo-secure-store";
 
 const getToken = async () => {
-
   const token = await SecureStorage.getItemAsync("token");
   return token;
 };
@@ -25,13 +29,11 @@ axios.interceptors.request.use(
   }
 );
 
-
-
 const requestGenerico = {
   get: (url: string) => axios.get(url),
   post: (url: string, body: any) => axios.post(url, body),
-  put : (url: string, body: any) => axios.put(url, body),
-  delete: (url: string, body:any) => axios.delete(url, body),
+  put: (url: string, body: any) => axios.put(url, body),
+  delete: (url: string, body: any) => axios.delete(url, body),
 };
 
 export default requestGenerico;
