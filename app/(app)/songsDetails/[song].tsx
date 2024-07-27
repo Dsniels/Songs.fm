@@ -59,8 +59,8 @@ const SongDetails = () => {
             ToastAndroid.showWithGravity(
               e,
               ToastAndroid.SHORT,
-              ToastAndroid.CENTER
-            )
+              ToastAndroid.CENTER,
+            ),
           );
       }
     } catch (error) {
@@ -100,7 +100,7 @@ const SongDetails = () => {
         }
       };
       return () => onBlur();
-    }, [currentSound, isFocused])
+    }, [currentSound, isFocused]),
   );
 
   useEffect(() => {
@@ -122,7 +122,7 @@ const SongDetails = () => {
       setInformacion(informacion);
     };
     fetchData().catch((e) =>
-      ToastAndroid.showWithGravity(e, ToastAndroid.SHORT, ToastAndroid.CENTER)
+      ToastAndroid.showWithGravity(e, ToastAndroid.SHORT, ToastAndroid.CENTER),
     );
   }, [navigation]);
 
@@ -156,30 +156,36 @@ const SongDetails = () => {
       }
     >
       <View className="flex flex-row justify-end items-center p-2">
-                  {like ? (
-              <Pressable className="m-2" onPress={(_) => handleUnLike(Track.info?.id)}>
-                <Ionicons name="heart" size={40} color="red" />
-              </Pressable>
-            ) : (
-              <Pressable className="m-2" onPress={(_) => handleLike(Track.info?.id)}>
-                <Ionicons name="heart-outline" size={40} color="red" />
-              </Pressable>
-            )}
+        {like ? (
+          <Pressable
+            className="m-2"
+            onPress={(_) => handleUnLike(Track.info?.id)}
+          >
+            <Ionicons name="heart" size={40} color="red" />
+          </Pressable>
+        ) : (
+          <Pressable
+            className="m-2"
+            onPress={(_) => handleLike(Track.info?.id)}
+          >
+            <Ionicons name="heart-outline" size={40} color="red" />
+          </Pressable>
+        )}
 
-            {currentSound === null && Track.info.preview_url ? (
-              <Pressable
-                className="bg-cyan-950"
-                style={styles.playButton}
-                onPress={() => playSound(Track.info?.preview_url || " ")}
-              >
-                <Ionicons name="play" size={30} color="white" />
-              </Pressable>
-            ) : (
-              <Pressable style={styles.playButton} onPress={() => pause()}>
-                <Ionicons name="pause" size={30} color="white" />
-              </Pressable>
-            )}
-          </View>
+        {currentSound === null && Track.info.preview_url ? (
+          <Pressable
+            className="bg-cyan-950"
+            style={styles.playButton}
+            onPress={() => playSound(Track.info?.preview_url || " ")}
+          >
+            <Ionicons name="play" size={30} color="white" />
+          </Pressable>
+        ) : (
+          <Pressable style={styles.playButton} onPress={() => pause()}>
+            <Ionicons name="pause" size={30} color="white" />
+          </Pressable>
+        )}
+      </View>
       <View className="mb-0 mt-3 flex justify-evenly flex-wrap flex-row content-evenly w-fit">
         <Pressable
           className="w-44 p-2 bg-opacity-70"
@@ -231,15 +237,12 @@ const SongDetails = () => {
                 <ActivityIndicator size="large" />
               )}
             </ScrollView>
-            
-
           </ThemedView>
 
           <View className=" flex flex-wrap mt-8 flex-row ">
-
             <View style={styles.caracteristica}>
               <View
-              className="bg-gray-800"
+                className="bg-gray-800"
                 style={{
                   height: 10,
                   width: 100,
@@ -247,7 +250,7 @@ const SongDetails = () => {
                 }}
               >
                 <View
-                className="bg-sky-700"
+                  className="bg-sky-700"
                   style={{
                     height: "100%",
                     width: `${Track.audioFeatures.danceability * 100}%`,
@@ -259,7 +262,7 @@ const SongDetails = () => {
             </View>
             <View style={styles.caracteristica}>
               <View
-              className="bg-gray-800"
+                className="bg-gray-800"
                 style={{
                   height: 10,
                   width: 100,
@@ -267,7 +270,7 @@ const SongDetails = () => {
                 }}
               >
                 <View
-                className="bg-sky-700"
+                  className="bg-sky-700"
                   style={{
                     height: "100%",
                     width: `${Track.audioFeatures.acousticness * 100}%`,
@@ -279,7 +282,7 @@ const SongDetails = () => {
             </View>
             <View style={styles.caracteristica}>
               <View
-              className="bg-gray-800"
+                className="bg-gray-800"
                 style={{
                   height: 10,
                   width: 100,
@@ -287,7 +290,7 @@ const SongDetails = () => {
                 }}
               >
                 <View
-                className="bg-sky-700"
+                  className="bg-sky-700"
                   style={{
                     height: "100%",
                     width: `${Track.audioFeatures.energy * 100}%`,
@@ -299,15 +302,15 @@ const SongDetails = () => {
             </View>
             <View style={styles.caracteristica}>
               <View
-              className="bg-gray-800"
+                className="bg-gray-800"
                 style={{
                   height: 10,
                   width: 100,
                   borderRadius: 5,
                 }}
               >
-                 <View
-                className="bg-sky-700"
+                <View
+                  className="bg-sky-700"
                   style={{
                     height: "100%",
                     width: `${Track.audioFeatures.instrumentalness * 100}%`,
@@ -319,7 +322,7 @@ const SongDetails = () => {
             </View>
             <View style={styles.caracteristica}>
               <View
-              className="bg-gray-800"
+                className="bg-gray-800"
                 style={{
                   height: 10,
                   width: 100,
@@ -327,7 +330,7 @@ const SongDetails = () => {
                 }}
               >
                 <View
-                className="bg-sky-700"
+                  className="bg-sky-700"
                   style={{
                     height: "100%",
                     width: `${Track.audioFeatures.liveness * 100}%`,
@@ -353,7 +356,7 @@ const SongDetails = () => {
             </View>
             <View style={styles.caracteristica}>
               <View
-              className="bg-gray-800"
+                className="bg-gray-800"
                 style={{
                   height: 10,
                   width: 100,
@@ -361,7 +364,7 @@ const SongDetails = () => {
                 }}
               >
                 <View
-                className="bg-sky-700"
+                  className="bg-sky-700"
                   style={{
                     height: "100%",
                     width: `${Track.audioFeatures.speechiness * 100}%`,
@@ -373,7 +376,7 @@ const SongDetails = () => {
             </View>
             <View style={styles.caracteristica}>
               <View
-              className="bg-gray-800"
+                className="bg-gray-800"
                 style={{
                   height: 10,
                   width: 100,
@@ -381,7 +384,7 @@ const SongDetails = () => {
                 }}
               >
                 <View
-                className="bg-sky-700"
+                  className="bg-sky-700"
                   style={{
                     height: "100%",
                     width: `${Track.audioFeatures.valence * 100}%`,

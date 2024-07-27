@@ -85,7 +85,7 @@ const Detalles = () => {
         ToastAndroid.showWithGravity(
           artistInfoResult.reason,
           ToastAndroid.SHORT,
-          ToastAndroid.CENTER
+          ToastAndroid.CENTER,
         );
       }
 
@@ -97,13 +97,13 @@ const Detalles = () => {
         ToastAndroid.showWithGravity(
           descriptionResult.reason,
           ToastAndroid.SHORT,
-          ToastAndroid.CENTER
+          ToastAndroid.CENTER,
         );
       }
     };
 
     fetchData().catch((e) =>
-      ToastAndroid.showWithGravity(e, ToastAndroid.SHORT, ToastAndroid.CENTER)
+      ToastAndroid.showWithGravity(e, ToastAndroid.SHORT, ToastAndroid.CENTER),
     );
   }, [name, id, navigation]);
 
@@ -127,10 +127,13 @@ const Detalles = () => {
           style={{ width: "100%", height: 400 }}
         />
       }
-      
     >
-      {!informacion  && <View className="flex-1 h-full m-auto " ><ActivityIndicator size="large" /></View>}
-      {informacion  && (
+      {!informacion && (
+        <View className="flex-1 h-full m-auto ">
+          <ActivityIndicator size="large" />
+        </View>
+      )}
+      {informacion && (
         <View className="flex m-5 ">
           <ThemedText type="subtitle">Who is {name}?</ThemedText>
           <Pressable
