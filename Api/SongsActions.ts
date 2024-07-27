@@ -8,7 +8,7 @@ import { features, Recently, song } from "@/types/Card.types";
 
 export const getTop = <T> (
   type: string,
-  offset: number = 0,
+  offset = 0,
   time_range: string,
 ): Promise<T> => {
   return new Promise((resolve, reject) => {
