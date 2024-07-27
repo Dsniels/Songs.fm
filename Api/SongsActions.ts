@@ -6,7 +6,7 @@ import { ToastAndroid } from "react-native";
 import { notificationAsync, NotificationFeedbackType } from "expo-haptics";
 import { features, Recently, song } from "@/types/Card.types";
 
-export const getTop = <T> (
+export const getTop = <T>(
   type: string,
   offset = 0,
   time_range: string,
@@ -14,7 +14,6 @@ export const getTop = <T> (
   return new Promise((resolve, reject) => {
     HttpCliente.get(`/me/top/${type}?offset=${offset}&time_range=${time_range}`)
       .then((response: AxiosResponse<T>) => {
-        
         resolve(response.data);
       })
       .catch((e) => {
@@ -57,7 +56,7 @@ export const getRecomendations = async (): Promise<any> => {
   });
 };
 
-export const getRecentlySongs = () : Promise<Recently> => {
+export const getRecentlySongs = (): Promise<Recently> => {
   return new Promise((resolve, reject) => {
     HttpCliente.get("/me/player/recently-played?limit=20")
       .then((response) => {
@@ -93,7 +92,7 @@ export const getSongInfo = async (id: string) => {
   return { Info: info, Features: features, Like: like };
 };
 
-const songInfo = (id: string) : Promise<song>=> {
+const songInfo = (id: string): Promise<song> => {
   return new Promise((resolve, reject) => {
     HttpCliente.get(`/tracks/${id}`)
       .then((response: any) => {
@@ -103,7 +102,7 @@ const songInfo = (id: string) : Promise<song>=> {
   });
 };
 
-const checkLikeTrack = (id: string) : Promise<boolean> => {
+const checkLikeTrack = (id: string): Promise<boolean> => {
   return new Promise((resolve, reject) => {
     HttpCliente.get(`/me/tracks/contains?ids=${id}`)
       .then((response: any) => {
