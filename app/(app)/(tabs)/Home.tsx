@@ -35,7 +35,6 @@ export default function HomeScreen() {
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const router = useRouter();
-  const nav = useNavigation();
   const [items, setItems] = useState<any | undefined>(undefined);
   const [text, setText] = useState("");
 

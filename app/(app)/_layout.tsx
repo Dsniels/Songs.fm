@@ -36,11 +36,7 @@ export default function Applayout() {
     });
   }, []);
 
-  if (sesionUsuario) {
-    !sesionUsuario.usuario ? (
-      <ActivityIndicator size="large" color="#0000ff" />
-    ) : null;
-  }
+
 
   useAuth(dispatch);
 

@@ -21,6 +21,7 @@ import { getInfo } from "@/Api/AnnotatiosActions";
 import { extractInfo } from "@/service/FormatData";
 import { ListOfArtists } from "@/components/ListOfArtists";
 import { SmallListSongs } from "@/components/SmallListSongs";
+import { album } from "@/types/Card.types";
 
 interface Tracks {
   album: any;
@@ -172,7 +173,7 @@ const Detalles = () => {
             <ThemedText style={{ marginTop: 20 }} type="subtitle">
               Canciones Top
             </ThemedText>
-            {infoArtist.songs.length > 0 ? (
+            {infoArtist.songs.length > 0 && infoArtist.songs ? (
               infoArtist.songs.map((item: Tracks, index: number) => (
                 <SmallListSongs
                   key={index}
@@ -187,14 +188,14 @@ const Detalles = () => {
               Albumes
             </ThemedText>
             <ScrollView horizontal>
-              {infoArtist.albums.length > 0 ? (
-                infoArtist.albums?.map((item: any) => (
+              {infoArtist.albums.length > 0 && infoArtist.albums ? (
+                infoArtist.albums.map((item: album) => (
                   <ImageBackground
                     key={item.id}
                     style={styles.TopSongs}
                     source={{
                       uri:
-                        item?.images?.[0]?.url ||
+                        item.images[0].url ||
                         "https://images.pexels.com/photos/145707/pexels-photo-145707.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
                     }}
                   >

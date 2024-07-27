@@ -221,7 +221,7 @@ export default function TabTwoScreen() {
                   Escuchadas Recientemente
                 </ThemedText>
                 <View className="rounded-3xl p-5">
-                  {recent?.length > 0 && !loading ? (
+                  {recent?.length > 0  ? (
                     <FlatList
                       data={recent}
                       keyExtractor={(item, index) => index.toString()}

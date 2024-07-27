@@ -10,7 +10,8 @@ export type CardType ={
 
 export type album =  {
         images : Array<{url : string}>;
-
+        id : string;
+        name:string;
 }
 export type song = {
         id  :string;
