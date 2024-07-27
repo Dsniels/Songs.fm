@@ -39,8 +39,10 @@ export default function Applayout() {
     });
   }, []);
 
-  if(sesionUsuario){
-    !sesionUsuario.usuario ? (<ActivityIndicator size="large" color="#0000ff" />) : null; 
+  if (sesionUsuario) {
+    !sesionUsuario.usuario ? (
+      <ActivityIndicator size="large" color="#0000ff" />
+    ) : null;
   }
 
   useAuth(dispatch, sesionUsuario);
@@ -60,7 +62,6 @@ export default function Applayout() {
       />
       <Stack.Screen
         name="Detalles/[name]"
-        
         options={{
           headerTransparent: true,
           contentStyle: { backgroundColor: "#000818" },

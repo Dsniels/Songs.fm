@@ -30,12 +30,12 @@ export const useAuth = (dispatch: Dispatch<any>, sesionUsuario: any) => {
         setServidorResponse(true);
       }
 
-      setInterval(async() => {
+      setInterval(async () => {
         await getData();
       }, 360000);
     };
     getData().catch((e) =>
-      ToastAndroid.showWithGravity(e, ToastAndroid.SHORT, ToastAndroid.CENTER)
+      ToastAndroid.showWithGravity(e, ToastAndroid.SHORT, ToastAndroid.CENTER),
     );
   }, []);
 };

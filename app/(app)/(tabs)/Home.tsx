@@ -21,7 +21,13 @@ import { HelloWave } from "@/components/HelloWave";
 import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
-import { Link, router, useFocusEffect, useNavigation, useRouter } from "expo-router";
+import {
+  Link,
+  router,
+  useFocusEffect,
+  useNavigation,
+  useRouter,
+} from "expo-router";
 import * as SecureStorage from "expo-secure-store";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { styles } from "@/Styles/styles";
@@ -34,8 +40,8 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 export default function HomeScreen() {
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const router = useRouter(); 
-  const nav = useNavigation(); 
+  const router = useRouter();
+  const nav = useNavigation();
   const [items, setItems] = useState<any | undefined>(undefined);
   const [text, setText] = useState("");
 
@@ -44,13 +50,13 @@ export default function HomeScreen() {
       "keyboardDidShow",
       () => {
         setKeyboardVisible(true);
-      }
+      },
     );
     const keyboardDidHideListener = Keyboard.addListener(
       "keyboardDidHide",
       () => {
         setKeyboardVisible(false);
-      }
+      },
     );
 
     return () => {
@@ -58,18 +64,18 @@ export default function HomeScreen() {
       keyboardDidHideListener.remove();
     };
   }, [items]);
- useFocusEffect(
+  useFocusEffect(
     useCallback(() => {
       const handleRouteChange = () => {
         setText("");
-        setItems(undefined);  
+        setItems(undefined);
         setShowModal(false);
       };
 
       return () => {
         handleRouteChange();
       };
-    }, [])
+    }, []),
   );
   const deleteToken = async () => {
     await AsyncStorage.clear();
@@ -100,16 +106,22 @@ export default function HomeScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.container}   className="flex-1 m-0 bg-[#000818]  p-9 ">
+    <SafeAreaView
+      style={styles.container}
+      className="flex-1 m-0 bg-[#000818]  p-9 "
+    >
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         keyboardVerticalOffset={Platform.OS === "ios" ? 64 : 0}
       >
-      <Pressable className="flex  align-middle m-1 bg-blue-950 rounded-2xl justify-center items-start p-3 shadow-lg shadow-cyan-500/50 " onPress={()=>setShowModal(true)}>
-        <View >
-          <Ionicons name="search" size={24} color="white" />
-        </View>
-    </Pressable>
+        <Pressable
+          className="flex  align-middle m-1 bg-blue-950 rounded-2xl justify-center items-start p-3 shadow-lg shadow-cyan-500/50 "
+          onPress={() => setShowModal(true)}
+        >
+          <View>
+            <Ionicons name="search" size={24} color="white" />
+          </View>
+        </Pressable>
         <ThemedView style={styles.titleContainer}>
           <ThemedText type="title">Hola Mundo</ThemedText>
           <HelloWave />
@@ -117,41 +129,39 @@ export default function HomeScreen() {
 
         <Button color="blue" title="delete token" onPress={deleteToken} />
 
-
-          <Modal
+        <Modal
           className="bg-[#000818] m-0 rounded-lg"
           animationType="slide"
           visible={showModal}
           onRequestClose={() => {
             setItems(undefined);
             setShowModal(false);
-          }}>
-            <View className="flex-1 p-2 bg-[#000818]">
-   
-            
-        <ThemedView className="bg-[#000818] flex  align-middle items-center p-2 content-center m-1 text-white  flex-row">
-          <Ionicons name="search" size={24} color="white" />
-          <TextInput
-            className="flex-auto bg-blue-950 text-white p-3 m-2 rounded-2xl"
-            value={text}
-            clearTextOnFocus
-            onTextInput={handleSearch}
-            onChangeText={handleTextChange}
-         /> 
-        </ThemedView>
+          }}
+        >
+          <View className="flex-1 p-2 bg-[#000818]">
+            <ThemedView className="bg-[#000818] flex  align-middle items-center p-2 content-center m-1 text-white  flex-row">
+              <Ionicons name="search" size={24} color="white" />
+              <TextInput
+                className="flex-auto bg-blue-950 text-white p-3 m-2 rounded-2xl"
+                value={text}
+                clearTextOnFocus
+                onTextInput={handleSearch}
+                onChangeText={handleTextChange}
+              />
+            </ThemedView>
 
-        {items && showModal ? (
-            <FlatList
-              data={items.tracks.items}
-              renderItem={({ item }) => (
-                <SmallListSongs item={item} getSongDetails={getSongDetails} />
-              )}
-              keyExtractor={(item) => item.id} />
-
-        ) : null}
-        </View>
+            {items && showModal ? (
+              <FlatList
+                data={items.tracks.items}
+                renderItem={({ item }) => (
+                  <SmallListSongs item={item} getSongDetails={getSongDetails} />
+                )}
+                keyExtractor={(item) => item.id}
+              />
+            ) : null}
+          </View>
         </Modal>
-        
+
         {!isKeyboardVisible && (
           <Link style={styles.LinkLogin} href="/login">
             <Pressable>

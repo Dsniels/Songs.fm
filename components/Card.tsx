@@ -21,7 +21,6 @@ const Card = ({ card }: { card: CardType }) => {
           type="subtitle"
           style={styles.cardContent}
         >
-       
           {`${card.name}`}
         </ThemedText>
         <ThemedText

@@ -1,17 +1,23 @@
 import { styles } from "@/Styles/styles";
-import { LinearGradient } from "expo-linear-gradient"
-import { ImageBackground, Pressable, Text, TouchableOpacity, View } from "react-native"
+import { LinearGradient } from "expo-linear-gradient";
+import {
+  ImageBackground,
+  Pressable,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
-
-export const ListSongs = ({item, getSongDetails } : any) => {
-
+export const ListSongs = ({ item, getSongDetails }: any) => {
   return (
     <TouchableOpacity key={item.id} onPress={() => getSongDetails(item)}>
       <ImageBackground
         key={item.id}
         style={styles.TopSongs}
         source={{
-          uri: item.album?.images[0].url || "https://images.pexels.com/photos/145707/pexels-photo-145707.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+          uri:
+            item.album?.images[0].url ||
+            "https://images.pexels.com/photos/145707/pexels-photo-145707.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
         }}
       >
         <LinearGradient
@@ -20,7 +26,10 @@ export const ListSongs = ({item, getSongDetails } : any) => {
           start={{ x: 0, y: 1 }}
           end={{ x: 0, y: 0 }}
         >
-          <View className="flex z-0 top-28 right-8 m-8 w-56 p-6 rounded-3xl" key={item.id}>
+          <View
+            className="flex z-0 top-28 right-8 m-8 w-56 p-6 rounded-3xl"
+            key={item.id}
+          >
             <Text
               lineBreakMode="clip"
               numberOfLines={1}
@@ -32,5 +41,5 @@ export const ListSongs = ({item, getSongDetails } : any) => {
         </LinearGradient>
       </ImageBackground>
     </TouchableOpacity>
-  )
-}
+  );
+};
