@@ -1,5 +1,4 @@
 import {
-  Image,
   View,
   Button,
   Pressable,
@@ -7,29 +6,24 @@ import {
   ToastAndroid,
   SafeAreaView,
   TextInput,
-  NativeSyntheticEvent,
-  TextInputChangeEventData,
   FlatList,
   KeyboardAvoidingView,
   Platform,
   Keyboard,
-  ScrollView,
   Modal,
 } from "react-native";
-import * as Network from "expo-network";
 import { HelloWave } from "@/components/HelloWave";
-import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
-import { Link, router, useFocusEffect, useNavigation, useRouter } from "expo-router";
+import { Link, useFocusEffect, useNavigation, useRouter } from "expo-router";
 import * as SecureStorage from "expo-secure-store";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { styles } from "@/Styles/styles";
 import { useCallback, useEffect, useState } from "react";
 import { search } from "@/Api/SongsActions";
-import { ListSongs } from "@/components/ListSongs";
 import { SmallListSongs } from "@/components/SmallListSongs";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { song } from "@/types/Card.types";
 
 export default function HomeScreen() {
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
@@ -92,7 +86,7 @@ export default function HomeScreen() {
     if (t === " ") setItems(undefined);
   };
 
-  const getSongDetails = (Item: any) => {
+  const getSongDetails = (Item: song) => {
     return router.push({
       pathname: `(app)/songsDetails/[song]`,
       params: { id: Item.id, name: Item.name, artists: Item.artists[0].name },

@@ -5,11 +5,10 @@ import {
   ActivityIndicator,
   FlatList,
   Image,
-  ScrollView,
   ToastAndroid,
 } from "react-native";
 import { ThemedText } from "@/components/ThemedText";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useStateValue } from "@/Context/store";
 import { getRecentlySongs, getTop } from "@/Api/SongsActions";
 import { styles } from "@/Styles/styles";
@@ -20,9 +19,7 @@ import { Picker } from "@react-native-picker/picker";
 import { ListSongs } from "@/components/ListSongs";
 import { ListOfArtists } from "@/components/ListOfArtists";
 import { SmallListSongs } from "@/components/SmallListSongs";
-import NetInfo from "@react-native-community/netinfo";
-import Ionicons from "@expo/vector-icons/Ionicons";
-import { Feather } from '@expo/vector-icons';
+import { artist, genero, Recently, song } from "@/types/Card.types";
 export default function TabTwoScreen() {
   const [{ sesionUsuario }, dispatch] = useStateValue();
   const [generos, setGeneros] = useState<{ name: string; value: number }[]>([]);
@@ -33,26 +30,25 @@ export default function TabTwoScreen() {
       url: "",
     },
   });
-  const [Connection, setConnection] = useState<boolean | null>(true);
   const [selectDate, setSelectDate] = useState("short_term");
-  const [recent, setRecent] = useState<any[]>([]);
-  const [requestArtist, setRequestArtist] = useState({
+  const [recent, setRecent] = useState<Recently[]>([]);
+  const [requestArtist, setRequestArtist] = useState<{artists : Array<artist>, offset : number }>({
     artists: [],
     offset: 0,
   });
-  const [requestMusic, setRequestMusic] = useState({
+  const [requestMusic, setRequestMusic] = useState<{songs : Array<song>, offsetSongs : number}>({
     songs: [],
     offsetSongs: 0,
   });
 
-  const getDetails = useCallback((Item: any) => {
+  const getDetails = useCallback((Item: artist) => {
     router.push({
       pathname: `(app)/Detalles/[name]`,
       params: { id: Item.id, name: Item.name },
     });
   }, []);
 
-  const getSongDetails = useCallback((Item: any) => {
+  const getSongDetails = useCallback((Item: song) => {
     router.push({
       pathname: `(app)/songsDetails/[song]`,
       params: { id: Item.id, name: Item.name, artists: Item.artists[0].name },
@@ -60,7 +56,7 @@ export default function TabTwoScreen() {
   }, []);
 
   const fetchRecentlySongs = useCallback(async () => {
-    const recently: any = await getRecentlySongs();
+    const recently: Recently = await getRecentlySongs();
     const newArray = recently.items.map((item: any) => item.track);
     setRecent(newArray);
     seedTracks(newArray);
@@ -108,7 +104,7 @@ export default function TabTwoScreen() {
   }, [selectDate]);
 
 
-  const renderGeneroItem = ({ item }: any) => (
+  const renderGeneroItem = ({ item }: genero) => (
     <View className="m-3 rounded-lg" key={item.name}>
       <ThemedText type="defaultSemiBold">{item.name}</ThemedText>
       <View className="bg-gray-800 h-4 w-60 rounded-lg">
@@ -191,7 +187,7 @@ export default function TabTwoScreen() {
                 </ThemedText>
                 <FlatList
                   data={requestArtist.artists}
-                  keyExtractor={(item: any) => item.id}
+                  keyExtractor={(index) => index.toString()}
                   renderItem={({ item }) => (
                     <ListOfArtists item={item} getDetails={getDetails} />
                   )}
@@ -206,7 +202,7 @@ export default function TabTwoScreen() {
                 </ThemedText>
                 <FlatList
                   data={requestMusic.songs}
-                  keyExtractor={(item: any, index: number) => index.toString()}
+                  keyExtractor={(item) => item.id}
                   renderItem={({ item }) => (
                     <ListSongs item={item} getSongDetails={getSongDetails} />
                   )}

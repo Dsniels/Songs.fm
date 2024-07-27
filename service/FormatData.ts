@@ -1,5 +1,8 @@
-  export const extractInfo =(node: any) => {
-    let data = [];
+import { annotationResponse } from "@/types/Card.types";
+
+  export const extractInfo =(node: annotationResponse) => {
+    let data : Array<string> = [];
+    
     if (typeof node === "string" && node !== ".") {
       data.push(node);
     } else if (node.children) {

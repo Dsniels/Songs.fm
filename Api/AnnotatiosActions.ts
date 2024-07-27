@@ -1,3 +1,4 @@
+import { annotationResponse, annotations } from '@/types/Card.types';
 import axios, { AxiosResponse } from 'axios';
 import { configureProps } from 'react-native-reanimated/lib/typescript/ConfigHelper';
 const GeniusApi = axios.create({
@@ -18,7 +19,7 @@ export const getInfo = async (search:string,artists:string, song : boolean)=>{
   
   const {response} = data;
 
-  const {result}= response.hits.find((i:any)=>{
+  const {result}= response.hits.find((i:annotations)=>{
     return i.result.artist_names.toLocaleLowerCase().includes(artists.toLocaleLowerCase()) 
   }) || false
   if(!result) return ["?"]
@@ -29,13 +30,13 @@ export const getInfo = async (search:string,artists:string, song : boolean)=>{
     id = result.primary_artist.id
   }
   
-  const annotations : any = await getAnnotations(id, song ? 'songs' :'artists');
+  const annotations : annotationResponse = await getAnnotations(id, song ? 'songs' :'artists');
 
     return annotations || ["?"]
 }
 
 
-const getAnnotations =(id:string, term : "songs" | "artists")=>{
+const getAnnotations =(id:string, term : "songs" | "artists") : Promise<annotationResponse>=>{
   return new Promise((resolve, reject)=>{
     GeniusApi.get(`/${term}/${id}`).then((response : AxiosResponse)=>{
       if(response.status === 200){

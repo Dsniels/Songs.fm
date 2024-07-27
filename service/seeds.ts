@@ -1,5 +1,4 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import * as SecureStorage from "expo-secure-store";
 import { generos } from "./Generos";
 
 export const seedGeners = async (seedGeners: string) => {
@@ -22,7 +21,7 @@ export const seedTracks = async (data: any) => {
     newIds = new Set(merge);
     newIds = Array.from(ids);
   }
-  await AsyncStorage.setItem("seedTrack", ids.toString());
+  await AsyncStorage.setItem("seedTrack", newIds.toString());
 };
 
 export const seedArtist = async (data: any) => {

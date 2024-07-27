@@ -4,6 +4,7 @@ import { seeds } from "@/service/seeds";
 import { refreshToken } from "./SpotifyAuth";
 import { ToastAndroid } from "react-native";
 import { notificationAsync, NotificationFeedbackType } from "expo-haptics";
+import { Recently } from "@/types/Card.types";
 
 export const getTop = (
   type: string,
@@ -56,7 +57,7 @@ export const getRecomendations = async (): Promise<any> => {
   });
 };
 
-export const getRecentlySongs = () => {
+export const getRecentlySongs = () : Promise<Recently> => {
   return new Promise((resolve, reject) => {
     HttpCliente.get("/me/player/recently-played?limit=20")
       .then((response) => {

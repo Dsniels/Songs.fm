@@ -1,14 +1,12 @@
 import { ActivityIndicator, SafeAreaView, View } from "react-native";
 import React, { useCallback, useEffect, useState } from "react";
-import { styles } from "@/Styles/styles";
 import { getRecomendations } from "@/Api/SongsActions";
 import Card from "@/components/Card";
 import { SwipeCard } from "@/components/SwipeCard";
-import * as Network from "expo-network";
-import { ThemedText } from "@/components/ThemedText";
+import { Recommendatios } from "@/types/Card.types";
 
 export default function music() {
-  const [data, setData] = useState<any[]>([]);
+  const [data, setData] = useState<object[]>([]);
 
   useEffect(() => {
     if (data.length <= 5) {
@@ -24,8 +22,9 @@ export default function music() {
     });
   }, []);
 
+
   const fetchData = useCallback(async () => {
-    const data_response: any[] = await getRecomendations();
+    const data_response: Recommendatios[] = await getRecomendations();
 
     if (data_response.length === 0) {
       return onRefresh();
@@ -33,9 +32,9 @@ export default function music() {
 
     const data_result = data_response
       .flat()
-      .filter((i: any) => i.preview_url !== null);
+      .filter((i: Recommendatios) => i.preview_url !== null);
 
-    const extractedData = data_result.map((track: any) => ({
+    const extractedData = data_result.map((track: Recommendatios) => ({
       id: track.id,
       name: track.name,
       image: track.album.images[0]?.url || null,
