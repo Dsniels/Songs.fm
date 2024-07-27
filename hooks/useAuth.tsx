@@ -15,7 +15,7 @@ export const useAuth = (dispatch: Dispatch<any>, sesionUsuario: any) => {
         SecureStorage.getItemAsync("expira"),
       ]);
       if (token.value == null || fecha.value === null) {
-        return router.push("/login");
+        return router.replace("/login");
       }
 
       const Today = new Date();
@@ -30,9 +30,9 @@ export const useAuth = (dispatch: Dispatch<any>, sesionUsuario: any) => {
         setServidorResponse(true);
       }
 
-      setInterval(() => {
-        getData();
-      }, 3600000);
+      setInterval(async() => {
+        await getData();
+      }, 360000);
     };
     getData().catch((e) =>
       ToastAndroid.showWithGravity(e, ToastAndroid.SHORT, ToastAndroid.CENTER)
