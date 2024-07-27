@@ -1,20 +1,32 @@
-import { router, Tabs, useFocusEffect } from "expo-router";
-import React, { useCallback, useEffect } from "react";
+import { router, Tabs,  } from "expo-router";
+import React, { useCallback, useEffect, useState } from "react";
 import NetInfo from "@react-native-community/netinfo";
 import { TabBarIcon } from "@/components/navigation/TabBarIcon";
 import { Colors } from "@/constants/Colors";
-import { useColorScheme } from "@/hooks/useColorScheme";
 import * as SecureStorage from "expo-secure-store";
-import { ToastAndroid } from "react-native";
+import {  View } from "react-native";
+import { Feather } from "@expo/vector-icons";
+import { ThemedText } from "@/components/ThemedText";
 
 export default function TabLayout() {
   const colorScheme = "dark";
+  const [Connection, setConnection] = useState<boolean | null>(true);
 
-  NetInfo.addEventListener((state) => {
-    if (!(state.isConnected || state.isWifiEnabled)) {
-      ToastAndroid.show("No tienes conexion a internet", ToastAndroid.SHORT);
-    }
-  });
+   const NotConnection = () => (
+        <View className="flex-1 bg-slate-900 items-center justify-center">
+          <Feather name="wifi-off" size={100} color="white" />
+          <ThemedText type="subtitle">Sin Conexion a internet</ThemedText>
+        </View>
+  );
+   useEffect(() => {
+    const unsubscribe = NetInfo.addEventListener((state) => {
+      
+      setConnection(state.isConnected);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
   useEffect(
     useCallback(() => {
       const fetchData = async () => {
@@ -28,7 +40,7 @@ export default function TabLayout() {
       return;
     }, [])
   );
-  return (
+  return Connection ? (
     <Tabs
       screenOptions={{
         tabBarStyle: {
@@ -80,5 +92,5 @@ export default function TabLayout() {
         }}
       />
     </Tabs>
-  );
+  ) : (<NotConnection />);
 }

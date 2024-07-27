@@ -32,9 +32,9 @@ const CustomHeader = () => {
 export default function Applayout() {
   const [{ sesionUsuario }, dispatch] = useStateValue();
   useEffect(() => {
-    AppState.addEventListener("change", (state) => {
+    AppState.addEventListener("change", async (state) => {
       if (state === "inactive") {
-        AsyncStorage.clear();
+        await AsyncStorage.clear();
       }
     });
   }, []);
@@ -60,8 +60,10 @@ export default function Applayout() {
       />
       <Stack.Screen
         name="Detalles/[name]"
+        
         options={{
           headerTransparent: true,
+          contentStyle: { backgroundColor: "#000818" },
           headerBackground: () => <CustomHeader />,
           headerShadowVisible: true,
           headerTitleStyle: { fontWeight: "bold", color: "white" },
