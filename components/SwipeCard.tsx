@@ -47,7 +47,7 @@ export const SwipeCard = <T,>({ children, items, setItems }: any) => {
           friction: 5,
         }).start();
       },
-    })
+    }),
   ).current;
 
   const playSound = useCallback(
@@ -69,7 +69,7 @@ export const SwipeCard = <T,>({ children, items, setItems }: any) => {
         console.error("Error ", error);
       }
     },
-    [currentSound]
+    [currentSound],
   );
 
   useEffect(() => {
@@ -94,14 +94,14 @@ export const SwipeCard = <T,>({ children, items, setItems }: any) => {
         inputRange: [-500, 0, 500],
         outputRange: ["8deg", "0deg", "-8deg"],
       }),
-    [swipe]
+    [swipe],
   );
 
   const animatedCardStyle = useMemo(
     () => ({
       transform: [...swipe.getTranslateTransform(), { rotate }],
     }),
-    [swipe, rotate]
+    [swipe, rotate],
   );
 
   const playCurrentSound = async () => {
@@ -126,7 +126,7 @@ export const SwipeCard = <T,>({ children, items, setItems }: any) => {
       };
 
       return () => onBlur();
-    }, [currentSound, isFocused])
+    }, [currentSound, isFocused]),
   );
   const getSongDetails = (Item: any) => {
     return router.push({

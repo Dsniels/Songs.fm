@@ -47,8 +47,8 @@ export default function music() {
   return (
     <SafeAreaView style={{ backgroundColor: "#000818", flex: 1 }}>
       {data.length >= 0 ? (
-        <View style={{ display:'flex', marginTop: 10, marginBottom: 10 }}>
-           <SwipeCard items={data} setItems={setData}>
+        <View style={{ display: "flex", marginTop: 10, marginBottom: 10 }}>
+          <SwipeCard items={data} setItems={setData}>
             {(item: any) => <Card card={item} />}
           </SwipeCard>
         </View>

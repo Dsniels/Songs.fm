@@ -9,7 +9,7 @@ import { Recently } from "@/types/Card.types";
 export const getTop = (
   type: string,
   offset: number = 0,
-  time_range: string
+  time_range: string,
 ): Promise<AxiosResponse<any>> => {
   return new Promise((resolve, reject) => {
     HttpCliente.get(`/me/top/${type}?offset=${offset}&time_range=${time_range}`)
@@ -24,10 +24,9 @@ export const getTop = (
 
 export const search = (t: string): Promise<object> => {
   return new Promise((resolve, reject) => {
-    HttpCliente.get(`search?q=${t}&type=artist%2Ctrack`)
-      .then((response) => {
-        resolve(response.data);
-      })
+    HttpCliente.get(`search?q=${t}&type=artist%2Ctrack`).then((response) => {
+      resolve(response.data);
+    });
   });
 };
 
@@ -41,7 +40,7 @@ export const getRecomendations = async (): Promise<any> => {
   const randomSpeechiness = Math.random();
   return new Promise((resolve, reject) => {
     HttpCliente.get(
-      `/recommendations?limit=40&seed_tracks=${songs.toString()}&seed_genres=${generos}&target_acousticness=${randomAcousticness}&target_energy=${randomEnergy}&target_speechiness${randomSpeechiness}&seed_artists=${artists.toString()}&target_danceability=${randomDanceability}&target_popularity=${randomPopularity}&target_valence${randomValence}`
+      `/recommendations?limit=40&seed_tracks=${songs.toString()}&seed_genres=${generos}&target_acousticness=${randomAcousticness}&target_energy=${randomEnergy}&target_speechiness${randomSpeechiness}&seed_artists=${artists.toString()}&target_danceability=${randomDanceability}&target_popularity=${randomPopularity}&target_valence${randomValence}`,
     )
       .then((response: AxiosResponse) => {
         resolve(response.data?.tracks);
@@ -50,7 +49,7 @@ export const getRecomendations = async (): Promise<any> => {
         ToastAndroid.showWithGravity(
           `Ocurrio un error: ${e.code}`,
           ToastAndroid.SHORT,
-          ToastAndroid.CENTER
+          ToastAndroid.CENTER,
         );
         resolve(e);
       });
@@ -70,7 +69,7 @@ export const getRecentlySongs = () : Promise<Recently> => {
 };
 
 export const getListOfSongs = (
-  tracks: string[]
+  tracks: string[],
 ): Promise<AxiosResponse<any>> => {
   return new Promise((resolve, reject) => {
     HttpCliente.get(`/tracks?ids=${tracks}`)
@@ -134,7 +133,7 @@ export const AddToFav = (id: string) => {
         ToastAndroid.showWithGravity(
           `Ocurrio un error: ${e.code}`,
           ToastAndroid.SHORT,
-          ToastAndroid.TOP
+          ToastAndroid.TOP,
         );
         reject(e);
       });
@@ -152,7 +151,7 @@ export const deleteFromFav = (id: string) => {
         ToastAndroid.showWithGravity(
           `Ocurrio un error: ${e.code}`,
           ToastAndroid.SHORT,
-          ToastAndroid.TOP
+          ToastAndroid.TOP,
         );
         reject(e);
       });

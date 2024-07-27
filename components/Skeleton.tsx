@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import React from "react";
+import { View, StyleSheet } from "react-native";
 
 const SkeletonCard = () => {
   return (
@@ -14,21 +14,21 @@ const SkeletonCard = () => {
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: 'white',
+    backgroundColor: "white",
     borderRadius: 8,
     padding: 20,
     marginBottom: 20,
   },
   image: {
-    width: '100%',
+    width: "100%",
     height: 150,
-    backgroundColor: '#ccc',
+    backgroundColor: "#ccc",
     borderRadius: 8,
     marginBottom: 10,
   },
   text: {
     height: 20,
-    backgroundColor: '#ccc',
+    backgroundColor: "#ccc",
     borderRadius: 4,
     marginBottom: 10,
   },

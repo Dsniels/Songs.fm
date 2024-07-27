@@ -51,14 +51,14 @@ const getRandomSeedItem = async (key: string) => {
 };
 
 export const seeds = async () => {
-  let songSeeds : string[] = []
-  let artistSeeds : string[] = []
+  let songSeeds: string[] = [];
+  let artistSeeds: string[] = [];
   const seedTrack = await getRandomSeedItem("seedTrack");
-  const seedTrack2 = await getRandomSeedItem("seedTrack")
-  songSeeds = [seedTrack, seedTrack2]
+  const seedTrack2 = await getRandomSeedItem("seedTrack");
+  songSeeds = [seedTrack, seedTrack2];
   const seedArtist = await getRandomSeedItem("seedArtists");
-  const seedArtist2= await getRandomSeedItem("seedArtists");
-  artistSeeds = [seedArtist, seedArtist2]
+  const seedArtist2 = await getRandomSeedItem("seedArtists");
+  artistSeeds = [seedArtist, seedArtist2];
   const seedGeneros = generos[randomIndex(generos)];
-  return { songs: songSeeds , artists: artistSeeds, generos: seedGeneros };
+  return { songs: songSeeds, artists: artistSeeds, generos: seedGeneros };
 };

@@ -99,8 +99,8 @@ export const styles = StyleSheet.create({
     height: 750,
   },
   CardDescription: {
-    margin:8,
-    padding:7,
+    margin: 8,
+    padding: 7,
     width: 300,
     justifyContent: "flex-end",
     alignItems: "flex-start",

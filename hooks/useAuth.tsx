@@ -32,11 +32,17 @@ const fulfilledValues = results.filter(isFulfilled).map(p => p.value);
         setServidorResponse(true);
       }
 
+<<<<<<< HEAD
 
       return () => {setTimeout(async () => await getData(), 360000)};
+=======
+      setInterval(async () => {
+        await getData();
+      }, 360000);
+>>>>>>> 60d89176b2f52bb3efce1a62f903a82a1377ce53
     };
     getData().catch((e) =>
-      ToastAndroid.showWithGravity(e, ToastAndroid.SHORT, ToastAndroid.CENTER)
+      ToastAndroid.showWithGravity(e, ToastAndroid.SHORT, ToastAndroid.CENTER),
     );
   }, []);
 };

@@ -19,7 +19,9 @@ import { Picker } from "@react-native-picker/picker";
 import { ListSongs } from "@/components/ListSongs";
 import { ListOfArtists } from "@/components/ListOfArtists";
 import { SmallListSongs } from "@/components/SmallListSongs";
+
 import { artist, genero, Recently, song } from "@/types/Card.types";
+
 export default function TabTwoScreen() {
   const [{ sesionUsuario }, dispatch] = useStateValue();
   const [generos, setGeneros] = useState<{ name: string; value: number }[]>([]);
@@ -62,8 +64,6 @@ export default function TabTwoScreen() {
     seedTracks(newArray);
   }, []);
 
- 
-
   const fetchData = useCallback(async () => {
     const [data, dataTopSongs]: any = await Promise.all([
       getTop("artists", requestArtist.offset, selectDate),
@@ -100,23 +100,28 @@ export default function TabTwoScreen() {
   }, [fetchData]);
 
   useEffect(() => {
-     onRefresh().then(() => {setLoading(false)}).catch((e)=>ToastAndroid.show("Error fetching", 3000));
+    onRefresh()
+      .then(() => {
+        setLoading(false);
+      })
+      .catch((e) => ToastAndroid.show("Error fetching", 3000));
   }, [selectDate]);
 
 
   const renderGeneroItem = ({ item }: genero) => (
+
     <View className="m-3 rounded-lg" key={item.name}>
       <ThemedText type="defaultSemiBold">{item.name}</ThemedText>
       <View className="bg-gray-800 h-4 w-60 rounded-lg">
         <View
           className="bg-sky-700 h-full rounded-md"
           style={{ width: `${item.value * 10}%` }}
-        ></View>
+        />
       </View>
     </View>
   );
 
-  return  (
+  return (
     <SafeAreaView style={[styles.container]}>
       <FlatList
         stickyHeaderHiddenOnScroll
