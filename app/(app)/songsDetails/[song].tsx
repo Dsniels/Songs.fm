@@ -256,7 +256,7 @@ const SongDetails = () => {
                     width: `${Track.audioFeatures.danceability * 100}%`,
                     borderRadius: 5,
                   }}
-                ></View>
+                />
               </View>
               <ThemedText style={{ fontSize: 12 }}>Danceability</ThemedText>
             </View>
@@ -276,7 +276,7 @@ const SongDetails = () => {
                     width: `${Track.audioFeatures.acousticness * 100}%`,
                     borderRadius: 5,
                   }}
-                ></View>
+                />
               </View>
               <ThemedText style={{ fontSize: 12 }}>Acousticness</ThemedText>
             </View>
@@ -296,7 +296,7 @@ const SongDetails = () => {
                     width: `${Track.audioFeatures.energy * 100}%`,
                     borderRadius: 5,
                   }}
-                ></View>
+                />
               </View>
               <ThemedText style={{ fontSize: 12 }}>Energy</ThemedText>
             </View>
@@ -316,7 +316,7 @@ const SongDetails = () => {
                     width: `${Track.audioFeatures.instrumentalness * 100}%`,
                     borderRadius: 5,
                   }}
-                ></View>
+                />
               </View>
               <ThemedText style={{ fontSize: 12 }}>Instrumentalness</ThemedText>
             </View>
@@ -336,7 +336,7 @@ const SongDetails = () => {
                     width: `${Track.audioFeatures.liveness * 100}%`,
                     borderRadius: 5,
                   }}
-                ></View>
+                />
               </View>
               <ThemedText style={{ fontSize: 12 }}>liveness</ThemedText>
             </View>
@@ -370,7 +370,7 @@ const SongDetails = () => {
                     width: `${Track.audioFeatures.speechiness * 100}%`,
                     borderRadius: 5,
                   }}
-                ></View>
+                />
               </View>
               <ThemedText style={{ fontSize: 12 }}>speechiness</ThemedText>
             </View>
@@ -390,7 +390,7 @@ const SongDetails = () => {
                     width: `${Track.audioFeatures.valence * 100}%`,
                     borderRadius: 5,
                   }}
-                ></View>
+                />
               </View>
               <ThemedText style={{ fontSize: 12 }}>valence</ThemedText>
             </View>
