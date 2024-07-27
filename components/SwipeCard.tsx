@@ -131,7 +131,7 @@ export const SwipeCard = <T,>({ children, items, setItems } : any ) => {
   );
   const getSongDetails = (Item: CardType) => {
     return router.push({
-      pathname: `(app)/songsDetails/[song]`,
+      pathname: "(app)/songsDetails/[song]",
       params: { id: Item.id, name: Item.name, artists: Item.artist },
     });
   };
