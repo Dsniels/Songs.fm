@@ -47,14 +47,14 @@ export default function TabTwoScreen() {
 
   const getDetails = useCallback((Item: any) => {
     router.push({
-      pathname: `(app)/Detalles/[name]`,
+      pathname: "(app)/Detalles/[name]",
       params: { id: Item.id, name: Item.name },
     });
   }, []);
 
   const getSongDetails = useCallback((Item: any) => {
     router.push({
-      pathname: `(app)/songsDetails/[song]`,
+      pathname: "(app)/songsDetails/[song]",
       params: { id: Item.id, name: Item.name, artists: Item.artists[0].name },
     });
   }, []);
