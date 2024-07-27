@@ -2,7 +2,6 @@ import { styles } from "@/Styles/styles";
 import { LinearGradient } from "expo-linear-gradient";
 import {
   ImageBackground,
-  Pressable,
   Text,
   TouchableOpacity,
   View,

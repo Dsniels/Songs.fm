@@ -5,15 +5,12 @@ import {
   Pressable,
   ScrollView,
   StyleSheet,
-  Text,
   ToastAndroid,
   View,
 } from "react-native";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { ThemedText } from "@/components/ThemedText";
 import {
-  Link,
-  Redirect,
   router,
   useFocusEffect,
   useLocalSearchParams,
@@ -21,7 +18,7 @@ import {
 } from "expo-router";
 import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { AddToFav, deleteFromFav, getSongInfo } from "@/Api/SongsActions";
-import { ThemeProvider, useIsFocused } from "@react-navigation/native";
+import { useIsFocused } from "@react-navigation/native";
 import { ThemedView } from "@/components/ThemedView";
 import { Audio } from "expo-av";
 import Ionicons from "@expo/vector-icons/Ionicons";

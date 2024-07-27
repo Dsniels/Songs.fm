@@ -1,4 +1,3 @@
-
 export type CardType ={
         artist : string;
         name : string;

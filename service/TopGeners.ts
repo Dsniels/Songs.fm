@@ -1,4 +1,3 @@
-import { seedGeners } from "./seeds";
 
 export const topGeneros = (data: any) => {
   const generos_data = data.items?.map((item: any) => item.genres).flat() || [];

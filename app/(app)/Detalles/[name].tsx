@@ -1,13 +1,11 @@
 import {
   ActivityIndicator,
-  ActivityIndicatorBase,
   FlatList,
   Image,
   ImageBackground,
   Linking,
   Pressable,
   ScrollView,
-  StyleSheet,
   Text,
   ToastAndroid,
   View,
@@ -63,7 +61,7 @@ const Detalles = () => {
     navigation.setOptions({ title: name, headerBlurEffect: "regular" });
 
     const fetchData = async () => {
-      const [artistInfoResult, descriptionResult] = await Promise.allSettled([
+      const [artistInfoResult, descriptionResult] : any = await Promise.allSettled([
         getArtistInformation(id),
         getInfo(name, name, false),
       ]);

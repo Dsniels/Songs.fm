@@ -1,16 +1,10 @@
-import {
-  DarkTheme,
-  DefaultTheme,
-  ThemeProvider,
-} from "@react-navigation/native";
+
 import { useFonts } from "expo-font";
-import { Slot, Stack } from "expo-router";
+import { Slot} from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import "react-native-reanimated";
 
-import { useColorScheme } from "@/hooks/useColorScheme";
-import { Text, View } from "react-native";
 import { StateProvider } from "@/Context/store";
 import { initialState } from "@/Context/Reducers/SesionUsuario";
 import { mainReducer } from "@/Context/Reducers";
@@ -19,7 +13,6 @@ import { mainReducer } from "@/Context/Reducers";
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
   const [loaded] = useFonts({
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
   });

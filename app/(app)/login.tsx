@@ -20,15 +20,12 @@ export default function login() {
   const [TOKEN, setToken] = useState<string | null>("");
 
   const [CODE, setCode] = useState("");
-  const URI = AuthSession.makeRedirectUri({
-    native: "myapp://",
-    path: "/login",
-  });
+
   const discovery = {
     authorizationEndpoint: "https://accounts.spotify.com/authorize",
     tokenEndpoint: "https://accounts.spotify.com/api/token",
   };
-  const [request, response, promptAsync] = AuthSession.useAuthRequest(
+  const [response, promptAsync] : any = AuthSession.useAuthRequest(
     {
       clientId: process.env.EXPO_PUBLIC_CLIENTE_ID || "",
       clientSecret: process.env.EXPO_PUBLIC_CLIENTE_SECRET || "",

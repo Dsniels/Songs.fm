@@ -1,5 +1,3 @@
-import { refreshToken } from "@/Api/SpotifyAuth";
-import { getprofile } from "@/Api/UserAction";
 import { useStateValue } from "@/Context/store";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { LinearGradient } from "expo-linear-gradient";
@@ -7,7 +5,6 @@ import { Stack } from "expo-router";
 import {
   ActivityIndicator,
   AppState,
-  AppStateEvent,
   StyleSheet,
   View,
 } from "react-native";
@@ -45,7 +42,7 @@ export default function Applayout() {
     ) : null;
   }
 
-  useAuth(dispatch, sesionUsuario);
+  useAuth(dispatch);
 
   return (
     <Stack screenOptions={{ headerTransparent: false }}>

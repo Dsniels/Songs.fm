@@ -1,4 +1,4 @@
-import { View, Image, Pressable, TouchableOpacity } from "react-native";
+import { View, Image, TouchableOpacity } from "react-native";
 import { ThemedText } from "./ThemedText";
 
 export const SmallListSongs = ({ item, getSongDetails }: any) => {

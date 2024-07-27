@@ -8,8 +8,7 @@ import Animated, {
 } from "react-native-reanimated";
 
 import { ThemedView } from "@/components/ThemedView";
-import { LinearGradient } from "expo-linear-gradient";
-import { styles } from "@/Styles/styles";
+
 
 const HEADER_HEIGHT = 250;
 
@@ -21,7 +20,6 @@ type Props = PropsWithChildren<{
 export default function ParallaxScrollView({
   children,
   headerImage,
-  headerBackgroundColor,
 }: Props) {
   const colorScheme = useColorScheme() ?? "light";
   const scrollRef = useAnimatedRef<Animated.ScrollView>();

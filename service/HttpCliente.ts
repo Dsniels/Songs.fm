@@ -1,10 +1,5 @@
-import { refreshToken } from "@/Api/SpotifyAuth";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+
 import axios, {
-  AxiosError,
-  AxiosRequestHeaders,
-  AxiosResponse,
-  InternalAxiosRequestConfig,
 } from "axios";
 import * as SecureStorage from "expo-secure-store";
 

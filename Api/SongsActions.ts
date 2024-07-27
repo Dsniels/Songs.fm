@@ -1,4 +1,4 @@
-import { Axios, AxiosError, AxiosResponse } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
 import HttpCliente from "../service/HttpCliente";
 import { seeds } from "@/service/seeds";
 import { refreshToken } from "./SpotifyAuth";
