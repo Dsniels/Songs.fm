@@ -1,11 +1,13 @@
-import { annotationResponse } from "@/types/Card.types";
+import { annotationResponse, annotations } from "@/types/Card.types";
 
-  export const extractInfo =(node: annotationResponse) => {
+  export const extractInfo =(node: annotationResponse | string) => {
     let data : Array<string> = [];
+
     
+
     if (typeof node === "string" && node !== ".") {
       data.push(node);
-    } else if (node.children) {
+    } else if (typeof node !== "string" && node.children) {
       node.children.map((i: any) => {
         data.push(extractInfo(i));
       });

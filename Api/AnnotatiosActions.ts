@@ -12,7 +12,7 @@ export const getInfo = async (
   search: string,
   artists: string,
   song: boolean,
-) => {
+) : Promise<annotationResponse[] | string[]>  => {
   const changed = search.replace(/\s*\(.*?\)\s*/g, "").trim();
   const query = song ? changed.concat(artists) : search;
   const { status, data } = await GeniusApi.get(
@@ -39,13 +39,13 @@ export const getInfo = async (
     id = result.primary_artist.id;
   }
 
-  const annotations : annotationResponse = await getAnnotations(id, song ? 'songs' :'artists');
+  const children : annotationResponse[] = await getAnnotations(id, song ? 'songs' :'artists');
 
-  return annotations || ["?"];
+  return children
 };
 
 
-const getAnnotations =(id:string, term : "songs" | "artists") : Promise<annotationResponse>=>{
+const getAnnotations =(id:string, term : "songs" | "artists") : Promise<annotationResponse[]>=>{
   return new Promise((resolve, reject)=>{
     GeniusApi.get(`/${term}/${id}`).then((response : AxiosResponse)=>{
       if(response.status === 200){

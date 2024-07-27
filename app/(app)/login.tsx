@@ -1,6 +1,6 @@
 import { Pressable, Text, ToastAndroid } from "react-native";
 import * as AuthSession from "expo-auth-session";
-import { useEffect, useState } from "react";
+import { useEffect} from "react";
 import * as WebBrowser from "expo-web-browser";
 import { ThemedView } from "@/components/ThemedView";
 import { ThemedText } from "@/components/ThemedText";
@@ -13,13 +13,12 @@ import * as Haptics from "expo-haptics";
 
 import { checkToken, getAccessToken } from "@/Api/SpotifyAuth";
 import { getprofile } from "@/Api/UserAction";
+import { ResponseAxios, TokenResponse } from "@/types/Card.types";
 
 WebBrowser.maybeCompleteAuthSession();
 export default function login() {
-  const [{ sesionUsuario }, dispatch] = useStateValue();
-  const [TOKEN, setToken] = useState<string | null>("");
+  const [ dispatch] = useStateValue();
 
-  const [CODE, setCode] = useState("");
 
   const discovery = {
     authorizationEndpoint: "https://accounts.spotify.com/authorize",
@@ -50,9 +49,9 @@ export default function login() {
   };
 
   const handleResponse = async (AccessCode: string) => {
-    const { data }: any = await getAccessToken(AccessCode, dispatch);
-    const { refresh_token, access_token, expira } = data;
-    checkToken(expira);
+    const response : ResponseAxios<TokenResponse>  = await getAccessToken(AccessCode);
+    const { refresh_token, access_token, expira } = response.data;
+    checkToken(new Date(expira));
 
     if (access_token) {
       Promise.all([
@@ -86,9 +85,7 @@ export default function login() {
         <Text className="text-cyan-100 ">Iniciar Sesion</Text>
       </Pressable>
 
-      <Text>Hola</Text>
-      <ThemedText>Token:{TOKEN}</ThemedText>
-      <ThemedText>code:{CODE}</ThemedText>
+
 
       <ThemedText>{Linking.createURL("login")}</ThemedText>
     </ThemedView>

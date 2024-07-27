@@ -4,7 +4,7 @@ import { seeds } from "@/service/seeds";
 import { refreshToken } from "./SpotifyAuth";
 import { ToastAndroid } from "react-native";
 import { notificationAsync, NotificationFeedbackType } from "expo-haptics";
-import { Recently } from "@/types/Card.types";
+import { features, Recently, song } from "@/types/Card.types";
 
 export const getTop = (
   type: string,
@@ -92,7 +92,7 @@ export const getSongInfo = async (id: string) => {
   return { Info: info, Features: features, Like: like };
 };
 
-const songInfo = (id: string) => {
+const songInfo = (id: string) : Promise<song>=> {
   return new Promise((resolve, reject) => {
     HttpCliente.get(`/tracks/${id}`)
       .then((response: any) => {
@@ -102,7 +102,7 @@ const songInfo = (id: string) => {
   });
 };
 
-const checkLikeTrack = (id: string) => {
+const checkLikeTrack = (id: string) : Promise<boolean> => {
   return new Promise((resolve, reject) => {
     HttpCliente.get(`/me/tracks/contains?ids=${id}`)
       .then((response: any) => {
@@ -112,7 +112,7 @@ const checkLikeTrack = (id: string) => {
   });
 };
 
-const AudioFeatures = (id: string): Promise<any> => {
+const AudioFeatures = (id: string): Promise<features> => {
   return new Promise((resolve, reject) => {
     HttpCliente.get(`/audio-features/${id}`)
       .then((response: any) => {

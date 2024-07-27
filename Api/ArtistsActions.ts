@@ -1,3 +1,4 @@
+import { album, artist, song } from "@/types/Card.types";
 import HttpCliente from "../service/HttpCliente";
 import { refreshToken } from "./SpotifyAuth";
 
@@ -11,7 +12,7 @@ export const getArtistInformation = async (id: string) => {
   return { Info: info, Songs: songs, Albums: albums, Artists: artists };
 };
 
-const infoArtista = (id: string) => {
+const infoArtista = (id: string) : Promise<artist> => {
   return new Promise((resolve, reject) => {
     HttpCliente.get(`/artists/${id}`)
       .then((response: any) => {
@@ -23,7 +24,7 @@ const infoArtista = (id: string) => {
   });
 };
 
-const TopSongsArtista = (id: string): Promise<any[]> => {
+const TopSongsArtista = (id: string): Promise<song[]> => {
   return new Promise((resolve, reject) => {
     HttpCliente.get(`/artists/${id}/top-tracks`)
       .then((response: any) => {
@@ -33,7 +34,7 @@ const TopSongsArtista = (id: string): Promise<any[]> => {
   });
 };
 
-const TopAlbumsArtista = (id: string): Promise<any[]> => {
+const TopAlbumsArtista = (id: string): Promise<album[]> => {
   return new Promise((resolve, reject) => {
     HttpCliente.get(`/artists/${id}/albums?limit=10`)
       .then((response: any) => {
@@ -43,7 +44,7 @@ const TopAlbumsArtista = (id: string): Promise<any[]> => {
   });
 };
 
-const similarArtist = (id: string): Promise<any[]> => {
+const similarArtist = (id: string): Promise<artist[]> => {
   return new Promise((resolve, reject) => {
     HttpCliente.get(`/artists/${id}/related-artists`)
       .then((response: any) => {

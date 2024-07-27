@@ -1,16 +1,16 @@
 import { styles } from "@/Styles/styles";
-import { CardType } from "@/types/Card.types";
+import { CardType, Recommendatios } from "@/types/Card.types";
 import { View, Image} from "react-native";
 import { ThemedText } from "./ThemedText";
 
-const Card = ({ card }: { card: CardType }) => {
+const Card = ({ card }: { card: Recommendatios }) => {
   return (
     <View style={styles.card}>
       <Image
         style={styles.imageCard}
         source={{
           uri:
-            card.image ||
+            card.album.images[0].url ||
             "https://images.pexels.com/photos/145707/pexels-photo-145707.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
         }}
         resizeMode="cover"
@@ -27,7 +27,7 @@ const Card = ({ card }: { card: CardType }) => {
           type="defaultSemiBold"
           style={[styles.cardContent, { fontSize: 16 }]}
         >
-          {`${card.artist}`}
+          {`${card.artists[0].name}`}
         </ThemedText>
       </View>
     </View>

@@ -20,25 +20,30 @@ import { ListSongs } from "@/components/ListSongs";
 import { ListOfArtists } from "@/components/ListOfArtists";
 import { SmallListSongs } from "@/components/SmallListSongs";
 
-import { artist, genero, Recently, song } from "@/types/Card.types";
+import { artist, genero, Recently, song, user } from "@/types/Card.types";
+
 
 export default function TabTwoScreen() {
-  const [{ sesionUsuario }, dispatch] = useStateValue();
+  const [{ sesionUsuario }] = useStateValue();
   const [generos, setGeneros] = useState<{ name: string; value: number }[]>([]);
   const [loading, setLoading] = useState(false);
-  const [usuario, setUsuario] = useState({
+  const [usuario, setUsuario] = useState<user>({
     display_name: "",
-    images: {
-      url: "",
-    },
+    images: [{ url: "" }],
   });
   const [selectDate, setSelectDate] = useState("short_term");
   const [recent, setRecent] = useState<Recently[]>([]);
-  const [requestArtist, setRequestArtist] = useState<{artists : Array<artist>, offset : number }>({
+  const [requestArtist, setRequestArtist] = useState<{
+    artists: Array<artist>;
+    offset: number;
+  }>({
     artists: [],
     offset: 0,
   });
-  const [requestMusic, setRequestMusic] = useState<{songs : Array<song>, offsetSongs : number}>({
+  const [requestMusic, setRequestMusic] = useState<{
+    songs: Array<song>;
+    offsetSongs: number;
+  }>({
     songs: [],
     offsetSongs: 0,
   });
@@ -101,15 +106,13 @@ export default function TabTwoScreen() {
 
   useEffect(() => {
     onRefresh()
-      .then(() => {
+      .finally(() => {
         setLoading(false);
       })
-      .catch((e) => ToastAndroid.show("Error fetching", 3000));
+      .catch(() => ToastAndroid.show("Error fetching", 3000));
   }, [selectDate]);
 
-
   const renderGeneroItem = ({ item }: genero) => (
-
     <View className="m-3 rounded-lg" key={item.name}>
       <ThemedText type="defaultSemiBold">{item.name}</ThemedText>
       <View className="bg-gray-800 h-4 w-60 rounded-lg">
@@ -127,6 +130,7 @@ export default function TabTwoScreen() {
         stickyHeaderHiddenOnScroll
         renderItem={() => null}
         data={[]}
+        // skipcq: JS-0417
         ListHeaderComponent={() => (
           <View className="m-1">
             <View className="flex mt-16 items-center ">
@@ -134,7 +138,7 @@ export default function TabTwoScreen() {
                 className="w-24 h-24 rounded-full m-4"
                 source={{
                   uri:
-                    usuario.images.url ||
+                    usuario.images[0].url ||
                     "https://filestore.community.support.microsoft.com/api/images/0ce956b2-9787-4756-a580-299568810730?upload=true",
                 }}
               />
@@ -180,7 +184,7 @@ export default function TabTwoScreen() {
                   </ThemedText>
                   <FlatList
                     data={generos}
-                    keyExtractor={(item) => item.name}
+                    keyExtractor={(_, index) => index.toString()}
                     renderItem={renderGeneroItem}
                   />
                 </View>
@@ -192,7 +196,8 @@ export default function TabTwoScreen() {
                 </ThemedText>
                 <FlatList
                   data={requestArtist.artists}
-                  keyExtractor={(index) => index.toString()}
+                  keyExtractor={(_,index) => index.toString()}
+                  // skipcq: JS-0417
                   renderItem={({ item }) => (
                     <ListOfArtists item={item} getDetails={getDetails} />
                   )}
@@ -207,7 +212,8 @@ export default function TabTwoScreen() {
                 </ThemedText>
                 <FlatList
                   data={requestMusic.songs}
-                  keyExtractor={(item) => item.id}
+                  keyExtractor={(_,index) => index.toString()}
+                  // skipcq: JS-0417
                   renderItem={({ item }) => (
                     <ListSongs item={item} getSongDetails={getSongDetails} />
                   )}
@@ -221,10 +227,11 @@ export default function TabTwoScreen() {
                   Escuchadas Recientemente
                 </ThemedText>
                 <View className="rounded-3xl p-5">
-                  {recent?.length > 0  ? (
+                  {recent?.length > 0 ? (
                     <FlatList
                       data={recent}
-                      keyExtractor={(item, index) => index.toString()}
+                      keyExtractor={(_, index) => index.toString()}
+                      // skipcq: JS-0417
                       renderItem={({ item }) => (
                         <SmallListSongs
                           item={item}

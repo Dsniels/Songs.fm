@@ -24,12 +24,12 @@ import { Audio } from "expo-av";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { getInfo } from "@/Api/AnnotatiosActions";
 import { extractInfo } from "@/service/FormatData";
+import { annotationResponse, annotations, artist, features, song } from "@/types/Card.types";
 
-interface ITrack {
-  info: any;
-  audioFeatures: any;
-  similarSongs?: any;
-}
+type ITrack = {
+  info: song;
+  audioFeatures: features;
+};
 
 const SongDetails = () => {
   const [currentSound, setCurrentSound] = useState<Audio.Sound | null>(null);
@@ -56,8 +56,8 @@ const SongDetails = () => {
             ToastAndroid.showWithGravity(
               e,
               ToastAndroid.SHORT,
-              ToastAndroid.CENTER,
-            ),
+              ToastAndroid.CENTER
+            )
           );
       }
     } catch (error) {
@@ -73,9 +73,30 @@ const SongDetails = () => {
 
   const navigation = useNavigation();
   const [Track, setTrack] = useState<ITrack>({
-    info: {},
-    audioFeatures: {},
-    similarSongs: [],
+    info: {
+      name: "",
+      id: "",
+      artists: [],
+      album: {
+        images: [{ url: "" }],
+        id: "",
+        name: "",
+      },
+      preview_url: "",
+    },
+    audioFeatures: {
+      danceability: 0,
+      acousticness: 0,
+      energy: 0,
+      instrumentalness: 0,
+      liveness: 0,
+      loudness: 0,
+      mode: 0,
+      speechiness: 0,
+      tempo: 0,
+      valence: 0,
+      uri: "",
+    },
   });
   const {
     name = "",
@@ -97,13 +118,13 @@ const SongDetails = () => {
         }
       };
       return () => onBlur();
-    }, [currentSound, isFocused]),
+    }, [currentSound, isFocused])
   );
 
   useEffect(() => {
     navigation.setOptions({ title: name, headerBlurEffect: "regular" });
     const fetchData = async () => {
-      const [{ Info, Features, Like }, description]: any[] = await Promise.all([
+      const [{ Info, Features, Like }, description] = await Promise.all([
         getSongInfo(id),
         getInfo(name, artists, true),
       ]);
@@ -114,16 +135,17 @@ const SongDetails = () => {
       }));
       setLike(Like);
       const informacion = description
-        .map((item: any) => extractInfo(item))
+        // skipcq: JS-0323
+        .map((item) => extractInfo(item))
         .join(" ");
       setInformacion(informacion);
     };
     fetchData().catch((e) =>
-      ToastAndroid.showWithGravity(e, ToastAndroid.SHORT, ToastAndroid.CENTER),
+      ToastAndroid.showWithGravity(e, ToastAndroid.SHORT, ToastAndroid.CENTER)
     );
   }, [navigation]);
 
-  const getDetails = useCallback((Item: any) => {
+  const getDetails = useCallback((Item: artist) => {
     return router.replace({
       pathname: `(app)/Detalles/[name]`,
       params: { id: Item.id, name: Item.name },
@@ -145,70 +167,66 @@ const SongDetails = () => {
         <Image
           source={{
             uri:
-              Track.info?.album?.images?.[0]?.url ||
+              Track.info.album.images[0].url ||
               "https://th.bing.com/th/id/OIP.dfpjYr0obWlvVKnjJ9ccyQHaHJ?rs=1&pid=ImgDetMain",
           }}
           style={{ width: "100%", height: 400 }}
         />
       }
-    >
-      <View className="flex flex-row justify-end items-center p-2">
-        {like ? (
-          <Pressable
-            className="m-2"
-            onPress={(_) => handleUnLike(Track.info?.id)}
-          >
-            <Ionicons name="heart" size={40} color="red" />
-          </Pressable>
-        ) : (
-          <Pressable
-            className="m-2"
-            onPress={(_) => handleLike(Track.info?.id)}
-          >
-            <Ionicons name="heart-outline" size={40} color="red" />
-          </Pressable>
-        )}
+    >{ Track.audioFeatures.acousticness && informacion ? (
+      <><View className="flex flex-row justify-end items-center p-2">
+          {like ? (
+            <Pressable
+              className="m-2"
+              onPress={(_) => handleUnLike(Track.info.id)}
+            >
+              <Ionicons name="heart" size={40} color="red" />
+            </Pressable>
+          ) : (
+            <Pressable className="m-2" onPress={(_) => handleLike(Track.info.id)}>
+              <Ionicons name="heart-outline" size={40} color="red" />
+            </Pressable>
+          )}
 
-        {currentSound === null && Track.info.preview_url ? (
-          <Pressable
-            className="bg-cyan-950"
-            style={styles.playButton}
-            onPress={() => playSound(Track.info?.preview_url || " ")}
-          >
-            <Ionicons name="play" size={30} color="white" />
-          </Pressable>
-        ) : (
-          <Pressable style={styles.playButton} onPress={() => pause()}>
-            <Ionicons name="pause" size={30} color="white" />
-          </Pressable>
-        )}
-      </View>
-      <View className="mb-0 mt-3 flex justify-evenly flex-wrap flex-row content-evenly w-fit">
-        <Pressable
-          className="w-44 p-2 bg-opacity-70"
-          style={{ backgroundColor: !showAbout ? "#000818" : "transparent" }}
-          onPress={() => setShowAbout(false)}
-        >
-          <ThemedText
-            className="flex w-full justify-center text-center"
-            type="subtitle"
-          >
-            Caracteristicas
-          </ThemedText>
-        </Pressable>
-        <Pressable
-          className=" flex flex-wrap w-40 text-center align-middle justify-items-center content-center justify-center bg-opacity-70 "
-          style={{ backgroundColor: showAbout ? "#000818" : "transparent" }}
-          onPress={() => setShowAbout(true)}
-        >
-          <ThemedText
-            className="flex w-20  justify-center content-center text-center"
-            type="subtitle"
-          >
-            About
-          </ThemedText>
-        </Pressable>
-      </View>
+          {currentSound === null && Track.info.preview_url ? (
+            <Pressable
+              className="bg-cyan-950"
+              style={styles.playButton}
+              onPress={() => playSound(Track.info.preview_url || " ")}
+            >
+              <Ionicons name="play" size={30} color="white" />
+            </Pressable>
+          ) : (
+            <Pressable style={styles.playButton} onPress={() => pause()}>
+              <Ionicons name="pause" size={30} color="white" />
+            </Pressable>
+          )}
+        </View><View className="mb-0 mt-3 flex justify-evenly flex-wrap flex-row content-evenly w-fit">
+            <Pressable
+              className="w-44 p-2 bg-opacity-70"
+              style={{ backgroundColor: !showAbout ? "#000818" : "transparent" }}
+              onPress={() => setShowAbout(false)}
+            >
+              <ThemedText
+                className="flex w-full justify-center text-center"
+                type="subtitle"
+              >
+                Caracteristicas
+              </ThemedText>
+            </Pressable>
+            <Pressable
+              className=" flex flex-wrap w-40 text-center align-middle justify-items-center content-center justify-center bg-opacity-70 "
+              style={{ backgroundColor: showAbout ? "#000818" : "transparent" }}
+              onPress={() => setShowAbout(true)}
+            >
+              <ThemedText
+                className="flex w-20  justify-center content-center text-center"
+                type="subtitle"
+              >
+                About
+              </ThemedText>
+            </Pressable>
+          </View>
 
       {showAbout === false && Track.info ? (
         <View className=" bg-opacity-80 bg-[#000818] m-1 mt-0 pt-0 -top-4 w-full p-7 ">
@@ -422,6 +440,7 @@ const SongDetails = () => {
           </ThemedText>
         </Pressable>
       </View>
+      </>) : (<ActivityIndicator size='large'/> ) }
     </ParallaxScrollView>
   );
 };

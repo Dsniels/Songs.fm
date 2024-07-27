@@ -1,24 +1,23 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { Buffer } from "buffer"; // Importa Buffer de la librería 'buffer'
 import qs from "querystring";
-import { Dispatch } from "react";
 import * as Linking from "expo-linking";
 import * as SecureStorage from "expo-secure-store";
+import { ResponseAxios, TokenResponse } from "@/types/Card.types";
 
 const instancia = axios.create({
   headers: {
     "Content-Type": "application/x-www-form-urlencoded",
     Authorization:
-      "Basic " +
-      Buffer.from(
-        process.env.EXPO_PUBLIC_CLIENTE_ID +
-          ":" +
-          process.env.EXPO_PUBLIC_CLIENTE_SECRET,
-      ).toString("base64"),
+      `Basic ${Buffer.from(
+        `${process.env.EXPO_PUBLIC_CLIENTE_ID}:${process.env.EXPO_PUBLIC_CLIENTE_SECRET}`
+      ).toString("base64")}`,
   },
 });
 
-export const getAccessToken = async (code: string, dispatch: Dispatch<any>) => {
+export const getAccessToken = (
+  code: string,
+): Promise<ResponseAxios<TokenResponse>> => {
   const URI = Linking.createURL("login");
   const data = {
     code: code,
@@ -40,7 +39,7 @@ export const getAccessToken = async (code: string, dispatch: Dispatch<any>) => {
   });
 };
 
-export const checkToken = async (expira: any) => {
+export const checkToken = async (expira: Date) => {
   const date_actual = new Date();
   if (date_actual >= expira) {
     await SecureStorage.deleteItemAsync("token");
@@ -58,10 +57,10 @@ export const refreshToken = async (): Promise<AxiosResponse> => {
   return new Promise((resolve, reject) => {
     instancia
       .post("https://accounts.spotify.com/api/token", qs.stringify(body))
-      .then(async (response: AxiosResponse) => {
+      .then(async (response: AxiosResponse<TokenResponse>) => {
         let expira = new Date();
         expira.setSeconds(expira.getSeconds() + 3600);
-        response.data.expira = expira;
+        response.data.expira = expira.toString();
         checkToken(expira);
         await SecureStorage.setItemAsync("token", response.data.access_token);
         resolve(response);
