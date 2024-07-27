@@ -115,7 +115,7 @@ export default function TabTwoScreen() {
         <View
           className="bg-sky-700 h-full rounded-md"
           style={{ width: `${item.value * 10}%` }}
-        ></View>
+         />
       </View>
     </View>
   );
