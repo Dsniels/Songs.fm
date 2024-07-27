@@ -11,7 +11,7 @@ import { useFocusEffect, useIsFocused } from "@react-navigation/native";
 import { router } from "expo-router";
 import { CardType } from "@/types/Card.types";
 
-export const SwipeCard = <T,>({ children, items, setItems } : any ) => {
+export const SwipeCard = <T,>({ children, items, setItems }: any) => {
   const { height } = Dimensions.get("screen");
   const swipe = useRef(new Animated.ValueXY()).current;
   const titlSign = useRef(new Animated.Value(1)).current;
@@ -131,7 +131,7 @@ export const SwipeCard = <T,>({ children, items, setItems } : any ) => {
   );
   const getSongDetails = (Item: CardType) => {
     return router.push({
-      pathname: `(app)/songsDetails/[song]`,
+      pathname: "(app)/songsDetails/[song]",
       params: { id: Item.id, name: Item.name, artists: Item.artist },
     });
   };

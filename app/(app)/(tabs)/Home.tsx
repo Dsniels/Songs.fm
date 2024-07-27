@@ -34,13 +34,13 @@ export default function HomeScreen() {
       "keyboardDidShow",
       () => {
         setKeyboardVisible(true);
-      }
+      },
     );
     const keyboardDidHideListener = Keyboard.addListener(
       "keyboardDidHide",
       () => {
         setKeyboardVisible(false);
-      }
+      },
     );
 
     return () => {
@@ -59,7 +59,7 @@ export default function HomeScreen() {
       return () => {
         handleRouteChange();
       };
-    }, [])
+    }, []),
   );
   const deleteToken = async () => {
     await AsyncStorage.clear();
@@ -84,7 +84,7 @@ export default function HomeScreen() {
 
   const getSongDetails = (Item: song) => {
     return router.push({
-      pathname: `(app)/songsDetails/[song]`,
+      pathname: "(app)/songsDetails/[song]",
       params: { id: Item.id, name: Item.name, artists: Item.artists[0].name },
     });
   };
