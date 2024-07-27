@@ -142,7 +142,7 @@ const Detalles = () => {
             <View style={{ margin: 30 }}>
               <ThemedText type="subtitle">Popularidad:</ThemedText>
               <ThemedText type="subtitle">
-                {infoArtist.info?.popularity}
+                {infoArtist.info.popularity}
               </ThemedText>
 
               <ThemedText style={{ marginTop: 20 }} type="subtitle">

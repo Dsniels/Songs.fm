@@ -19,9 +19,9 @@ export const seedTracks = async (data: any) => {
     ids = [...ids, ...seedArray];
     const merge = seedArray.concat(ids);
     newIds = new Set(merge);
-    newIds = Array.from(ids);
+    ids = Array.from(newIds);
   }
-  await AsyncStorage.setItem("seedTrack", newIds.toString());
+  await AsyncStorage.setItem("seedTrack", ids.toString());
 };
 
 export const seedArtist = async (data: any) => {

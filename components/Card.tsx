@@ -1,5 +1,5 @@
 import { styles } from "@/Styles/styles";
-import { CardType, Recommendatios } from "@/types/Card.types";
+import {  Recommendatios } from "@/types/Card.types";
 import { View, Image} from "react-native";
 import { ThemedText } from "./ThemedText";
 

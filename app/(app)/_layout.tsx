@@ -3,7 +3,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { LinearGradient } from "expo-linear-gradient";
 import { Stack } from "expo-router";
 import {
-  ActivityIndicator,
+
   AppState,
   StyleSheet,
   View,
@@ -27,7 +27,7 @@ const CustomHeader = () => {
 };
 
 export default function Applayout() {
-  const [{ sesionUsuario }, dispatch] = useStateValue();
+  const [ dispatch] = useStateValue();
   useEffect(() => {
     AppState.addEventListener("change", async (state) => {
       if (state === "inactive") {

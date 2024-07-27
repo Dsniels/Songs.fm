@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from "react";
 import { getRecomendations } from "@/Api/SongsActions";
 import Card from "@/components/Card";
 import { SwipeCard } from "@/components/SwipeCard";
-import { CardType, Recommendatios, song } from "@/types/Card.types";
+import {  Recommendatios, song } from "@/types/Card.types";
 
 export default function music() {
   const [data, setData] = useState<song[]>([]);

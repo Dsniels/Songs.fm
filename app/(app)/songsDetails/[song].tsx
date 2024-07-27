@@ -8,7 +8,7 @@ import {
   ToastAndroid,
   View,
 } from "react-native";
-import React, { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { ThemedText } from "@/components/ThemedText";
 import {
   router,
@@ -24,7 +24,7 @@ import { Audio } from "expo-av";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { getInfo } from "@/Api/AnnotatiosActions";
 import { extractInfo } from "@/service/FormatData";
-import { annotationResponse, annotations, artist, features, song } from "@/types/Card.types";
+import {  artist, features, song } from "@/types/Card.types";
 
 type ITrack = {
   info: song;
@@ -228,7 +228,7 @@ const SongDetails = () => {
             </Pressable>
           </View>
 
-      {showAbout === false && Track.info ? (
+      {showAbout === false  ? (
         <View className=" bg-opacity-80 bg-[#000818] m-1 mt-0 pt-0 -top-4 w-full p-7 ">
           <ThemedText type="defaultSemiBold">Artistas</ThemedText>
 
@@ -411,7 +411,7 @@ const SongDetails = () => {
             </View>
           </View>
         </View>
-      ) : showAbout && informacion ? (
+      ) : showAbout  ? (
         <>
           <View className=" bg-opacity-80 bg-[#000818] m-1 mt-0 pt-0 -top-4 w-fit ">
             <ThemedText

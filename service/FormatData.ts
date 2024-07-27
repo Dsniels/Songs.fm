@@ -1,4 +1,4 @@
-import { annotationResponse, annotations } from "@/types/Card.types";
+import { annotationResponse} from "@/types/Card.types";
 
   export const extractInfo =(node: annotationResponse | string) => {
     let data : Array<string> = [];
