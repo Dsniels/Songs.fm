@@ -16,12 +16,7 @@ import { HelloWave } from "@/components/HelloWave";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 
-import {
-  Link,
-  useFocusEffect,
-  useNavigation,
-  useRouter,
-} from "expo-router";
+import { Link, useFocusEffect, useNavigation, useRouter } from "expo-router";
 import * as SecureStorage from "expo-secure-store";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { styles } from "@/Styles/styles";

@@ -2,12 +2,7 @@ import { useStateValue } from "@/Context/store";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { LinearGradient } from "expo-linear-gradient";
 import { Stack } from "expo-router";
-import {
-  ActivityIndicator,
-  AppState,
-  StyleSheet,
-  View,
-} from "react-native";
+import { ActivityIndicator, AppState, StyleSheet, View } from "react-native";
 import { useAuth } from "@/hooks/useAuth";
 import { useEffect } from "react";
 
@@ -35,8 +30,6 @@ export default function Applayout() {
       }
     });
   }, []);
-
-
 
   useAuth(dispatch);
 
