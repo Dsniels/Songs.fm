@@ -1,5 +1,5 @@
-import { annotationResponse, annotations } from '@/types/Card.types';
-import axios, { AxiosResponse } from 'axios';
+import { annotationResponse, annotations } from "@/types/Card.types";
+import axios, { AxiosResponse } from "axios";
 
 const GeniusApi = axios.create({
   baseURL: process.env.EXPO_PUBLIC_BASE_URL_GENIUS,
@@ -12,7 +12,7 @@ export const getInfo = async (
   search: string,
   artists: string,
   song: boolean,
-) : Promise<annotationResponse[] | string[]>  => {
+): Promise<annotationResponse[] | string[]> => {
   const changed = search.replace(/\s*\(.*?\)\s*/g, "").trim();
   const query = song ? changed.concat(artists) : search;
   const { status, data } = await GeniusApi.get(
@@ -21,7 +21,6 @@ export const getInfo = async (
   if (status !== 200) {
     throw new Error("Sin info");
   }
-
 
   const { response } = data;
 
@@ -39,24 +38,32 @@ export const getInfo = async (
     id = result.primary_artist.id;
   }
 
-  const children : annotationResponse[] = await getAnnotations(id, song ? 'songs' :'artists');
+  const children: annotationResponse[] = await getAnnotations(
+    id,
+    song ? "songs" : "artists",
+  );
 
-  return children
+  return children;
 };
 
-
-const getAnnotations =(id:string, term : "songs" | "artists") : Promise<annotationResponse[]>=>{
-  return new Promise((resolve, reject)=>{
-    GeniusApi.get(`/${term}/${id}`).then((response : AxiosResponse)=>{
-      if(response.status === 200){
-        if(term === 'songs') {
-          resolve(response.data.response.song.description.dom.children)
-
-        }else{
-          resolve(response.data.response.artist.description_annotation.annotations[0].body.dom.children)
-
+const getAnnotations = (
+  id: string,
+  term: "songs" | "artists",
+): Promise<annotationResponse[]> => {
+  return new Promise((resolve, reject) => {
+    GeniusApi.get(`/${term}/${id}`)
+      .then((response: AxiosResponse) => {
+        if (response.status === 200) {
+          if (term === "songs") {
+            resolve(response.data.response.song.description.dom.children);
+          } else {
+            resolve(
+              response.data.response.artist.description_annotation
+                .annotations[0].body.dom.children,
+            );
+          }
         }
-      }})
+      })
       .catch(reject);
   });
 };

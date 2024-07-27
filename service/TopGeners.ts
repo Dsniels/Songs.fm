@@ -1,4 +1,3 @@
-
 export const topGeneros = (data: any) => {
   const generos_data = data.items?.map((item: any) => item.genres).flat() || [];
   const frec = generos_data?.reduce((sum: [string, number][], item: string) => {

@@ -1,6 +1,4 @@
-
-import axios, {
-} from "axios";
+import axios from "axios";
 import * as SecureStorage from "expo-secure-store";
 
 const getToken = async () => {
