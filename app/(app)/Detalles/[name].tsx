@@ -61,10 +61,11 @@ const Detalles = () => {
     navigation.setOptions({ title: name, headerBlurEffect: "regular" });
 
     const fetchData = async () => {
-      const [artistInfoResult, descriptionResult] : any = await Promise.allSettled([
-        getArtistInformation(id),
-        getInfo(name, name, false),
-      ]);
+      const [artistInfoResult, descriptionResult]: any =
+        await Promise.allSettled([
+          getArtistInformation(id),
+          getInfo(name, name, false),
+        ]);
 
       if (artistInfoResult.status === "fulfilled") {
         const {

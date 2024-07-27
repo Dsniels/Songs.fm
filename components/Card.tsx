@@ -1,6 +1,6 @@
 import { styles } from "@/Styles/styles";
 import { CardType } from "@/types/Card.types";
-import { View, Image} from "react-native";
+import { View, Image } from "react-native";
 import { ThemedText } from "./ThemedText";
 
 const Card = ({ card }: { card: CardType }) => {

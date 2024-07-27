@@ -25,7 +25,7 @@ export default function login() {
     authorizationEndpoint: "https://accounts.spotify.com/authorize",
     tokenEndpoint: "https://accounts.spotify.com/api/token",
   };
-  const [response, promptAsync] : any = AuthSession.useAuthRequest(
+  const [response, promptAsync]: any = AuthSession.useAuthRequest(
     {
       clientId: process.env.EXPO_PUBLIC_CLIENTE_ID || "",
       clientSecret: process.env.EXPO_PUBLIC_CLIENTE_SECRET || "",
