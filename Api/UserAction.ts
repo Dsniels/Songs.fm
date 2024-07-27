@@ -3,7 +3,7 @@ import HttpCliente from "../service/HttpCliente";
 import { Dispatch } from "react";
 
 export const getprofile = (
-  dispatch: Dispatch<any>
+  dispatch: Dispatch<any>,
 ): Promise<AxiosResponse<any>> => {
   return new Promise((resolve, reject) => {
     HttpCliente.get("/me")

@@ -15,7 +15,7 @@ const instancia = axios.create({
       Buffer.from(
         process.env.EXPO_PUBLIC_CLIENTE_ID +
           ":" +
-          process.env.EXPO_PUBLIC_CLIENTE_SECRET
+          process.env.EXPO_PUBLIC_CLIENTE_SECRET,
       ).toString("base64"),
   },
 });

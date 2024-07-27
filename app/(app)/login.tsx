@@ -42,7 +42,7 @@ export default function login() {
       redirectUri: Linking.createURL("login"),
       usePKCE: false,
     },
-    discovery
+    discovery,
   );
   const storeData = async (key: string, data: string) => {
     try {
@@ -63,13 +63,13 @@ export default function login() {
         storeData("refresh_token", refresh_token),
       ]).then(() => {
         getprofile(dispatch).then(() => {
-        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-        ToastAndroid.showWithGravity(
-          "Sesion Iniciada",
-          ToastAndroid.SHORT,
-          ToastAndroid.CENTER
-        );
-        return router.replace("/(tabs)");
+          Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+          ToastAndroid.showWithGravity(
+            "Sesion Iniciada",
+            ToastAndroid.SHORT,
+            ToastAndroid.CENTER,
+          );
+          return router.replace("/(tabs)");
         });
       });
     }
