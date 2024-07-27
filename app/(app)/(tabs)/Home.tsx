@@ -34,13 +34,13 @@ export default function HomeScreen() {
       "keyboardDidShow",
       () => {
         setKeyboardVisible(true);
-      }
+      },
     );
     const keyboardDidHideListener = Keyboard.addListener(
       "keyboardDidHide",
       () => {
         setKeyboardVisible(false);
-      }
+      },
     );
 
     return () => {
@@ -59,7 +59,7 @@ export default function HomeScreen() {
       return () => {
         handleRouteChange();
       };
-    }, [])
+    }, []),
   );
   const deleteToken = async () => {
     await AsyncStorage.clear();

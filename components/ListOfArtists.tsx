@@ -1,11 +1,6 @@
 import { styles } from "@/Styles/styles";
 import { LinearGradient } from "expo-linear-gradient";
-import {
-  ImageBackground,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { ImageBackground, Text, TouchableOpacity, View } from "react-native";
 
 export const ListOfArtists = ({ item, getDetails }: any) => {
   return (
