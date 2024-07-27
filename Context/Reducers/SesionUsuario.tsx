@@ -1,20 +1,17 @@
 import { action } from "@/types/action.type";
 
- export const initialState = {
+export const initialState = {
   usuario: {
     display_name: "",
-    images: [ { url: "" } ],
+    images: [{ url: "" }],
   },
-  
 };
 
 const sesionUsuarioReducer = (state = initialState, action: action) => {
-  
-switch (action.type) {
-    case "INICIAR_SESION": 
+  switch (action.type) {
+    case "INICIAR_SESION":
       const { display_name, images } = action.usuario;
-     
-      
+
       return {
         ...state,
         usuario: {
@@ -22,7 +19,6 @@ switch (action.type) {
           images,
         },
       };
-    
 
     case "CERRAR_SESION":
       return {
