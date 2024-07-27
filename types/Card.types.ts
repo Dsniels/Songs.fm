@@ -64,7 +64,9 @@ export type user ={
 export type items<T>={
         item : T
 }
-
+export type ItemRespone<T> ={
+  items:T
+}
 export type genero = {
   item: { name: string; value: number };
 };

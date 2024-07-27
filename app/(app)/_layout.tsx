@@ -27,7 +27,7 @@ const CustomHeader = () => {
 };
 
 export default function Applayout() {
-  const [ dispatch] = useStateValue();
+  const [{sesionUsuario}, dispatch] = useStateValue();
   useEffect(() => {
     AppState.addEventListener("change", async (state) => {
       if (state === "inactive") {

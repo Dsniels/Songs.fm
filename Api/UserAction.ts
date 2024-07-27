@@ -9,10 +9,10 @@ export const getprofile = (
   return new Promise((resolve, reject) => {
     HttpCliente.get("/me")
       .then((response: AxiosResponse<user>) => {
+        (response.data)
         dispatch({
           type: "INICIAR_SESION",
           usuario: response.data,
-          autenticado: true,
         });
         resolve(response);
       })

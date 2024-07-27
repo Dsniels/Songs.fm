@@ -20,7 +20,7 @@ import { ListSongs } from "@/components/ListSongs";
 import { ListOfArtists } from "@/components/ListOfArtists";
 import { SmallListSongs } from "@/components/SmallListSongs";
 
-import { artist, genero, Recently, song, user } from "@/types/Card.types";
+import { artist, genero, ItemRespone, Recently, song, user } from "@/types/Card.types";
 
 
 export default function TabTwoScreen() {
@@ -32,7 +32,7 @@ export default function TabTwoScreen() {
     images: [{ url: "" }],
   });
   const [selectDate, setSelectDate] = useState("short_term");
-  const [recent, setRecent] = useState<Recently[]>([]);
+  const [recent, setRecent] = useState<song[]>([]);
   const [requestArtist, setRequestArtist] = useState<{
     artists: Array<artist>;
     offset: number;
@@ -50,30 +50,31 @@ export default function TabTwoScreen() {
 
   const getDetails = useCallback((Item: artist) => {
     router.push({
-      pathname: `(app)/Detalles/[name]`,
+      pathname: "(app)/Detalles/[name]",
       params: { id: Item.id, name: Item.name },
     });
   }, []);
 
   const getSongDetails = useCallback((Item: song) => {
     router.push({
-      pathname: `(app)/songsDetails/[song]`,
+      pathname: "(app)/songsDetails/[song]",
       params: { id: Item.id, name: Item.name, artists: Item.artists[0].name },
     });
   }, []);
 
   const fetchRecentlySongs = useCallback(async () => {
     const recently: Recently = await getRecentlySongs();
-    const newArray = recently.items.map((item: any) => item.track);
+    const newArray = recently.items.map((item) => item.track);
     setRecent(newArray);
     seedTracks(newArray);
   }, []);
 
   const fetchData = useCallback(async () => {
-    const [data, dataTopSongs]: any = await Promise.all([
-      getTop("artists", requestArtist.offset, selectDate),
-      getTop("tracks", requestMusic.offsetSongs, selectDate),
+    const [data, dataTopSongs] = await Promise.all([
+      getTop<ItemRespone<artist[]>>("artists", requestArtist.offset, selectDate),
+      getTop<ItemRespone<song[]>>("tracks", requestMusic.offsetSongs, selectDate),
     ]);
+
 
     setRequestArtist((prev) => ({
       ...prev,
@@ -102,6 +103,7 @@ export default function TabTwoScreen() {
     setLoading(true);
 
     await Promise.all([fetchData(), fetchRecentlySongs()]);
+    setLoading(false);
   }, [fetchData]);
 
   useEffect(() => {

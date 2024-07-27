@@ -9,9 +9,11 @@ import { action } from "@/types/action.type";
 };
 
 const sesionUsuarioReducer = (state = initialState, action: action) => {
+  (action);
 switch (action.type) {
-    case "INICIAR_SESION": {
+    case "INICIAR_SESION": 
       const { display_name, images } = action.usuario;
+      (action.usuario);
       
       return {
         ...state,
@@ -20,7 +22,7 @@ switch (action.type) {
           images,
         },
       };
-    }
+    
 
     case "CERRAR_SESION":
       return {

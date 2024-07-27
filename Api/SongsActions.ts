@@ -6,17 +6,18 @@ import { ToastAndroid } from "react-native";
 import { notificationAsync, NotificationFeedbackType } from "expo-haptics";
 import { features, Recently, song } from "@/types/Card.types";
 
-export const getTop = (
+export const getTop = <T> (
   type: string,
   offset: number = 0,
   time_range: string,
-): Promise<AxiosResponse<any>> => {
+): Promise<T> => {
   return new Promise((resolve, reject) => {
     HttpCliente.get(`/me/top/${type}?offset=${offset}&time_range=${time_range}`)
-      .then((response: AxiosResponse) => {
+      .then((response: AxiosResponse<T>) => {
+        
         resolve(response.data);
       })
-      .catch((e: any) => {
+      .catch((e) => {
         resolve(e);
       });
   });

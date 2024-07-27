@@ -147,7 +147,7 @@ const SongDetails = () => {
 
   const getDetails = useCallback((Item: artist) => {
     return router.replace({
-      pathname: `(app)/Detalles/[name]`,
+      pathname: "(app)/Detalles/[name]",
       params: { id: Item.id, name: Item.name },
     });
   }, []);

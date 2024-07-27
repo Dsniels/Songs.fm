@@ -21,14 +21,14 @@ import { getInfo } from "@/Api/AnnotatiosActions";
 import { extractInfo } from "@/service/FormatData";
 import { ListOfArtists } from "@/components/ListOfArtists";
 import { SmallListSongs } from "@/components/SmallListSongs";
-import { album, artist, items, song } from "@/types/Card.types";
+import { album, annotationResponse, artist, items, song } from "@/types/Card.types";
 
 
 type ArtistInfo = {
   info: artist;
   songs: song[];
-  albums: any[];
-  artists: any[];
+  albums: album[];
+  artists: artist[];
 }
 
 const Detalles = () => {
@@ -49,7 +49,7 @@ const Detalles = () => {
   const getDetails = (Item: artist) => {
     
     return router.push({
-      pathname: `(app)/Detalles/[name]`,
+      pathname: "(app)/Detalles/[name]",
       params: { id: Item.id, name: Item.name },
     });
   };
@@ -82,7 +82,7 @@ const Detalles = () => {
        
 
         const description = descriptionResult;
-        const info = description.map((i: any) => extractInfo(i)).join("");
+        const info = description.map((i : annotationResponse | string ) => extractInfo(i)).join("");
         setInformacion(info);
 
     };
@@ -94,7 +94,7 @@ const Detalles = () => {
 
   const getSongDetails = (Item: song) => {
     return router.push({
-      pathname: `(app)/songsDetails/[song]`,
+      pathname: "(app)/songsDetails/[song]",
       params: { id: Item.id, name: Item.name, artists: Item.artists[0].name },
     });
   };
