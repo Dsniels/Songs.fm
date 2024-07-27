@@ -5,6 +5,8 @@ import {
   ActivityIndicator,
   FlatList,
   Image,
+  ScrollView,
+  ToastAndroid,
 } from "react-native";
 import { ThemedText } from "@/components/ThemedText";
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -18,7 +20,9 @@ import { Picker } from "@react-native-picker/picker";
 import { ListSongs } from "@/components/ListSongs";
 import { ListOfArtists } from "@/components/ListOfArtists";
 import { SmallListSongs } from "@/components/SmallListSongs";
-
+import NetInfo from "@react-native-community/netinfo";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import { Feather } from '@expo/vector-icons';
 export default function TabTwoScreen() {
   const [{ sesionUsuario }, dispatch] = useStateValue();
   const [generos, setGeneros] = useState<{ name: string; value: number }[]>([]);
@@ -29,6 +33,7 @@ export default function TabTwoScreen() {
       url: "",
     },
   });
+  const [Connection, setConnection] = useState<boolean | null>(true);
   const [selectDate, setSelectDate] = useState("short_term");
   const [recent, setRecent] = useState<any[]>([]);
   const [requestArtist, setRequestArtist] = useState({
@@ -60,6 +65,8 @@ export default function TabTwoScreen() {
     setRecent(newArray);
     seedTracks(newArray);
   }, []);
+
+ 
 
   const fetchData = useCallback(async () => {
     const [data, dataTopSongs]: any = await Promise.all([
@@ -93,15 +100,15 @@ export default function TabTwoScreen() {
   const onRefresh = useCallback(async () => {
     setLoading(true);
 
-    Promise.all([fetchData(), fetchRecentlySongs()]).then(() => {
+    Promise.all([fetchData(), fetchRecentlySongs()]).catch((e)=>ToastAndroid.show("Error fetching", 3000)).finally(() => {
       setLoading(false);
     });
   }, [fetchData]);
 
   useEffect(() => {
     onRefresh();
-
   }, [selectDate]);
+
 
   const renderGeneroItem = ({ item }: any) => (
     <View className="m-3 rounded-lg" key={item.name}>
@@ -115,17 +122,24 @@ export default function TabTwoScreen() {
     </View>
   );
 
-  return (
+  return  (
     <SafeAreaView style={[styles.container]}>
       <FlatList
-      stickyHeaderHiddenOnScroll
+        stickyHeaderHiddenOnScroll
         renderItem={() => null}
         data={[]}
         ListHeaderComponent={() => (
           <View className="m-1">
-            <View  className="flex mt-16 items-center ">
-              <Image className="w-24 h-24 rounded-full m-4" source={{ uri:usuario.images.url || "https://filestore.community.support.microsoft.com/api/images/0ce956b2-9787-4756-a580-299568810730?upload=true" }} />
-              <View >
+            <View className="flex mt-16 items-center ">
+              <Image
+                className="w-24 h-24 rounded-full m-4"
+                source={{
+                  uri:
+                    usuario.images.url ||
+                    "https://filestore.community.support.microsoft.com/api/images/0ce956b2-9787-4756-a580-299568810730?upload=true",
+                }}
+              />
+              <View>
                 <ThemedText type="subtitle">{usuario.display_name}</ThemedText>
               </View>
             </View>
@@ -134,7 +148,7 @@ export default function TabTwoScreen() {
               <Picker
                 dropdownIconColor="white"
                 mode="dialog"
-                style={{ color: "white", width: 225, }}
+                style={{ color: "white", width: 225 }}
                 selectedValue={selectDate}
                 onValueChange={(value) => setSelectDate(value)}
               >
@@ -201,7 +215,10 @@ export default function TabTwoScreen() {
                   horizontal
                   showsHorizontalScrollIndicator={false}
                 />
-                <ThemedText type="subtitle" className="m-5 m-t-6 text-center p-2 ">
+                <ThemedText
+                  type="subtitle"
+                  className="m-5 m-t-6 text-center p-2 "
+                >
                   Escuchadas Recientemente
                 </ThemedText>
                 <View className="rounded-3xl p-5">

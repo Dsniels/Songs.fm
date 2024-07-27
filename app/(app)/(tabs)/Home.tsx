@@ -105,7 +105,7 @@ export default function HomeScreen() {
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         keyboardVerticalOffset={Platform.OS === "ios" ? 64 : 0}
       >
-      <Pressable className="flex  align-middle m-1 bg-blue-950 rounded-2xl justify-center items-start p-3" onPress={()=>setShowModal(true)}>
+      <Pressable className="flex  align-middle m-1 bg-blue-950 rounded-2xl justify-center items-start p-3 shadow-lg shadow-cyan-500/50 " onPress={()=>setShowModal(true)}>
         <View >
           <Ionicons name="search" size={24} color="white" />
         </View>

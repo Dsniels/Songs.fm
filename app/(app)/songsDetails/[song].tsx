@@ -161,7 +161,7 @@ const SongDetails = () => {
                 <Ionicons name="heart" size={40} color="red" />
               </Pressable>
             ) : (
-              <Pressable onPress={(_) => handleLike(Track.info?.id)}>
+              <Pressable className="m-2" onPress={(_) => handleLike(Track.info?.id)}>
                 <Ionicons name="heart-outline" size={40} color="red" />
               </Pressable>
             )}

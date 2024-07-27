@@ -116,7 +116,7 @@ const Detalles = () => {
 
   return (
     <ParallaxScrollView
-      headerBackgroundColor={{ light: "#D0D0D0", dark: "#353636" }}
+      headerBackgroundColor={{ light: "#000818", dark: "#000818" }}
       headerImage={
         <Image
           source={{
@@ -127,9 +127,10 @@ const Detalles = () => {
           style={{ width: "100%", height: 400 }}
         />
       }
+      
     >
-      {informacion === undefined && <ActivityIndicator size="large" />}
-      {informacion !== undefined && (
+      {!informacion  && <View className="flex-1 h-full m-auto " ><ActivityIndicator size="large" /></View>}
+      {informacion  && (
         <View className="flex m-5 ">
           <ThemedText type="subtitle">Who is {name}?</ThemedText>
           <Pressable

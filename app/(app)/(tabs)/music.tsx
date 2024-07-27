@@ -5,6 +5,7 @@ import { getRecomendations } from "@/Api/SongsActions";
 import Card from "@/components/Card";
 import { SwipeCard } from "@/components/SwipeCard";
 import * as Network from "expo-network";
+import { ThemedText } from "@/components/ThemedText";
 
 export default function music() {
   const [data, setData] = useState<any[]>([]);
@@ -25,8 +26,7 @@ export default function music() {
 
   const fetchData = useCallback(async () => {
     const data_response: any[] = await getRecomendations();
-      
-    
+
     if (data_response.length === 0) {
       return onRefresh();
     }
@@ -48,8 +48,8 @@ export default function music() {
   return (
     <SafeAreaView style={{ backgroundColor: "#000818", flex: 1 }}>
       {data.length >= 0 ? (
-        <View style={{ marginTop: 40 }}>
-          <SwipeCard items={data} setItems={setData}>
+        <View style={{ display:'flex', marginTop: 10, marginBottom: 10 }}>
+           <SwipeCard items={data} setItems={setData}>
             {(item: any) => <Card card={item} />}
           </SwipeCard>
         </View>
