@@ -100,13 +100,11 @@ export default function TabTwoScreen() {
   const onRefresh = useCallback(async () => {
     setLoading(true);
 
-    Promise.all([fetchData(), fetchRecentlySongs()]).then(() => {
-      setLoading(false);
-    }).catch((e)=>ToastAndroid.show("Error fetching", 3000));
+    await Promise.all([fetchData(), fetchRecentlySongs()]);
   }, [fetchData]);
 
   useEffect(() => {
-    onRefresh();
+     onRefresh().then(() => {setLoading(false)}).catch((e)=>ToastAndroid.show("Error fetching", 3000));
   }, [selectDate]);
 
 
