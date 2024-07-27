@@ -17,7 +17,6 @@ export const getInfo = async (search:string,artists:string, song : boolean)=>{
   }
   
   const {response} = data;
-  // console.log(JSON.stringify(data, null, 2), query.replaceAll(' ', '%20'))
 
   const {result}= response.hits.find((i:any)=>{
     return i.result.artist_names.toLocaleLowerCase().includes(artists.toLocaleLowerCase()) 
