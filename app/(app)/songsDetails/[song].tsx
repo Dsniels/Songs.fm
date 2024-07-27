@@ -24,7 +24,7 @@ import { Audio } from "expo-av";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { getInfo } from "@/Api/AnnotatiosActions";
 import { extractInfo } from "@/service/FormatData";
-import {  artist, features, song } from "@/types/Card.types";
+import { artist, features, song } from "@/types/Card.types";
 
 type ITrack = {
   info: song;
@@ -56,8 +56,8 @@ const SongDetails = () => {
             ToastAndroid.showWithGravity(
               e,
               ToastAndroid.SHORT,
-              ToastAndroid.CENTER
-            )
+              ToastAndroid.CENTER,
+            ),
           );
       }
     } catch (error) {
@@ -118,7 +118,7 @@ const SongDetails = () => {
         }
       };
       return () => onBlur();
-    }, [currentSound, isFocused])
+    }, [currentSound, isFocused]),
   );
 
   useEffect(() => {
@@ -141,7 +141,7 @@ const SongDetails = () => {
       setInformacion(informacion);
     };
     fetchData().catch((e) =>
-      ToastAndroid.showWithGravity(e, ToastAndroid.SHORT, ToastAndroid.CENTER)
+      ToastAndroid.showWithGravity(e, ToastAndroid.SHORT, ToastAndroid.CENTER),
     );
   }, [navigation]);
 
@@ -173,38 +173,46 @@ const SongDetails = () => {
           style={{ width: "100%", height: 400 }}
         />
       }
-    >{ Track.audioFeatures.acousticness && informacion ? (
-      <><View className="flex flex-row justify-end items-center p-2">
-          {like ? (
-            <Pressable
-              className="m-2"
-              onPress={(_) => handleUnLike(Track.info.id)}
-            >
-              <Ionicons name="heart" size={40} color="red" />
-            </Pressable>
-          ) : (
-            <Pressable className="m-2" onPress={(_) => handleLike(Track.info.id)}>
-              <Ionicons name="heart-outline" size={40} color="red" />
-            </Pressable>
-          )}
+    >
+      {Track.audioFeatures.acousticness && informacion ? (
+        <>
+          <View className="flex flex-row justify-end items-center p-2">
+            {like ? (
+              <Pressable
+                className="m-2"
+                onPress={(_) => handleUnLike(Track.info.id)}
+              >
+                <Ionicons name="heart" size={40} color="red" />
+              </Pressable>
+            ) : (
+              <Pressable
+                className="m-2"
+                onPress={(_) => handleLike(Track.info.id)}
+              >
+                <Ionicons name="heart-outline" size={40} color="red" />
+              </Pressable>
+            )}
 
-          {currentSound === null && Track.info.preview_url ? (
-            <Pressable
-              className="bg-cyan-950"
-              style={styles.playButton}
-              onPress={() => playSound(Track.info.preview_url || " ")}
-            >
-              <Ionicons name="play" size={30} color="white" />
-            </Pressable>
-          ) : (
-            <Pressable style={styles.playButton} onPress={() => pause()}>
-              <Ionicons name="pause" size={30} color="white" />
-            </Pressable>
-          )}
-        </View><View className="mb-0 mt-3 flex justify-evenly flex-wrap flex-row content-evenly w-fit">
+            {currentSound === null && Track.info.preview_url ? (
+              <Pressable
+                className="bg-cyan-950"
+                style={styles.playButton}
+                onPress={() => playSound(Track.info.preview_url || " ")}
+              >
+                <Ionicons name="play" size={30} color="white" />
+              </Pressable>
+            ) : (
+              <Pressable style={styles.playButton} onPress={() => pause()}>
+                <Ionicons name="pause" size={30} color="white" />
+              </Pressable>
+            )}
+          </View>
+          <View className="mb-0 mt-3 flex justify-evenly flex-wrap flex-row content-evenly w-fit">
             <Pressable
               className="w-44 p-2 bg-opacity-70"
-              style={{ backgroundColor: !showAbout ? "#000818" : "transparent" }}
+              style={{
+                backgroundColor: !showAbout ? "#000818" : "transparent",
+              }}
               onPress={() => setShowAbout(false)}
             >
               <ThemedText
@@ -228,219 +236,224 @@ const SongDetails = () => {
             </Pressable>
           </View>
 
-      {showAbout === false  ? (
-        <View className=" bg-opacity-80 bg-[#000818] m-1 mt-0 pt-0 -top-4 w-full p-7 ">
-          <ThemedText type="defaultSemiBold">Artistas</ThemedText>
+          {showAbout === false ? (
+            <View className=" bg-opacity-80 bg-[#000818] m-1 mt-0 pt-0 -top-4 w-full p-7 ">
+              <ThemedText type="defaultSemiBold">Artistas</ThemedText>
 
-          <ThemedView className=" flex flex-row justify-center content-center items-center bg-[#000218]">
-            <ScrollView
-              className="bg-[#000818]"
-              horizontal
-              style={{ width: 80 }}
-            >
-              {Track.info.artists ? (
-                Track.info.artists.map((item: any, index: number) => (
-                  <Pressable
-                    className="rounded-3xl m-3 px-2 bg-[#1F283D]"
-                    onPress={() => getDetails(item)}
-                    key={index}
+              <ThemedView className=" flex flex-row justify-center content-center items-center bg-[#000218]">
+                <ScrollView
+                  className="bg-[#000818]"
+                  horizontal
+                  style={{ width: 80 }}
+                >
+                  {Track.info.artists ? (
+                    Track.info.artists.map((item: any, index: number) => (
+                      <Pressable
+                        className="rounded-3xl m-3 px-2 bg-[#1F283D]"
+                        onPress={() => getDetails(item)}
+                        key={index}
+                      >
+                        <ThemedText type="default">{item.name}</ThemedText>
+                      </Pressable>
+                    ))
+                  ) : (
+                    <ActivityIndicator size="large" />
+                  )}
+                </ScrollView>
+              </ThemedView>
+
+              <View className=" flex flex-wrap mt-8 flex-row ">
+                <View style={styles.caracteristica}>
+                  <View
+                    className="bg-gray-800"
+                    style={{
+                      height: 10,
+                      width: 100,
+                      borderRadius: 5,
+                    }}
                   >
-                    <ThemedText type="default">{item.name}</ThemedText>
-                  </Pressable>
-                ))
-              ) : (
-                <ActivityIndicator size="large" />
-              )}
-            </ScrollView>
-          </ThemedView>
-
-          <View className=" flex flex-wrap mt-8 flex-row ">
-            <View style={styles.caracteristica}>
-              <View
-                className="bg-gray-800"
-                style={{
-                  height: 10,
-                  width: 100,
-                  borderRadius: 5,
-                }}
-              >
+                    <View
+                      className="bg-sky-700"
+                      style={{
+                        height: "100%",
+                        width: `${Track.audioFeatures.danceability * 100}%`,
+                        borderRadius: 5,
+                      }}
+                    />
+                  </View>
+                  <ThemedText style={{ fontSize: 12 }}>Danceability</ThemedText>
+                </View>
+                <View style={styles.caracteristica}>
+                  <View
+                    className="bg-gray-800"
+                    style={{
+                      height: 10,
+                      width: 100,
+                      borderRadius: 5,
+                    }}
+                  >
+                    <View
+                      className="bg-sky-700"
+                      style={{
+                        height: "100%",
+                        width: `${Track.audioFeatures.acousticness * 100}%`,
+                        borderRadius: 5,
+                      }}
+                    />
+                  </View>
+                  <ThemedText style={{ fontSize: 12 }}>Acousticness</ThemedText>
+                </View>
+                <View style={styles.caracteristica}>
+                  <View
+                    className="bg-gray-800"
+                    style={{
+                      height: 10,
+                      width: 100,
+                      borderRadius: 5,
+                    }}
+                  >
+                    <View
+                      className="bg-sky-700"
+                      style={{
+                        height: "100%",
+                        width: `${Track.audioFeatures.energy * 100}%`,
+                        borderRadius: 5,
+                      }}
+                    />
+                  </View>
+                  <ThemedText style={{ fontSize: 12 }}>Energy</ThemedText>
+                </View>
+                <View style={styles.caracteristica}>
+                  <View
+                    className="bg-gray-800"
+                    style={{
+                      height: 10,
+                      width: 100,
+                      borderRadius: 5,
+                    }}
+                  >
+                    <View
+                      className="bg-sky-700"
+                      style={{
+                        height: "100%",
+                        width: `${Track.audioFeatures.instrumentalness * 100}%`,
+                        borderRadius: 5,
+                      }}
+                    />
+                  </View>
+                  <ThemedText style={{ fontSize: 12 }}>
+                    Instrumentalness
+                  </ThemedText>
+                </View>
+                <View style={styles.caracteristica}>
+                  <View
+                    className="bg-gray-800"
+                    style={{
+                      height: 10,
+                      width: 100,
+                      borderRadius: 5,
+                    }}
+                  >
+                    <View
+                      className="bg-sky-700"
+                      style={{
+                        height: "100%",
+                        width: `${Track.audioFeatures.liveness * 100}%`,
+                        borderRadius: 5,
+                      }}
+                    />
+                  </View>
+                  <ThemedText style={{ fontSize: 12 }}>liveness</ThemedText>
+                </View>
                 <View
-                  className="bg-sky-700"
                   style={{
-                    height: "100%",
-                    width: `${Track.audioFeatures.danceability * 100}%`,
-                    borderRadius: 5,
+                    margin: 10,
+                    flexDirection: "column",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
                   }}
-                />
+                >
+                  <ThemedText type="default">
+                    {Track.audioFeatures.loudness}
+                  </ThemedText>
+                  <ThemedText style={{ fontSize: 12 }}>loudness</ThemedText>
+                </View>
+                <View style={styles.caracteristica}>
+                  <View
+                    className="bg-gray-800"
+                    style={{
+                      height: 10,
+                      width: 100,
+                      borderRadius: 5,
+                    }}
+                  >
+                    <View
+                      className="bg-sky-700"
+                      style={{
+                        height: "100%",
+                        width: `${Track.audioFeatures.speechiness * 100}%`,
+                        borderRadius: 5,
+                      }}
+                    />
+                  </View>
+                  <ThemedText style={{ fontSize: 12 }}>speechiness</ThemedText>
+                </View>
+                <View style={styles.caracteristica}>
+                  <View
+                    className="bg-gray-800"
+                    style={{
+                      height: 10,
+                      width: 100,
+                      borderRadius: 5,
+                    }}
+                  >
+                    <View
+                      className="bg-sky-700"
+                      style={{
+                        height: "100%",
+                        width: `${Track.audioFeatures.valence * 100}%`,
+                        borderRadius: 5,
+                      }}
+                    />
+                  </View>
+                  <ThemedText style={{ fontSize: 12 }}>valence</ThemedText>
+                </View>
               </View>
-              <ThemedText style={{ fontSize: 12 }}>Danceability</ThemedText>
             </View>
-            <View style={styles.caracteristica}>
-              <View
-                className="bg-gray-800"
-                style={{
-                  height: 10,
-                  width: 100,
-                  borderRadius: 5,
-                }}
-              >
-                <View
-                  className="bg-sky-700"
-                  style={{
-                    height: "100%",
-                    width: `${Track.audioFeatures.acousticness * 100}%`,
-                    borderRadius: 5,
-                  }}
-                />
+          ) : showAbout ? (
+            <>
+              <View className=" bg-opacity-80 bg-[#000818] m-1 mt-0 pt-0 -top-4 w-fit ">
+                <ThemedText
+                  className="p-7"
+                  style={{ justifyContent: "center", textAlign: "justify" }}
+                >
+                  {informacion}
+                </ThemedText>
               </View>
-              <ThemedText style={{ fontSize: 12 }}>Acousticness</ThemedText>
+            </>
+          ) : (
+            <View className="bg-opacity-80 bg-cyan-950 flex justify-stretch content-center items-center align-middle m-1 mt-0 pt-0 -top-4 w-fit h-36 ">
+              <ActivityIndicator className="m-8" size="large" />
             </View>
-            <View style={styles.caracteristica}>
-              <View
-                className="bg-gray-800"
-                style={{
-                  height: 10,
-                  width: 100,
-                  borderRadius: 5,
-                }}
-              >
-                <View
-                  className="bg-sky-700"
-                  style={{
-                    height: "100%",
-                    width: `${Track.audioFeatures.energy * 100}%`,
-                    borderRadius: 5,
-                  }}
-                />
-              </View>
-              <ThemedText style={{ fontSize: 12 }}>Energy</ThemedText>
-            </View>
-            <View style={styles.caracteristica}>
-              <View
-                className="bg-gray-800"
-                style={{
-                  height: 10,
-                  width: 100,
-                  borderRadius: 5,
-                }}
-              >
-                <View
-                  className="bg-sky-700"
-                  style={{
-                    height: "100%",
-                    width: `${Track.audioFeatures.instrumentalness * 100}%`,
-                    borderRadius: 5,
-                  }}
-                />
-              </View>
-              <ThemedText style={{ fontSize: 12 }}>Instrumentalness</ThemedText>
-            </View>
-            <View style={styles.caracteristica}>
-              <View
-                className="bg-gray-800"
-                style={{
-                  height: 10,
-                  width: 100,
-                  borderRadius: 5,
-                }}
-              >
-                <View
-                  className="bg-sky-700"
-                  style={{
-                    height: "100%",
-                    width: `${Track.audioFeatures.liveness * 100}%`,
-                    borderRadius: 5,
-                  }}
-                />
-              </View>
-              <ThemedText style={{ fontSize: 12 }}>liveness</ThemedText>
-            </View>
-            <View
-              style={{
-                margin: 10,
-                flexDirection: "column",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
+          )}
+          <View style={{ marginTop: 30, marginBottom: 20 }}>
+            <ThemedText type="title">Links</ThemedText>
+            <Pressable
+              onPress={() => Linking.openURL(Track.audioFeatures.uri || "")}
             >
-              <ThemedText type="default">
-                {Track.audioFeatures.loudness}
+              <ThemedText
+                type="link"
+                style={{ justifyContent: "center", textAlign: "justify" }}
+              >
+                Escuchar en Spotify
               </ThemedText>
-              <ThemedText style={{ fontSize: 12 }}>loudness</ThemedText>
-            </View>
-            <View style={styles.caracteristica}>
-              <View
-                className="bg-gray-800"
-                style={{
-                  height: 10,
-                  width: 100,
-                  borderRadius: 5,
-                }}
-              >
-                <View
-                  className="bg-sky-700"
-                  style={{
-                    height: "100%",
-                    width: `${Track.audioFeatures.speechiness * 100}%`,
-                    borderRadius: 5,
-                  }}
-                />
-              </View>
-              <ThemedText style={{ fontSize: 12 }}>speechiness</ThemedText>
-            </View>
-            <View style={styles.caracteristica}>
-              <View
-                className="bg-gray-800"
-                style={{
-                  height: 10,
-                  width: 100,
-                  borderRadius: 5,
-                }}
-              >
-                <View
-                  className="bg-sky-700"
-                  style={{
-                    height: "100%",
-                    width: `${Track.audioFeatures.valence * 100}%`,
-                    borderRadius: 5,
-                  }}
-                />
-              </View>
-              <ThemedText style={{ fontSize: 12 }}>valence</ThemedText>
-            </View>
-          </View>
-        </View>
-      ) : showAbout  ? (
-        <>
-          <View className=" bg-opacity-80 bg-[#000818] m-1 mt-0 pt-0 -top-4 w-fit ">
-            <ThemedText
-              className="p-7"
-              style={{ justifyContent: "center", textAlign: "justify" }}
-            >
-              {informacion}
-            </ThemedText>
+            </Pressable>
           </View>
         </>
       ) : (
-        <View className="bg-opacity-80 bg-cyan-950 flex justify-stretch content-center items-center align-middle m-1 mt-0 pt-0 -top-4 w-fit h-36 ">
-          <ActivityIndicator className="m-8" size="large" />
-        </View>
+        <ActivityIndicator size="large" />
       )}
-      <View style={{ marginTop: 30, marginBottom: 20 }}>
-        <ThemedText type="title">Links</ThemedText>
-        <Pressable
-          onPress={() => Linking.openURL(Track.audioFeatures.uri || "")}
-        >
-          <ThemedText
-            type="link"
-            style={{ justifyContent: "center", textAlign: "justify" }}
-          >
-            Escuchar en Spotify
-          </ThemedText>
-        </Pressable>
-      </View>
-      </>) : (<ActivityIndicator size='large'/> ) }
     </ParallaxScrollView>
   );
 };
