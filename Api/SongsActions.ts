@@ -56,7 +56,7 @@ export const getRecomendations = async (): Promise<any> => {
   });
 };
 
-export const getRecentlySongs = () : Promise<Recently> => {
+export const getRecentlySongs = (): Promise<Recently> => {
   return new Promise((resolve, reject) => {
     HttpCliente.get("/me/player/recently-played?limit=20")
       .then((response) => {
@@ -92,7 +92,7 @@ export const getSongInfo = async (id: string) => {
   return { Info: info, Features: features, Like: like };
 };
 
-const songInfo = (id: string) : Promise<song>=> {
+const songInfo = (id: string): Promise<song> => {
   return new Promise((resolve, reject) => {
     HttpCliente.get(`/tracks/${id}`)
       .then((response: any) => {
@@ -102,7 +102,7 @@ const songInfo = (id: string) : Promise<song>=> {
   });
 };
 
-const checkLikeTrack = (id: string) : Promise<boolean> => {
+const checkLikeTrack = (id: string): Promise<boolean> => {
   return new Promise((resolve, reject) => {
     HttpCliente.get(`/me/tracks/contains?ids=${id}`)
       .then((response: any) => {

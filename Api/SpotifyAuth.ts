@@ -8,10 +8,9 @@ import { ResponseAxios, TokenResponse } from "@/types/Card.types";
 const instancia = axios.create({
   headers: {
     "Content-Type": "application/x-www-form-urlencoded",
-    Authorization:
-      `Basic ${Buffer.from(
-        `${process.env.EXPO_PUBLIC_CLIENTE_ID}:${process.env.EXPO_PUBLIC_CLIENTE_SECRET}`
-      ).toString("base64")}`,
+    Authorization: `Basic ${Buffer.from(
+      `${process.env.EXPO_PUBLIC_CLIENTE_ID}:${process.env.EXPO_PUBLIC_CLIENTE_SECRET}`,
+    ).toString("base64")}`,
   },
 });
 

@@ -1,5 +1,5 @@
 export type CardType = {
-  id:string;
+  id: string;
   artist: string;
   name: string;
   image: string;
@@ -26,7 +26,7 @@ export type features = {
   speechiness: number;
   tempo: number;
   valence: number;
-  uri : string;
+  uri: string;
 };
 
 export type song = {
@@ -56,14 +56,14 @@ export type annotationResponse = {
   children: Array<{ children: string | object }>;
 };
 
-export type user ={
-        display_name : string;
-        images : Array<{url:string}>
-}
+export type user = {
+  display_name: string;
+  images: Array<{ url: string }>;
+};
 
-export type items<T>={
-        item : T
-}
+export type items<T> = {
+  item: T;
+};
 
 export type genero = {
   item: { name: string; value: number };
@@ -72,9 +72,9 @@ export type artist = {
   name: string;
   id: string;
   images: Array<{ url: string }>;
-  genres : Array<string>;
-  popularity:number;
-  uri:string
+  genres: Array<string>;
+  popularity: number;
+  uri: string;
 };
 
 export type Recommendatios = {

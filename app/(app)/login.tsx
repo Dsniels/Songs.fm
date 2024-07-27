@@ -1,6 +1,6 @@
 import { Pressable, Text, ToastAndroid } from "react-native";
 import * as AuthSession from "expo-auth-session";
-import { useEffect} from "react";
+import { useEffect } from "react";
 import * as WebBrowser from "expo-web-browser";
 import { ThemedView } from "@/components/ThemedView";
 import { ThemedText } from "@/components/ThemedText";
@@ -17,14 +17,13 @@ import { ResponseAxios, TokenResponse } from "@/types/Card.types";
 
 WebBrowser.maybeCompleteAuthSession();
 export default function login() {
-  const [ dispatch] = useStateValue();
-
+  const [dispatch] = useStateValue();
 
   const discovery = {
     authorizationEndpoint: "https://accounts.spotify.com/authorize",
     tokenEndpoint: "https://accounts.spotify.com/api/token",
   };
-  const [response, promptAsync] : any = AuthSession.useAuthRequest(
+  const [response, promptAsync]: any = AuthSession.useAuthRequest(
     {
       clientId: process.env.EXPO_PUBLIC_CLIENTE_ID || "",
       clientSecret: process.env.EXPO_PUBLIC_CLIENTE_SECRET || "",
@@ -49,7 +48,8 @@ export default function login() {
   };
 
   const handleResponse = async (AccessCode: string) => {
-    const response : ResponseAxios<TokenResponse>  = await getAccessToken(AccessCode);
+    const response: ResponseAxios<TokenResponse> =
+      await getAccessToken(AccessCode);
     const { refresh_token, access_token, expira } = response.data;
     checkToken(new Date(expira));
 
@@ -84,8 +84,6 @@ export default function login() {
       <Pressable className="flex bg-green-500" onPress={() => promptAsync()}>
         <Text className="text-cyan-100 ">Iniciar Sesion</Text>
       </Pressable>
-
-
 
       <ThemedText>{Linking.createURL("login")}</ThemedText>
     </ThemedView>

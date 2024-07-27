@@ -22,7 +22,6 @@ import { SmallListSongs } from "@/components/SmallListSongs";
 
 import { artist, genero, Recently, song, user } from "@/types/Card.types";
 
-
 export default function TabTwoScreen() {
   const [{ sesionUsuario }] = useStateValue();
   const [generos, setGeneros] = useState<{ name: string; value: number }[]>([]);
@@ -196,7 +195,7 @@ export default function TabTwoScreen() {
                 </ThemedText>
                 <FlatList
                   data={requestArtist.artists}
-                  keyExtractor={(_,index) => index.toString()}
+                  keyExtractor={(_, index) => index.toString()}
                   // skipcq: JS-0417
                   renderItem={({ item }) => (
                     <ListOfArtists item={item} getDetails={getDetails} />
@@ -212,7 +211,7 @@ export default function TabTwoScreen() {
                 </ThemedText>
                 <FlatList
                   data={requestMusic.songs}
-                  keyExtractor={(_,index) => index.toString()}
+                  keyExtractor={(_, index) => index.toString()}
                   // skipcq: JS-0417
                   renderItem={({ item }) => (
                     <ListSongs item={item} getSongDetails={getSongDetails} />

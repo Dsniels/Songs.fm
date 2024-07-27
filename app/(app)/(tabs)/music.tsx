@@ -10,7 +10,7 @@ export default function music() {
 
   useEffect(() => {
     if (data.length <= 5) {
-      fetchData().then((traks: song[] ) => {
+      fetchData().then((traks: song[]) => {
         setData((prev: song[]) => [...prev, ...traks]);
       });
     }
@@ -22,15 +22,14 @@ export default function music() {
   //   });
   // }, []);
 
-
-  const fetchData = useCallback(async () : Promise<Recommendatios[]> => {
+  const fetchData = useCallback(async (): Promise<Recommendatios[]> => {
     const data_response: Recommendatios[] = await getRecomendations();
 
     const data_result = data_response
       .flat()
       .filter((i: Recommendatios) => i.preview_url !== null);
 
-    const extractedData = data_result
+    const extractedData = data_result;
     return extractedData;
   }, []);
 
