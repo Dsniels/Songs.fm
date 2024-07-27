@@ -126,11 +126,6 @@ export const AddToFav = (id: string) => {
   return new Promise((resolve, reject) => {
     HttpCliente.put(`/me/tracks?ids=${id}`, id)
       .then((response: any) => {
-        ToastAndroid.showWithGravity(
-          "Cancion agregada a favoritos",
-          ToastAndroid.SHORT,
-          ToastAndroid.TOP
-        );
         notificationAsync(NotificationFeedbackType.Success);
         resolve(response);
       })
@@ -149,12 +144,7 @@ export const deleteFromFav = (id: string) => {
   return new Promise((resolve, reject) => {
     HttpCliente.delete(`/me/tracks?ids=${id}`, id)
       .then((response: any) => {
-        ToastAndroid.showWithGravity(
-          "Cancion eliminada de favoritos",
-          ToastAndroid.SHORT,
-          ToastAndroid.TOP
-        );
-        notificationAsync(NotificationFeedbackType.Success);
+        notificationAsync(NotificationFeedbackType.Warning);
         resolve(response);
       })
       .catch((e) => {

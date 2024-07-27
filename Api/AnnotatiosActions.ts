@@ -1,4 +1,5 @@
 import axios, { AxiosResponse } from 'axios';
+import { configureProps } from 'react-native-reanimated/lib/typescript/ConfigHelper';
 const GeniusApi = axios.create({
     baseURL:process.env.EXPO_PUBLIC_BASE_URL_GENIUS,
     headers :{
@@ -9,13 +10,15 @@ const GeniusApi = axios.create({
 export const getInfo = async (search:string,artists:string, song : boolean)=>{
 
   const changed = search.replace(/\s*\(.*?\)\s*/g, '').trim();
-  const query = song ? changed+artists : search
-  const {status,data} = await GeniusApi.get(`/search?q=${query.replace(' ', '-')}`);
+  const query = song ? changed.concat(artists) : search
+  const {status,data} = await GeniusApi.get(`/search?q=${query.replace(' ', '%20')}`);
   if(status !== 200){
     throw new Error('Sin info')
   }
   
   const {response} = data;
+  // console.log(JSON.stringify(data, null, 2), query.replaceAll(' ', '%20'))
+
   const {result}= response.hits.find((i:any)=>{
     return i.result.artist_names.toLocaleLowerCase().includes(artists.toLocaleLowerCase()) 
   }) || false
@@ -27,7 +30,7 @@ export const getInfo = async (search:string,artists:string, song : boolean)=>{
     id = result.primary_artist.id
   }
   
-  const annotations : any = await getAnnotations(id, song? 'songs' :'artists');
+  const annotations : any = await getAnnotations(id, song ? 'songs' :'artists');
 
     return annotations || ["?"]
 }
