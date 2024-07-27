@@ -12,6 +12,7 @@ import * as SecureStorage from "expo-secure-store";
 import * as Haptics from "expo-haptics";
 
 import { checkToken, getAccessToken } from "@/Api/SpotifyAuth";
+import { getprofile } from "@/Api/UserAction";
 
 WebBrowser.maybeCompleteAuthSession();
 export default function login() {
@@ -61,6 +62,7 @@ export default function login() {
         storeData("token", access_token),
         storeData("refresh_token", refresh_token),
       ]).then(() => {
+        getprofile(dispatch).then(() => {
         Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
         ToastAndroid.showWithGravity(
           "Sesion Iniciada",
@@ -68,6 +70,7 @@ export default function login() {
           ToastAndroid.CENTER
         );
         return router.replace("/(tabs)");
+        });
       });
     }
   };

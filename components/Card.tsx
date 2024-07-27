@@ -17,18 +17,17 @@ const Card = ({ card }: { card: CardType }) => {
       />
       <View style={styles.CardDescription}>
         <ThemedText
-          numberOfLines={2}
-          type="defaultSemiBold"
+          numberOfLines={1}
+          type="subtitle"
           style={styles.cardContent}
         >
-          {" "}
+       
           {`${card.name}`}
         </ThemedText>
         <ThemedText
-          type="default"
+          type="defaultSemiBold"
           style={[styles.cardContent, { fontSize: 16 }]}
         >
-          {" "}
           {`${card.artist}`}
         </ThemedText>
       </View>

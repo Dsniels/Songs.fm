@@ -16,9 +16,7 @@ export const styles = StyleSheet.create({
   },
   titleContainer: {
     display: "flex",
-    justifyContent: "center",
     flexDirection: "row",
-    alignItems: "center",
     gap: 8,
     margin: 20,
     padding: 0,
@@ -101,6 +99,8 @@ export const styles = StyleSheet.create({
     height: 750,
   },
   CardDescription: {
+    margin:8,
+    padding:7,
     width: 300,
     justifyContent: "flex-end",
     alignItems: "flex-start",
@@ -111,7 +111,7 @@ export const styles = StyleSheet.create({
     bottom: 10,
   },
   cardContent: {
-    textAlign: "left",
+    textAlign: "justify",
     padding: 10,
     width: 250,
     fontSize: 20,

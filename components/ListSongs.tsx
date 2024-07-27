@@ -1,14 +1,12 @@
 import { styles } from "@/Styles/styles";
 import { LinearGradient } from "expo-linear-gradient"
-import { router } from "expo-router";
-import { useCallback } from "react";
-import { ImageBackground, Pressable, Text, View } from "react-native"
+import { ImageBackground, Pressable, Text, TouchableOpacity, View } from "react-native"
 
 
 export const ListSongs = ({item, getSongDetails } : any) => {
 
   return (
-    <Pressable key={item.id} onPress={() => getSongDetails(item)}>
+    <TouchableOpacity key={item.id} onPress={() => getSongDetails(item)}>
       <ImageBackground
         key={item.id}
         style={styles.TopSongs}
@@ -33,6 +31,6 @@ export const ListSongs = ({item, getSongDetails } : any) => {
           </View>
         </LinearGradient>
       </ImageBackground>
-    </Pressable>
+    </TouchableOpacity>
   )
 }

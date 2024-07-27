@@ -4,6 +4,7 @@ import {
   RefreshControl,
   ActivityIndicator,
   FlatList,
+  Image,
 } from "react-native";
 import { ThemedText } from "@/components/ThemedText";
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -84,7 +85,7 @@ export default function TabTwoScreen() {
   }, [selectDate]);
 
   useEffect(() => {
-    if (sesionUsuario?.usuario) {
+    if (sesionUsuario) {
       setUsuario(sesionUsuario.usuario);
     }
   }, [sesionUsuario]);
@@ -92,9 +93,6 @@ export default function TabTwoScreen() {
   const onRefresh = useCallback(async () => {
     setLoading(true);
 
-    if (usuario.display_name === "" && sesionUsuario?.usuario) {
-      setUsuario(sesionUsuario.usuario);
-    }
     Promise.all([fetchData(), fetchRecentlySongs()]).then(() => {
       setLoading(false);
     });
@@ -102,14 +100,15 @@ export default function TabTwoScreen() {
 
   useEffect(() => {
     onRefresh();
-  }, [selectDate, sesionUsuario]);
+
+  }, [selectDate]);
 
   const renderGeneroItem = ({ item }: any) => (
     <View className="m-3 rounded-lg" key={item.name}>
       <ThemedText type="defaultSemiBold">{item.name}</ThemedText>
-      <View className="bg-cyan-900 h-4 w-60 rounded-lg">
+      <View className="bg-gray-800 h-4 w-60 rounded-lg">
         <View
-          className="bg-cyan-950 h-full rounded-md"
+          className="bg-sky-700 h-full rounded-md"
           style={{ width: `${item.value * 10}%` }}
         ></View>
       </View>
@@ -119,19 +118,23 @@ export default function TabTwoScreen() {
   return (
     <SafeAreaView style={[styles.container]}>
       <FlatList
+      stickyHeaderHiddenOnScroll
         renderItem={() => null}
         data={[]}
         ListHeaderComponent={() => (
           <View className="m-1">
-            <View style={[styles.titleContainer]} className="mt-16">
-              <ThemedText type="title">Hola {usuario.display_name}!</ThemedText>
+            <View  className="flex mt-16 items-center ">
+              <Image className="w-24 h-24 rounded-full m-4" source={{ uri:usuario.images.url || "https://filestore.community.support.microsoft.com/api/images/0ce956b2-9787-4756-a580-299568810730?upload=true" }} />
+              <View >
+                <ThemedText type="subtitle">{usuario.display_name}</ThemedText>
+              </View>
             </View>
             <View className="m-3 flex text-center items-center justify-center flex-row">
               <ThemedText type="defaultSemiBold">Estadisticas</ThemedText>
               <Picker
                 dropdownIconColor="white"
                 mode="dialog"
-                style={{ color: "white", width: 225 }}
+                style={{ color: "white", width: 225, }}
                 selectedValue={selectDate}
                 onValueChange={(value) => setSelectDate(value)}
               >
@@ -152,73 +155,73 @@ export default function TabTwoScreen() {
                 />
               </Picker>
             </View>
-
-            <View className="bg-cyan-700 bg-opacity-100 rounded-lg m-35 p-3">
-              <ThemedText
-                className="m-3 border-blue-950  opacity-2 rounded-full text-center p-5 mb-3"
-                type="subtitle"
-              >
-                Generos que mas escuchas
-              </ThemedText>
-              {loading && <ActivityIndicator size="large" />}
-              {!loading && (
+            {loading && <ActivityIndicator size="large" />}
+            {!loading && (
+              <>
+                <View className="bg-opacity-25 rounded-lg m-35 p-3">
+                  <ThemedText
+                    className="m-3 opacity-100 rounded-full text-center p-5 mb-3"
+                    type="subtitle"
+                  >
+                    Generos que mas escuchas
+                  </ThemedText>
+                  <FlatList
+                    data={generos}
+                    keyExtractor={(item) => item.name}
+                    renderItem={renderGeneroItem}
+                  />
+                </View>
+                <ThemedText
+                  type="subtitle"
+                  className=" m-5 text-white font-bold mt-8"
+                >
+                  Artistas que mas escuchas
+                </ThemedText>
                 <FlatList
-                  data={generos}
-                  keyExtractor={(item) => item.name}
-                  renderItem={renderGeneroItem}
-                />
-              )}
-            </View>
-            <ThemedText
-              type="subtitle"
-              className=" m-5 text-white font-bold mt-8"
-            >
-              Artistas que mas escuchas
-            </ThemedText>
-
-            <FlatList
-              data={requestArtist.artists}
-              keyExtractor={(item: any) => item.id}
-              renderItem={({ item }) => (
-                <ListOfArtists item={item} getDetails={getDetails} />
-              )}
-              horizontal
-              showsHorizontalScrollIndicator={false}
-            />
-            <ThemedText
-              type="subtitle"
-              className=" m-5 text-white font-bold mt-8"
-            >
-              Canciones mas escuchadas
-            </ThemedText>
-            <FlatList
-              data={requestMusic.songs}
-              keyExtractor={(item: any, index: number) => index.toString()}
-              renderItem={({ item }) => (
-                <ListSongs item={item} getSongDetails={getSongDetails} />
-              )}
-              horizontal
-              showsHorizontalScrollIndicator={false}
-            />
-            <ThemedText type="subtitle" className="m-5 m-t-6 text-center p-2 ">
-              Escuchadas Recientemente
-            </ThemedText>
-            <View className="bg-cyan-950 rounded-3xl p-5">
-              {recent?.length > 0 && !loading ? (
-                <FlatList
-                  data={recent}
-                  keyExtractor={(item, index) => index.toString()}
+                  data={requestArtist.artists}
+                  keyExtractor={(item: any) => item.id}
                   renderItem={({ item }) => (
-                    <SmallListSongs
-                      item={item}
-                      getSongDetails={getSongDetails}
-                    />
+                    <ListOfArtists item={item} getDetails={getDetails} />
                   )}
+                  horizontal
+                  showsHorizontalScrollIndicator={false}
                 />
-              ) : (
-                <ActivityIndicator size="large" />
-              )}
-            </View>
+                <ThemedText
+                  type="subtitle"
+                  className=" m-5 text-white font-bold mt-8"
+                >
+                  Canciones mas escuchadas
+                </ThemedText>
+                <FlatList
+                  data={requestMusic.songs}
+                  keyExtractor={(item: any, index: number) => index.toString()}
+                  renderItem={({ item }) => (
+                    <ListSongs item={item} getSongDetails={getSongDetails} />
+                  )}
+                  horizontal
+                  showsHorizontalScrollIndicator={false}
+                />
+                <ThemedText type="subtitle" className="m-5 m-t-6 text-center p-2 ">
+                  Escuchadas Recientemente
+                </ThemedText>
+                <View className="rounded-3xl p-5">
+                  {recent?.length > 0 && !loading ? (
+                    <FlatList
+                      data={recent}
+                      keyExtractor={(item, index) => index.toString()}
+                      renderItem={({ item }) => (
+                        <SmallListSongs
+                          item={item}
+                          getSongDetails={getSongDetails}
+                        />
+                      )}
+                    />
+                  ) : (
+                    <ActivityIndicator size="large" />
+                  )}
+                </View>
+              </>
+            )}
           </View>
         )}
         refreshControl={

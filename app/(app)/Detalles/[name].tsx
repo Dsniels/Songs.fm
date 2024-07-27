@@ -63,20 +63,43 @@ const Detalles = () => {
     navigation.setOptions({ title: name, headerBlurEffect: "regular" });
 
     const fetchData = async () => {
-      const [{ Info, Songs = [], Albums = [], Artists = [] }, description] =
-        await Promise.all([
-          getArtistInformation(id),
-          getInfo(name, name, false),
-        ]);
+      const [artistInfoResult, descriptionResult] = await Promise.allSettled([
+        getArtistInformation(id),
+        getInfo(name, name, false),
+      ]);
 
-      setInfo({
-        info: Info || {},
-        songs: Songs || [],
-        albums: Albums || [],
-        artists: Artists,
-      });
-      const info = description?.map((i: any) => extractInfo(i)).join(" ");
-      setInformacion(info);
+      if (artistInfoResult.status === "fulfilled") {
+        const {
+          Info,
+          Songs = [],
+          Albums = [],
+          Artists = [],
+        } = artistInfoResult.value;
+        setInfo({
+          info: Info || {},
+          songs: Songs || [],
+          albums: Albums || [],
+          artists: Artists,
+        });
+      } else {
+        ToastAndroid.showWithGravity(
+          artistInfoResult.reason,
+          ToastAndroid.SHORT,
+          ToastAndroid.CENTER
+        );
+      }
+
+      if (descriptionResult.status === "fulfilled") {
+        const description = descriptionResult.value;
+        const info = description?.map((i: any) => extractInfo(i)).join("");
+        setInformacion(info);
+      } else {
+        ToastAndroid.showWithGravity(
+          descriptionResult.reason,
+          ToastAndroid.SHORT,
+          ToastAndroid.CENTER
+        );
+      }
     };
 
     fetchData().catch((e) =>
@@ -120,10 +143,11 @@ const Detalles = () => {
             >
               {informacion}
             </ThemedText>
-            <ThemedText className="mt-0" type="link">
-              {" "}
-              ...{ShowMore ? "show less" : "show more"}
-            </ThemedText>
+            {informacion.length > 2 && (
+              <ThemedText className="mt-0" type="link">
+                ...{ShowMore ? "show less" : "show more"}
+              </ThemedText>
+            )}
           </Pressable>
         </View>
       )}
@@ -240,9 +264,7 @@ const Detalles = () => {
             </View>
           </View>
         </View>
-      ) : (
-        <ActivityIndicator size="large" />
-      )}
+      ) : null}
     </ParallaxScrollView>
   );
 };

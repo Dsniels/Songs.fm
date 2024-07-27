@@ -1,10 +1,10 @@
 import { styles } from "@/Styles/styles";
 import { LinearGradient } from "expo-linear-gradient";
-import { ImageBackground, Pressable, Text, View } from "react-native";
+import { ImageBackground, Pressable, Text, TouchableOpacity, View } from "react-native";
 
 export const ListOfArtists = ({ item, getDetails }: any) => {
   return (
-    <Pressable
+    <TouchableOpacity
       style={{ elevation: 270 }}
       key={item.id}
       onPress={() => getDetails(item)}
@@ -32,6 +32,6 @@ export const ListOfArtists = ({ item, getDetails }: any) => {
           </View>
         </LinearGradient>
       </ImageBackground>
-    </Pressable>
+    </TouchableOpacity>
   );
 };
