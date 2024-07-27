@@ -34,11 +34,17 @@ export default function TabTwoScreen() {
   });
   const [selectDate, setSelectDate] = useState("short_term");
   const [recent, setRecent] = useState<Recently[]>([]);
-  const [requestArtist, setRequestArtist] = useState<{artists : Array<artist>, offset : number }>({
+  const [requestArtist, setRequestArtist] = useState<{
+    artists: Array<artist>;
+    offset: number;
+  }>({
     artists: [],
     offset: 0,
   });
-  const [requestMusic, setRequestMusic] = useState<{songs : Array<song>, offsetSongs : number}>({
+  const [requestMusic, setRequestMusic] = useState<{
+    songs: Array<song>;
+    offsetSongs: number;
+  }>({
     songs: [],
     offsetSongs: 0,
   });
@@ -107,9 +113,7 @@ export default function TabTwoScreen() {
       .catch((e) => ToastAndroid.show("Error fetching", 3000));
   }, [selectDate]);
 
-
   const renderGeneroItem = ({ item }: genero) => (
-
     <View className="m-3 rounded-lg" key={item.name}>
       <ThemedText type="defaultSemiBold">{item.name}</ThemedText>
       <View className="bg-gray-800 h-4 w-60 rounded-lg">

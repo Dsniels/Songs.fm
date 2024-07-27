@@ -56,7 +56,7 @@ export const getRecomendations = async (): Promise<any> => {
   });
 };
 
-export const getRecentlySongs = () : Promise<Recently> => {
+export const getRecentlySongs = (): Promise<Recently> => {
   return new Promise((resolve, reject) => {
     HttpCliente.get("/me/player/recently-played?limit=20")
       .then((response) => {

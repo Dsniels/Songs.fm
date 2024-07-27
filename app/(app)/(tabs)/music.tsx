@@ -22,7 +22,6 @@ export default function music() {
     });
   }, []);
 
-
   const fetchData = useCallback(async () => {
     const data_response: Recommendatios[] = await getRecomendations();
 
