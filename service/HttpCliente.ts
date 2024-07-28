@@ -26,7 +26,8 @@ const requestGenerico = {
   get: (url: string) => axios.get(url),
   post: (url: string, body: string) => axios.post(url, body),
   put: (url: string, body: string) => axios.put(url, body),
-  delete: (url: string, body?: string | string[]) => axios.delete(url, { data: body }),
+  delete: (url: string, body?: string | string[]) =>
+    axios.delete(url, { data: body }),
 };
 
 export default requestGenerico;
