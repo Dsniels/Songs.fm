@@ -74,31 +74,19 @@ const Detalles = () => {
         getInfo(name, name, false),
       ]);
 
-        const {
-          Info,
-          Songs = [],
-          Albums = [],
-          Artists = [],
-        } = artistInfoResult;
-        setInfo({
-          info: Info ,
-          songs: Songs ,
-          albums: Albums ,
-          artists: Artists,
-        });
+      const { Info, Songs = [], Albums = [], Artists = [] } = artistInfoResult;
+      setInfo({
+        info: Info,
+        songs: Songs,
+        albums: Albums,
+        artists: Artists,
+      });
 
+      const description = descriptionResult;
+      let info = description.map((i) => extractInfo(i)).join(" ");
+      if (informacion === "?") info = "I Dont found it  :(";
 
-    
-
-       
-
-        const description = descriptionResult;
-        let info = description.map((i ) => extractInfo(i)).join(" ");
-        if(informacion === '?') info = 'I Dont found it  :(';
-
-        setInformacion(info);
-
-
+      setInformacion(info);
     };
 
     fetchData().catch((e) =>

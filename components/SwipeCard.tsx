@@ -1,4 +1,12 @@
-import { Dispatch, SetStateAction, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import {
   Animated,
   Dimensions,
@@ -11,7 +19,15 @@ import { useFocusEffect, useIsFocused } from "@react-navigation/native";
 import { router } from "expo-router";
 import { CardType, song } from "@/types/Card.types";
 
-export const SwipeCard = <T,>({ children, items, setItems } : {children:(item:song)=>React.JSX.Element, items : song[], setItems: Dispatch<SetStateAction<song[]>>} ) => {
+export const SwipeCard = <T,>({
+  children,
+  items,
+  setItems,
+}: {
+  children: (item: song) => React.JSX.Element;
+  items: song[];
+  setItems: Dispatch<SetStateAction<song[]>>;
+}) => {
   const { height } = Dimensions.get("screen");
   const swipe = useRef(new Animated.ValueXY()).current;
   const titlSign = useRef(new Animated.Value(1)).current;
@@ -131,9 +147,8 @@ export const SwipeCard = <T,>({ children, items, setItems } : {children:(item:so
   );
   const getSongDetails = (Item: song) => {
     return router.push({
-      pathname: '(app)/songsDetails/[song]',
+      pathname: "(app)/songsDetails/[song]",
       params: { id: Item.id, name: Item.name, artists: Item.artists[0].name },
-
     });
   };
   return (

@@ -138,7 +138,7 @@ const SongDetails = () => {
         // skipcq: JS-0323
         .map((item) => extractInfo(item))
         .join(" ");
-        if(informacion === '?') informacion = 'I Dont found it  :(';
+      if (informacion === "?") informacion = "I Dont found it  :(";
       setInformacion(informacion);
     };
     fetchData().catch((e) =>
@@ -240,7 +240,6 @@ const SongDetails = () => {
           {showAbout === false ? (
             <View className=" bg-opacity-80 bg-[#000818] m-1 mt-0 pt-0 -top-4 w-full p-7 ">
               <ThemedText type="defaultSemiBold">Artistas</ThemedText>
-
 
               <ThemedView className=" flex flex-row justify-center content-center items-center bg-[#000218]">
                 <ScrollView

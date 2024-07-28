@@ -112,7 +112,7 @@ export default function HomeScreen() {
         </ThemedView>
 
         <Button color="blue" title="delete token" onPress={deleteToken} />
-    <SearchModal
+        <SearchModal
           showModal={showModal}
           setShowModal={setShowModal}
           text={text}
@@ -121,7 +121,6 @@ export default function HomeScreen() {
           handleTextChange={handleTextChange}
           getSongDetails={getSongDetails}
         />
-        
 
         {!isKeyboardVisible && (
           <Link style={styles.LinkLogin} href="/login">
