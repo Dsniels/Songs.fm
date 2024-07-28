@@ -8,27 +8,24 @@ import { features, Recently, Recommendatios, song, Track } from "@/types/Card.ty
 
 export const getTop = <T>(
   type: string,
-<<<<<<< HEAD
-=======
-  offset = 0,
->>>>>>> f8f3028746e285ca8831e21a03413370c401d43d
   time_range: string,
   offset = 0,
 ): Promise<T> => {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve, _) => {
     HttpCliente.get(`/me/top/${type}?offset=${offset}&time_range=${time_range}`)
       .then((response: AxiosResponse<T>) => {
         resolve(response.data);
       })
-      .catch(async(e) => {
+      .catch(async(_) => {
         await refreshToken();
-        reject(e);
+        await getTop;
+
       });
   });
 };
 
 export const search = (t: string): Promise<Track> => {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve, _) => {
     HttpCliente.get(`search?q=${t}&type=artist%2Ctrack`).then((response) => {
       resolve(response.data);
     });
@@ -62,13 +59,14 @@ export const getRecomendations = async (): Promise<Recommendatios[]> => {
 };
 
 export const getRecentlySongs = (): Promise<Recently> => {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve, _) => {
     HttpCliente.get("/me/player/recently-played?limit=20")
       .then((response) => {
         resolve(response.data);
       })
-      .catch((e) => {
-        reject(e);
+      .catch(async() => {
+        await refreshToken();
+        await getRecentlySongs;
       });
   });
 };
@@ -76,7 +74,7 @@ export const getRecentlySongs = (): Promise<Recently> => {
 export const getListOfSongs = (
   tracks: string[],
 ): Promise<AxiosResponse<song[]>> => {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve, _) => {
     HttpCliente.get(`/tracks?ids=${tracks}`)
       .then((response: AxiosResponse) => {
         resolve(response.data.tracks);
@@ -98,7 +96,7 @@ export const getSongInfo = async (id: string) => {
 };
 
 const songInfo = (id: string): Promise<song> => {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve, _) => {
     HttpCliente.get(`/tracks/${id}`)
       .then((response: AxiosResponse) => {
         resolve(response.data || {});
@@ -108,17 +106,17 @@ const songInfo = (id: string): Promise<song> => {
 };
 
 const checkLikeTrack = (id: string): Promise<boolean> => {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve, _) => {
     HttpCliente.get(`/me/tracks/contains?ids=${id}`)
       .then((response: AxiosResponse) => {
         resolve(response.data[0]);
       })
-      .catch(resolve);
+      .catch(refreshToken);
   });
 };
 
 const AudioFeatures = (id: string): Promise<features> => {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve, _) => {
     HttpCliente.get(`/audio-features/${id}`)
       .then((response: AxiosResponse) => {
         resolve(response.data);

@@ -25,7 +25,7 @@ import {
   ItemRespone,
   Recently,
   song,
-  user,
+  
 } from "@/types/Card.types";
 
 export default function TabTwoScreen() {
@@ -111,14 +111,13 @@ const onRefresh = useCallback(() => {
     setLoading(true);
 
 
-     return Promise.all([fetchData(), fetchRecentlySongs()]).then(() => {;
-    setLoading(false);
-     });
+     return Promise.all([fetchData(), fetchRecentlySongs()]).then(() => (
+    setLoading(false)
+     ));
   }, [fetchData]);
 
   useEffect(() => {
-    onRefresh()
-      .catch(() =>{ onRefresh();});
+    onRefresh().then(()=>setLoading(false)).catch(() =>{ onRefresh();});
   }, [selectDate]);
 
   const renderGeneroItem = ({ item }: genero) => (
@@ -137,6 +136,7 @@ const onRefresh = useCallback(() => {
     <SafeAreaView style={[styles.container]}>
       <FlatList
         stickyHeaderHiddenOnScroll
+        // skipcq: JS-0417
         renderItem={() => null}
         data={[]}
         // skipcq: JS-0417
