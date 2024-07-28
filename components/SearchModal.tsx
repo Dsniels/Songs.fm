@@ -1,9 +1,16 @@
-import { song, Track } from '@/types/Card.types';
-import { Dispatch, SetStateAction } from 'react'
-import { FlatList, Modal, NativeSyntheticEvent, TextInput, TextInputTextInputEventData, View } from 'react-native';
-import { ThemedView } from './ThemedView';
-import { Ionicons } from '@expo/vector-icons';
-import { SmallListSongs } from './SmallListSongs';
+import { song, Track } from "@/types/Card.types";
+import { Dispatch, SetStateAction } from "react";
+import {
+  FlatList,
+  Modal,
+  NativeSyntheticEvent,
+  TextInput,
+  TextInputTextInputEventData,
+  View,
+} from "react-native";
+import { ThemedView } from "./ThemedView";
+import { Ionicons } from "@expo/vector-icons";
+import { SmallListSongs } from "./SmallListSongs";
 
 export const SearchModal = ({
   showModal,
@@ -57,4 +64,4 @@ export const SearchModal = ({
       </View>
     </Modal>
   );
-}
+};

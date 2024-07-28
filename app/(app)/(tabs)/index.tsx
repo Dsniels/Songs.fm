@@ -19,8 +19,14 @@ import { ListSongs } from "@/components/ListSongs";
 import { ListOfArtists } from "@/components/ListOfArtists";
 import { SmallListSongs } from "@/components/SmallListSongs";
 
-import { artist, genero, ItemRespone, Recently, song, user } from "@/types/Card.types";
-
+import {
+  artist,
+  genero,
+  ItemRespone,
+  Recently,
+  song,
+  user,
+} from "@/types/Card.types";
 
 export default function TabTwoScreen() {
   const [{ sesionUsuario }, dispatch] = useStateValue();
@@ -71,10 +77,22 @@ export default function TabTwoScreen() {
 
   const fetchData = useCallback(async () => {
     const [data, dataTopSongs] = await Promise.all([
+<<<<<<< HEAD
       getTop<ItemRespone<artist[]>>("artists", selectDate, requestArtist.offset),
       getTop<ItemRespone<song[]>>("tracks", selectDate, requestMusic.offsetSongs),
+=======
+      getTop<ItemRespone<artist[]>>(
+        "artists",
+        requestArtist.offset,
+        selectDate,
+      ),
+      getTop<ItemRespone<song[]>>(
+        "tracks",
+        requestMusic.offsetSongs,
+        selectDate,
+      ),
+>>>>>>> f8f3028746e285ca8831e21a03413370c401d43d
     ]);
-
 
     setRequestArtist((prev) => ({
       ...prev,
@@ -200,7 +218,7 @@ const onRefresh = useCallback(() => {
                 </ThemedText>
                 <FlatList
                   data={requestArtist.artists}
-                  keyExtractor={(_,index) => index.toString()}
+                  keyExtractor={(_, index) => index.toString()}
                   // skipcq: JS-0417
                   renderItem={({ item }) => (
                     <ListOfArtists item={item} getDetails={getDetails} />
@@ -216,7 +234,7 @@ const onRefresh = useCallback(() => {
                 </ThemedText>
                 <FlatList
                   data={requestMusic.songs}
-                  keyExtractor={(_,index) => index.toString()}
+                  keyExtractor={(_, index) => index.toString()}
                   // skipcq: JS-0417
                   renderItem={({ item }) => (
                     <ListSongs item={item} getSongDetails={getSongDetails} />

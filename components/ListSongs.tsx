@@ -1,12 +1,7 @@
 import { styles } from "@/Styles/styles";
 import { song } from "@/types/Card.types";
 import { LinearGradient } from "expo-linear-gradient";
-import {
-  ImageBackground,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { ImageBackground, Text, TouchableOpacity, View } from "react-native";
 
 export const ListSongs = ({ item, getSongDetails }: {item:song, getSongDetails: (item:song)=>void}) => {
   return (

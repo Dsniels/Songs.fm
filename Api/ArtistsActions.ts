@@ -13,7 +13,7 @@ export const getArtistInformation = async (id: string) => {
   return { Info: info, Songs: songs, Albums: albums, Artists: artists };
 };
 
-const infoArtista = (id: string) : Promise<artist> => {
+const infoArtista = (id: string): Promise<artist> => {
   return new Promise((resolve, reject) => {
     HttpCliente.get(`/artists/${id}`)
       .then((response: AxiosResponse) => {

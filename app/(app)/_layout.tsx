@@ -2,12 +2,7 @@ import { useStateValue } from "@/Context/store";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { LinearGradient } from "expo-linear-gradient";
 import { Stack } from "expo-router";
-import {
-
-  AppState,
-  StyleSheet,
-  View,
-} from "react-native";
+import { AppState, StyleSheet, View } from "react-native";
 import { useAuth } from "@/hooks/useAuth";
 import { useEffect } from "react";
 
@@ -27,7 +22,7 @@ const CustomHeader = () => {
 };
 
 export default function Applayout() {
-  const [{sesionUsuario}, dispatch] = useStateValue();
+  const [{ sesionUsuario }, dispatch] = useStateValue();
   useEffect(() => {
     AppState.addEventListener("change", async (state) => {
       if (state === "inactive") {
@@ -35,8 +30,6 @@ export default function Applayout() {
       }
     });
   }, []);
-
-
 
   useAuth(dispatch);
 

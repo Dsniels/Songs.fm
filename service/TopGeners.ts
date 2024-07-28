@@ -1,8 +1,13 @@
+<<<<<<< HEAD
 import { artist, ItemRespone} from "@/types/Card.types";
 
 export const topGeneros = (data: ItemRespone<artist[]>) : {name : string,value:  number}[] => {
   
   const generos_data = data.items.map((item) => item.genres).flat() || [];
+=======
+export const topGeneros = (data: any) => {
+  const generos_data = data.items?.map((item: any) => item.genres).flat() || [];
+>>>>>>> f8f3028746e285ca8831e21a03413370c401d43d
   const frec = generos_data?.reduce((sum: [string, number][], item: string) => {
     const encontrado = sum.find((subArray) => subArray[0] === item);
     if (encontrado) {
