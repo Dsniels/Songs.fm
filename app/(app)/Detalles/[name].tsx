@@ -74,7 +74,6 @@ const Detalles = () => {
         getInfo(name, name, false),
       ]);
 
-<<<<<<< HEAD
         const {
           Info,
           Songs = [],
@@ -98,21 +97,8 @@ const Detalles = () => {
         if(informacion === '?') info = 'I Dont found it  :(';
 
         setInformacion(info);
-=======
-      const { Info, Songs = [], Albums = [], Artists = [] } = artistInfoResult;
-      setInfo({
-        info: Info,
-        songs: Songs,
-        albums: Albums,
-        artists: Artists,
-      });
->>>>>>> f8f3028746e285ca8831e21a03413370c401d43d
 
-      const description = descriptionResult;
-      const info = description
-        .map((i: annotationResponse | string) => extractInfo(i))
-        .join("");
-      setInformacion(info);
+
     };
 
     fetchData().catch((e) =>

@@ -77,21 +77,9 @@ export default function TabTwoScreen() {
 
   const fetchData = useCallback(async () => {
     const [data, dataTopSongs] = await Promise.all([
-<<<<<<< HEAD
       getTop<ItemRespone<artist[]>>("artists", selectDate, requestArtist.offset),
       getTop<ItemRespone<song[]>>("tracks", selectDate, requestMusic.offsetSongs),
-=======
-      getTop<ItemRespone<artist[]>>(
-        "artists",
-        requestArtist.offset,
-        selectDate,
-      ),
-      getTop<ItemRespone<song[]>>(
-        "tracks",
-        requestMusic.offsetSongs,
-        selectDate,
-      ),
->>>>>>> f8f3028746e285ca8831e21a03413370c401d43d
+
     ]);
 
     setRequestArtist((prev) => ({

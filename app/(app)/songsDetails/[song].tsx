@@ -241,20 +241,7 @@ const SongDetails = () => {
             <View className=" bg-opacity-80 bg-[#000818] m-1 mt-0 pt-0 -top-4 w-full p-7 ">
               <ThemedText type="defaultSemiBold">Artistas</ThemedText>
 
-<<<<<<< HEAD
-          <ThemedView className=" flex flex-row justify-center content-center items-center bg-[#000218]">
-            <ScrollView
-              className="bg-[#000818]"
-              horizontal
-              style={{ width: 80 }}
-            >
-              {Track.info.artists ? (
-                Track.info.artists.map((item: artist , index: number) => (
-                  <Pressable
-                    className="rounded-3xl m-3 px-2 bg-[#1F283D]"
-                    onPress={() => getDetails(item)}
-                    key={index}
-=======
+
               <ThemedView className=" flex flex-row justify-center content-center items-center bg-[#000218]">
                 <ScrollView
                   className="bg-[#000818]"
@@ -262,7 +249,7 @@ const SongDetails = () => {
                   style={{ width: 80 }}
                 >
                   {Track.info.artists ? (
-                    Track.info.artists.map((item: any, index: number) => (
+                    Track.info.artists.map((item: artist, index: number) => (
                       <Pressable
                         className="rounded-3xl m-3 px-2 bg-[#1F283D]"
                         onPress={() => getDetails(item)}
@@ -286,7 +273,6 @@ const SongDetails = () => {
                       width: 100,
                       borderRadius: 5,
                     }}
->>>>>>> f8f3028746e285ca8831e21a03413370c401d43d
                   >
                     <View
                       className="bg-sky-700"

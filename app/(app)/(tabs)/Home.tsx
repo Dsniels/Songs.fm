@@ -84,11 +84,7 @@ export default function HomeScreen() {
 
   const getSongDetails = (Item: song) => {
     return router.push({
-<<<<<<< HEAD
-      pathname: '(app)/songsDetails/[song]',
-=======
       pathname: "(app)/songsDetails/[song]",
->>>>>>> f8f3028746e285ca8831e21a03413370c401d43d
       params: { id: Item.id, name: Item.name, artists: Item.artists[0].name },
     });
   };
