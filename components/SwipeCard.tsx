@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Dispatch, SetStateAction, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   Animated,
   Dimensions,
@@ -9,9 +9,9 @@ import {
 import { Audio } from "expo-av";
 import { useFocusEffect, useIsFocused } from "@react-navigation/native";
 import { router } from "expo-router";
-import { CardType } from "@/types/Card.types";
+import { CardType, song } from "@/types/Card.types";
 
-export const SwipeCard = <T,>({ children, items, setItems } : any ) => {
+export const SwipeCard = <T,>({ children, items, setItems } : {children:(item:song)=>React.JSX.Element, items : song[], setItems: Dispatch<SetStateAction<song[]>>} ) => {
   const { height } = Dimensions.get("screen");
   const swipe = useRef(new Animated.ValueXY()).current;
   const titlSign = useRef(new Animated.Value(1)).current;
@@ -85,7 +85,7 @@ export const SwipeCard = <T,>({ children, items, setItems } : any ) => {
       await currentSound.unloadAsync();
       setCurrentSound(null);
     }
-    setItems((prevState: any) => prevState.slice(1));
+    setItems((prevState) => prevState.slice(1));
     swipe.setValue({ x: 0, y: 0 });
   }, [swipe, setItems, currentSound]);
 
@@ -129,24 +129,24 @@ export const SwipeCard = <T,>({ children, items, setItems } : any ) => {
       return () => onBlur();
     }, [currentSound, isFocused]),
   );
-  const getSongDetails = (Item: CardType) => {
+  const getSongDetails = (Item: song) => {
     return router.push({
       pathname: `(app)/songsDetails/[song]`,
-      params: { id: Item.id, name: Item.name, artists: Item.artist },
+      params: { id: Item.id, name: Item.name, artists: Item.artists[0].name },
     });
   };
   return (
     <View>
       <View>
         {items
-          .map((item: CardType, index: number) => (
+          .map((item, index: number) => (
             <Animated.View
               key={index}
               style={[index === 0 ? animatedCardStyle : {}]}
               {...(index === 0 ? panResponder.panHandlers : {})}
             >
               <Pressable onPress={() => getSongDetails(item)}>
-                {children(item, swipe, index === 0)}
+                {children(item)}
               </Pressable>
             </Animated.View>
           ))

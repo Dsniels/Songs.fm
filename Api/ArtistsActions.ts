@@ -1,6 +1,7 @@
-import { album, artist, song } from "@/types/Card.types";
+import { album, artist, song, Track } from "@/types/Card.types";
 import HttpCliente from "../service/HttpCliente";
 import { refreshToken } from "./SpotifyAuth";
+import { AxiosResponse } from "axios";
 
 export const getArtistInformation = async (id: string) => {
   const [info, songs, albums, artists] = await Promise.all([
@@ -15,41 +16,40 @@ export const getArtistInformation = async (id: string) => {
 const infoArtista = (id: string) : Promise<artist> => {
   return new Promise((resolve, reject) => {
     HttpCliente.get(`/artists/${id}`)
-      .then((response: any) => {
+      .then((response: AxiosResponse) => {
         resolve(response.data || {});
       })
-      .catch((e) => {
-        refreshToken();
-      });
+      .catch((_) => refreshToken());
   });
 };
 
 const TopSongsArtista = (id: string): Promise<song[]> => {
   return new Promise((resolve, reject) => {
     HttpCliente.get(`/artists/${id}/top-tracks`)
-      .then((response: any) => {
-        resolve(response.data.tracks || []);
+      .then((response: AxiosResponse<Track>) => {
+        resolve(response.data.tracks.items || []);
       })
-      .catch((e) => refreshToken());
+      .catch((_) => refreshToken());
   });
 };
 
 const TopAlbumsArtista = (id: string): Promise<album[]> => {
   return new Promise((resolve, reject) => {
     HttpCliente.get(`/artists/${id}/albums?limit=10`)
-      .then((response: any) => {
+      .then((response:AxiosResponse) => {
         resolve(response.data.items || []);
       })
-      .catch((e) => refreshToken());
+      .catch((_) => refreshToken());
   });
 };
 
 const similarArtist = (id: string): Promise<artist[]> => {
   return new Promise((resolve, reject) => {
     HttpCliente.get(`/artists/${id}/related-artists`)
-      .then((response: any) => {
+      .then((response: AxiosResponse) => {
+
         resolve(response.data.artists || []);
       })
-      .catch((e) => refreshToken());
+      .catch((_) => refreshToken());
   });
 };

@@ -4,12 +4,12 @@ import { seeds } from "@/service/seeds";
 import { refreshToken } from "./SpotifyAuth";
 import { ToastAndroid } from "react-native";
 import { notificationAsync, NotificationFeedbackType } from "expo-haptics";
-import { features, Recently, song } from "@/types/Card.types";
+import { features, Recently, Recommendatios, song, Track } from "@/types/Card.types";
 
 export const getTop = <T> (
   type: string,
-  offset: number = 0,
   time_range: string,
+  offset = 0,
 ): Promise<T> => {
   return new Promise((resolve, reject) => {
     HttpCliente.get(`/me/top/${type}?offset=${offset}&time_range=${time_range}`)
@@ -17,13 +17,14 @@ export const getTop = <T> (
         
         resolve(response.data);
       })
-      .catch((e) => {
-        resolve(e);
+      .catch(async(e) => {
+        await refreshToken();
+        reject(e);
       });
   });
 };
 
-export const search = (t: string): Promise<object> => {
+export const search = (t: string): Promise<Track> => {
   return new Promise((resolve, reject) => {
     HttpCliente.get(`search?q=${t}&type=artist%2Ctrack`).then((response) => {
       resolve(response.data);
@@ -31,7 +32,7 @@ export const search = (t: string): Promise<object> => {
   });
 };
 
-export const getRecomendations = async (): Promise<any> => {
+export const getRecomendations = async (): Promise<Recommendatios[]> => {
   const { songs, artists, generos } = await seeds();
   const randomDanceability = Math.random();
   const randomPopularity = Math.floor(Math.random() * 100);
@@ -52,7 +53,7 @@ export const getRecomendations = async (): Promise<any> => {
           ToastAndroid.SHORT,
           ToastAndroid.CENTER,
         );
-        resolve(e);
+        reject(e);
       });
   });
 };
@@ -71,13 +72,13 @@ export const getRecentlySongs = () : Promise<Recently> => {
 
 export const getListOfSongs = (
   tracks: string[],
-): Promise<AxiosResponse<any>> => {
+): Promise<AxiosResponse<song[]>> => {
   return new Promise((resolve, reject) => {
     HttpCliente.get(`/tracks?ids=${tracks}`)
       .then((response: AxiosResponse) => {
         resolve(response.data.tracks);
       })
-      .catch((e: any) => {
+      .catch((e: AxiosResponse) => {
         refreshToken();
         resolve(e);
       });
@@ -96,7 +97,7 @@ export const getSongInfo = async (id: string) => {
 const songInfo = (id: string) : Promise<song>=> {
   return new Promise((resolve, reject) => {
     HttpCliente.get(`/tracks/${id}`)
-      .then((response: any) => {
+      .then((response: AxiosResponse) => {
         resolve(response.data || {});
       })
       .catch((e) => resolve(e));
@@ -106,7 +107,7 @@ const songInfo = (id: string) : Promise<song>=> {
 const checkLikeTrack = (id: string) : Promise<boolean> => {
   return new Promise((resolve, reject) => {
     HttpCliente.get(`/me/tracks/contains?ids=${id}`)
-      .then((response: any) => {
+      .then((response: AxiosResponse) => {
         resolve(response.data[0]);
       })
       .catch(resolve);
@@ -116,7 +117,7 @@ const checkLikeTrack = (id: string) : Promise<boolean> => {
 const AudioFeatures = (id: string): Promise<features> => {
   return new Promise((resolve, reject) => {
     HttpCliente.get(`/audio-features/${id}`)
-      .then((response: any) => {
+      .then((response: AxiosResponse) => {
         resolve(response.data);
       })
       .catch(resolve);
@@ -126,7 +127,7 @@ const AudioFeatures = (id: string): Promise<features> => {
 export const AddToFav = (id: string) => {
   return new Promise((resolve, reject) => {
     HttpCliente.put(`/me/tracks?ids=${id}`, id)
-      .then((response: any) => {
+      .then((response: AxiosResponse) => {
         notificationAsync(NotificationFeedbackType.Success);
         resolve(response);
       })
@@ -144,7 +145,7 @@ export const AddToFav = (id: string) => {
 export const deleteFromFav = (id: string) => {
   return new Promise((resolve, reject) => {
     HttpCliente.delete(`/me/tracks?ids=${id}`, id)
-      .then((response: any) => {
+      .then((response: AxiosResponse) => {
         notificationAsync(NotificationFeedbackType.Warning);
         resolve(response);
       })

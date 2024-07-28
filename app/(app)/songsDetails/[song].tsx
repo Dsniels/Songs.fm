@@ -134,10 +134,11 @@ const SongDetails = () => {
         audioFeatures: Features || {},
       }));
       setLike(Like);
-      const informacion = description
+      let informacion = description
         // skipcq: JS-0323
         .map((item) => extractInfo(item))
         .join(" ");
+        if(informacion === '?') informacion = 'I Dont found it  :(';
       setInformacion(informacion);
     };
     fetchData().catch((e) =>
@@ -239,7 +240,7 @@ const SongDetails = () => {
               style={{ width: 80 }}
             >
               {Track.info.artists ? (
-                Track.info.artists.map((item: any, index: number) => (
+                Track.info.artists.map((item: artist , index: number) => (
                   <Pressable
                     className="rounded-3xl m-3 px-2 bg-[#1F283D]"
                     onPress={() => getDetails(item)}

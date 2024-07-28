@@ -1,19 +1,20 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { generos } from "./Generos";
+import { artist, ItemRespone, song } from "@/types/Card.types";
 
 export const seedGeners = async (seedGeners: string) => {
   await AsyncStorage.setItem("seedGeneros", seedGeners);
 };
 
-const extractIDs = (data: any): string[] => {
-  const fsd = data?.map((i: any) => i.id);
+const extractIDs = <T extends { id: string }>(data: T[]): string[] => {
+  const fsd = data.map((i: T) => i.id);
   return fsd;
 };
 
-export const seedTracks = async (data: any) => {
+export const seedTracks = async (data: song[]) => {
   const seedPrev = (await AsyncStorage.getItem("seedTrack")) || false;
   let ids: string[] = extractIDs(data);
-  let newIds: any = [];
+  let newIds: Set<string>;
   if (seedPrev) {
     const seedArray = convertToArray(seedPrev);
     ids = [...ids, ...seedArray];
@@ -24,19 +25,19 @@ export const seedTracks = async (data: any) => {
   await AsyncStorage.setItem("seedTrack", ids.toString());
 };
 
-export const seedArtist = async (data: any) => {
+export const seedArtist = async (data: ItemRespone<artist[]>) => {
   const seedPrev = (await AsyncStorage.getItem("seedArtists")) || false;
-  let ids: any = extractIDs(data.items);
+  let ids: string[] = extractIDs(data.items);
   if (seedPrev) {
     const seedArray = convertToArray(seedPrev);
     ids = [...ids, ...seedArray];
-    ids = new Set(ids);
-    ids = Array.from(ids);
+    const newIds = new Set(ids);
+    ids = Array.from(newIds);
   }
   await AsyncStorage.setItem("seedArtists", ids.toString());
 };
 
-const randomIndex = (array: any[]) => {
+const randomIndex = (array: string[]) => {
   return Math.floor(Math.random() * array.length);
 };
 

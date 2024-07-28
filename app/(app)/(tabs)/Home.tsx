@@ -19,14 +19,14 @@ import { styles } from "@/Styles/styles";
 import { useCallback, useEffect, useState } from "react";
 import { search } from "@/Api/SongsActions";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { song } from "@/types/Card.types";
+import { song, Track } from "@/types/Card.types";
 import { SearchModal } from "@/components/SearchModal";
 
 export default function HomeScreen() {
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const router = useRouter();
-  const [items, setItems] = useState<any | undefined>(undefined);
+  const [items, setItems] = useState<Track | null>(null);
   const [text, setText] = useState("");
 
   useEffect(() => {
@@ -52,7 +52,7 @@ export default function HomeScreen() {
     useCallback(() => {
       const handleRouteChange = () => {
         setText("");
-        setItems(undefined);
+        setItems(null);
         setShowModal(false);
       };
 
@@ -71,7 +71,7 @@ export default function HomeScreen() {
   };
 
   const handleSearch = () => {
-    if (!text) setItems(undefined);
+    if (!text) setItems(null);
     search(text).then((data) => {
       setItems(data);
     });
@@ -79,12 +79,12 @@ export default function HomeScreen() {
 
   const handleTextChange = (t: string) => {
     setText(t);
-    if (t) setItems(undefined);
+    if (t) setItems(null);
   };
 
   const getSongDetails = (Item: song) => {
     return router.push({
-      pathname: `(app)/songsDetails/[song]`,
+      pathname: '(app)/songsDetails/[song]',
       params: { id: Item.id, name: Item.name, artists: Item.artists[0].name },
     });
   };
@@ -112,16 +112,16 @@ export default function HomeScreen() {
         </ThemedView>
 
         <Button color="blue" title="delete token" onPress={deleteToken} />
-
-        <SearchModal
+    <SearchModal
           showModal={showModal}
           setShowModal={setShowModal}
           text={text}
-          items={items}
+          items={items as Track}
           handleSearch={handleSearch}
           handleTextChange={handleTextChange}
           getSongDetails={getSongDetails}
         />
+        
 
         {!isKeyboardVisible && (
           <Link style={styles.LinkLogin} href="/login">

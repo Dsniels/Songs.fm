@@ -52,14 +52,18 @@ export type Recently = {
 export type annotations = {
   result: { artist_names: string };
 };
+export type childrenType ={
+  children : Array<childrenType>;
+}
 export type annotationResponse = {
-  children: Array<{ children: string | object }>;
+  children: Array<{ children: Array<string | object> }>;
 };
 
 export type user ={
         display_name : string;
         images : Array<{url:string}>
 }
+
 
 export type items<T>={
         item : T

@@ -1,4 +1,5 @@
 import { styles } from "@/Styles/styles";
+import { song } from "@/types/Card.types";
 import { LinearGradient } from "expo-linear-gradient";
 import {
   ImageBackground,
@@ -7,7 +8,7 @@ import {
   View,
 } from "react-native";
 
-export const ListSongs = ({ item, getSongDetails }: any) => {
+export const ListSongs = ({ item, getSongDetails }: {item:song, getSongDetails: (item:song)=>void}) => {
   return (
     <TouchableOpacity key={item.id} onPress={() => getSongDetails(item)}>
       <ImageBackground
@@ -15,7 +16,7 @@ export const ListSongs = ({ item, getSongDetails }: any) => {
         style={styles.TopSongs}
         source={{
           uri:
-            item.album?.images[0].url ||
+            item.album.images[0].url ||
             "https://images.pexels.com/photos/145707/pexels-photo-145707.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
         }}
       >

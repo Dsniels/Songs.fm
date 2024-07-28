@@ -82,7 +82,9 @@ const Detalles = () => {
        
 
         const description = descriptionResult;
-        const info = description.map((i : annotationResponse | string ) => extractInfo(i)).join("");
+        let info = description.map((i ) => extractInfo(i)).join(" ");
+        if(informacion === '?') info = 'I Dont found it  :(';
+
         setInformacion(info);
 
     };

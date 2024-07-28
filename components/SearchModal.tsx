@@ -17,13 +17,14 @@ export const SearchModal = ({
   showModal: boolean;
   setShowModal: Dispatch<SetStateAction<boolean>>;
   text: string;
-  items: Track;
+  items: Track ;
   handleSearch:
     | ((e: NativeSyntheticEvent<TextInputTextInputEventData>) => void)
     | undefined;
   handleTextChange: ((text: string) => void) | undefined;
-  getSongDetails: ((item: song) => void) | undefined;
+  getSongDetails: ((item: song) => void);
 }) => {
+
   return (
     <Modal
       className="bg-[#000818] m-0 rounded-lg"
@@ -44,8 +45,7 @@ export const SearchModal = ({
             onChangeText={handleTextChange}
           />
         </ThemedView>
-
-        {items && showModal ? (
+{items && showModal ? (
           <FlatList
             data={items.tracks.items}
             renderItem={({ item }) => (

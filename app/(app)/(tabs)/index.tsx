@@ -5,7 +5,6 @@ import {
   ActivityIndicator,
   FlatList,
   Image,
-  ToastAndroid,
 } from "react-native";
 import { ThemedText } from "@/components/ThemedText";
 import { useCallback, useEffect, useState } from "react";
@@ -24,13 +23,14 @@ import { artist, genero, ItemRespone, Recently, song, user } from "@/types/Card.
 
 
 export default function TabTwoScreen() {
-  const [{ sesionUsuario }] = useStateValue();
+  const [{ sesionUsuario }, dispatch] = useStateValue();
   const [generos, setGeneros] = useState<{ name: string; value: number }[]>([]);
   const [loading, setLoading] = useState(false);
-  const [usuario, setUsuario] = useState<user>({
+  const [usuario, setUsuario] = useState({
     display_name: "",
-    images: [{ url: "" }],
+    images: {url : ''},
   });
+  
   const [selectDate, setSelectDate] = useState("short_term");
   const [recent, setRecent] = useState<song[]>([]);
   const [requestArtist, setRequestArtist] = useState<{
@@ -71,8 +71,8 @@ export default function TabTwoScreen() {
 
   const fetchData = useCallback(async () => {
     const [data, dataTopSongs] = await Promise.all([
-      getTop<ItemRespone<artist[]>>("artists", requestArtist.offset, selectDate),
-      getTop<ItemRespone<song[]>>("tracks", requestMusic.offsetSongs, selectDate),
+      getTop<ItemRespone<artist[]>>("artists", selectDate, requestArtist.offset),
+      getTop<ItemRespone<song[]>>("tracks", selectDate, requestMusic.offsetSongs),
     ]);
 
 
@@ -94,24 +94,25 @@ export default function TabTwoScreen() {
   }, [selectDate]);
 
   useEffect(() => {
+
     if (sesionUsuario) {
       setUsuario(sesionUsuario.usuario);
+
     }
   }, [sesionUsuario]);
 
-  const onRefresh = useCallback(async () => {
+const onRefresh = useCallback(() => {
     setLoading(true);
 
-    await Promise.all([fetchData(), fetchRecentlySongs()]);
+
+     return Promise.all([fetchData(), fetchRecentlySongs()]).then(() => {;
     setLoading(false);
+     });
   }, [fetchData]);
 
   useEffect(() => {
     onRefresh()
-      .finally(() => {
-        setLoading(false);
-      })
-      .catch(() => ToastAndroid.show("Error fetching", 3000));
+      .catch(() =>{ onRefresh();});
   }, [selectDate]);
 
   const renderGeneroItem = ({ item }: genero) => (
@@ -137,10 +138,11 @@ export default function TabTwoScreen() {
           <View className="m-1">
             <View className="flex mt-16 items-center ">
               <Image
-                className="w-24 h-24 rounded-full m-4"
+                className="w-28 h-28 rounded-full m-4"
                 source={{
+                  scale: 1,
                   uri:
-                    usuario.images[0].url ||
+                  usuario.images.url ||
                     "https://filestore.community.support.microsoft.com/api/images/0ce956b2-9787-4756-a580-299568810730?upload=true",
                 }}
               />
