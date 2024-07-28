@@ -25,7 +25,6 @@ import {
   ItemRespone,
   Recently,
   song,
-  
 } from "@/types/Card.types";
 
 export default function TabTwoScreen() {
@@ -34,9 +33,9 @@ export default function TabTwoScreen() {
   const [loading, setLoading] = useState(false);
   const [usuario, setUsuario] = useState({
     display_name: "",
-    images: {url : ''},
+    images: { url: "" },
   });
-  
+
   const [selectDate, setSelectDate] = useState("short_term");
   const [recent, setRecent] = useState<song[]>([]);
   const [requestArtist, setRequestArtist] = useState<{
@@ -77,9 +76,16 @@ export default function TabTwoScreen() {
 
   const fetchData = useCallback(async () => {
     const [data, dataTopSongs] = await Promise.all([
-      getTop<ItemRespone<artist[]>>("artists", selectDate, requestArtist.offset),
-      getTop<ItemRespone<song[]>>("tracks", selectDate, requestMusic.offsetSongs),
-
+      getTop<ItemRespone<artist[]>>(
+        "artists",
+        selectDate,
+        requestArtist.offset,
+      ),
+      getTop<ItemRespone<song[]>>(
+        "tracks",
+        selectDate,
+        requestMusic.offsetSongs,
+      ),
     ]);
 
     setRequestArtist((prev) => ({
@@ -100,24 +106,25 @@ export default function TabTwoScreen() {
   }, [selectDate]);
 
   useEffect(() => {
-
     if (sesionUsuario) {
       setUsuario(sesionUsuario.usuario);
-
     }
   }, [sesionUsuario]);
 
-const onRefresh = useCallback(() => {
+  const onRefresh = useCallback(() => {
     setLoading(true);
 
-
-     return Promise.all([fetchData(), fetchRecentlySongs()]).then(() => (
-    setLoading(false)
-     ));
+    return Promise.all([fetchData(), fetchRecentlySongs()]).then(() =>
+      setLoading(false),
+    );
   }, [fetchData]);
 
   useEffect(() => {
-    onRefresh().then(()=>setLoading(false)).catch(() =>{ onRefresh();});
+    onRefresh()
+      .then(() => setLoading(false))
+      .catch(() => {
+        onRefresh();
+      });
   }, [selectDate]);
 
   const renderGeneroItem = ({ item }: genero) => (
@@ -148,7 +155,7 @@ const onRefresh = useCallback(() => {
                 source={{
                   scale: 1,
                   uri:
-                  usuario.images.url ||
+                    usuario.images.url ||
                     "https://filestore.community.support.microsoft.com/api/images/0ce956b2-9787-4756-a580-299568810730?upload=true",
                 }}
               />
