@@ -120,6 +120,11 @@ const onRefresh = useCallback(() => {
     onRefresh().then(()=>setLoading(false)).catch(() =>{ onRefresh();});
   }, [selectDate]);
 
+  /** 
+   * Renders a single genre item within a list.
+   * @param {Object} item - The genre item to be rendered.
+   * @returns A JSX element representing the genre item.
+   */
   const renderGeneroItem = ({ item }: genero) => (
     <View className="m-3 rounded-lg" key={item.name}>
       <ThemedText type="defaultSemiBold">{item.name}</ThemedText>
