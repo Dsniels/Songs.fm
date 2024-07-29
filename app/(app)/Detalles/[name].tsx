@@ -74,35 +74,24 @@ const Detalles = () => {
         getInfo(name, name, false),
       ]);
 
-        const {
-          Info,
-          Songs = [],
-          Albums = [],
-          Artists = [],
-        } = artistInfoResult;
-        setInfo({
-          info: Info ,
-          songs: Songs ,
-          albums: Albums ,
-          artists: Artists,
-        });
+      const { Info, Songs = [], Albums = [], Artists = [] } = artistInfoResult;
+      setInfo({
+        info: Info,
+        songs: Songs,
+        albums: Albums,
+        artists: Artists,
+      });
 
 
-    
+      const description = descriptionResult;
+      let info = description.map((i) => extractInfo(i)).join(" ");
+      if (informacion === "?") info = "I Dont found it  :(";
 
-       
-
-        const description = descriptionResult;
-        let info = description.map((i ) => extractInfo(i)).join(" ");
-        if(informacion === '?') info = 'I Dont found it  :(';
-
-        setInformacion(info);
-
-
+      setInformacion(info);
     };
 
     fetchData().catch((e) =>
-      ToastAndroid.showWithGravity(e, ToastAndroid.SHORT, ToastAndroid.CENTER),
+      ToastAndroid.showWithGravity(e, ToastAndroid.SHORT, ToastAndroid.CENTER)
     );
   }, [name, id, navigation]);
 
@@ -158,13 +147,11 @@ const Detalles = () => {
           </View>
           <View>
             <View style={{ margin: 30 }}>
-              <ThemedText type="subtitle">Popularidad:</ThemedText>
-              <ThemedText type="subtitle">
-                {infoArtist.info.popularity}
-              </ThemedText>
+              <ThemedText type="subtitle">Popularity {infoArtist.info.popularity} of 100</ThemedText>
+          
 
               <ThemedText style={{ marginTop: 20 }} type="subtitle">
-                Géneros
+                Genres              
               </ThemedText>
               <ThemedText numberOfLines={3}>
                 {infoArtist.info.genres.join(", ") || "No disponible"}
@@ -172,9 +159,9 @@ const Detalles = () => {
             </View>
             <View>
               <ThemedText style={{ marginTop: 20 }} type="subtitle">
-                Canciones Top
+                Top Songs
               </ThemedText>
-              {infoArtist.songs.length > 0 && infoArtist.songs ? (
+              {infoArtist.songs ? (
                 infoArtist.songs.map((item: song, index: number) => (
                   <SmallListSongs
                     key={index}
@@ -186,7 +173,7 @@ const Detalles = () => {
                 <ThemedText>No hay canciones disponibles</ThemedText>
               )}
               <ThemedText style={{ marginTop: 20 }} type="subtitle">
-                Albumes
+                Albums
               </ThemedText>
               <ScrollView horizontal>
                 {infoArtist.albums.map((item: album) => (
@@ -235,7 +222,7 @@ const Detalles = () => {
               </ScrollView>
 
               <ThemedText style={{ marginTop: 20 }} type="subtitle">
-                Te podría interesar...
+                You may be interested...
               </ThemedText>
 
               <FlatList
@@ -255,7 +242,7 @@ const Detalles = () => {
                     type="link"
                     style={{ justifyContent: "center", textAlign: "justify" }}
                   >
-                    Escuchar en Spotify
+                    Listen on Spotify
                   </ThemedText>
                 </Pressable>
               </View>

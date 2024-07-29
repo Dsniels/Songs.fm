@@ -1,4 +1,4 @@
-import { Pressable, Text, ToastAndroid } from "react-native";
+import { Pressable, SafeAreaView, Text, ToastAndroid } from "react-native";
 import * as AuthSession from "expo-auth-session";
 import { useEffect } from "react";
 import * as WebBrowser from "expo-web-browser";
@@ -79,13 +79,12 @@ export default function login() {
   }, [response]);
 
   return (
-    <ThemedView style={styles.stepContainer}>
-      <ThemedText type="subtitle">Conecta tu cuenta de Spotify</ThemedText>
-      <Pressable className="flex bg-green-500" onPress={() => promptAsync()}>
-        <Text className="text-cyan-100 ">Iniciar Sesion</Text>
+    <SafeAreaView className="flex-1 align-middle justify-center items-center bg-slate-900 ">
+      <ThemedText type="subtitle">Connect your Account </ThemedText>
+      <Pressable className="flex rounded-lg m-4 p-3 w-auto h-auto bg-green-500" onPress={() => promptAsync()}>
+        <Text className="text-cyan-100 ">Log In</Text>
       </Pressable>
 
-      <ThemedText>{Linking.createURL("login")}</ThemedText>
-    </ThemedView>
+    </SafeAreaView>
   );
 }

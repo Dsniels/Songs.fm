@@ -210,9 +210,9 @@ const SongDetails = () => {
           </View>
           <View className="mb-0 mt-3 flex justify-evenly flex-wrap flex-row content-evenly w-fit">
             <Pressable
-              className="w-44 p-2 bg-opacity-70"
+              className="w-44 p-2 bg-opacity-70 rounded-t-md"
               style={{
-                backgroundColor: !showAbout ? "#000818" : "transparent",
+                backgroundColor: !showAbout ? "#0f172a" : "transparent",
               }}
               onPress={() => setShowAbout(false)}
             >
@@ -220,12 +220,12 @@ const SongDetails = () => {
                 className="flex w-full justify-center text-center"
                 type="subtitle"
               >
-                Caracteristicas
+                Features
               </ThemedText>
             </Pressable>
             <Pressable
-              className=" flex flex-wrap w-40 text-center align-middle justify-items-center content-center justify-center bg-opacity-70 "
-              style={{ backgroundColor: showAbout ? "#000818" : "transparent" }}
+              className=" flex flex-wrap w-40 text-center align-middle justify-items-center content-center justify-center bg-opacity-70  rounded-t-md"
+              style={{ backgroundColor: showAbout ? "#0f172a" : "transparent" }}
               onPress={() => setShowAbout(true)}
             >
               <ThemedText
@@ -238,13 +238,13 @@ const SongDetails = () => {
           </View>
 
           {showAbout === false ? (
-            <View className=" bg-opacity-80 bg-[#000818] m-1 mt-0 pt-0 -top-4 w-full p-7 ">
-              <ThemedText type="defaultSemiBold">Artistas</ThemedText>
+            <View className=" bg-opacity-80 bg-[#0f172a] m-1 mt-0 pt-0 -top-4 w-full p-7 rounded-b-md rounded-r-md shadow-sm shadow-gray-700">
+              <ThemedText type="defaultSemiBold">Artists</ThemedText>
 
 
-              <ThemedView className=" flex flex-row justify-center content-center items-center bg-[#000218]">
+              <ThemedView className=" flex flex-row justify-center content-center items-center bg-[#0f172a]">
                 <ScrollView
-                  className="bg-[#000818]"
+                  className="bg-[#0f172a]"
                   horizontal
                   style={{ width: 80 }}
                 >
@@ -264,7 +264,7 @@ const SongDetails = () => {
                 </ScrollView>
               </ThemedView>
 
-              <View className=" flex flex-wrap mt-8 flex-row ">
+              <View className=" flex flex-wrap mt-8 flex-row rounded-b-md rounded-r-md shadow-sm shadow-gray-700">
                 <View style={styles.caracteristica}>
                   <View
                     className="bg-gray-800"
@@ -425,7 +425,7 @@ const SongDetails = () => {
             </View>
           ) : showAbout ? (
             <>
-              <View className=" bg-opacity-80 bg-[#000818] m-1 mt-0 pt-0 -top-4 w-fit ">
+              <View className=" bg-opacity-80 bg-[#0f172a] m-1 mt-0 pt-0 -top-4 w-fit rounded-b-md rounded-l-md shadow-sm shadow-gray-700 ">
                 <ThemedText
                   className="p-7"
                   style={{ justifyContent: "center", textAlign: "justify" }}
@@ -448,7 +448,7 @@ const SongDetails = () => {
                 type="link"
                 style={{ justifyContent: "center", textAlign: "justify" }}
               >
-                Escuchar en Spotify
+                Listen on Spotify
               </ThemedText>
             </Pressable>
           </View>

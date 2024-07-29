@@ -34,13 +34,13 @@ export default function HomeScreen() {
       "keyboardDidShow",
       () => {
         setKeyboardVisible(true);
-      },
+      }
     );
     const keyboardDidHideListener = Keyboard.addListener(
       "keyboardDidHide",
       () => {
         setKeyboardVisible(false);
-      },
+      }
     );
 
     return () => {
@@ -59,7 +59,7 @@ export default function HomeScreen() {
       return () => {
         handleRouteChange();
       };
-    }, []),
+    }, [])
   );
   const deleteToken = async () => {
     await AsyncStorage.clear();
@@ -98,6 +98,11 @@ export default function HomeScreen() {
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         keyboardVerticalOffset={Platform.OS === "ios" ? 64 : 0}
       >
+        <View style={styles.titleContainer}>
+          <ThemedText className="text-lg text-white font-bold" >
+            Search For Your Favorite Songs
+          </ThemedText>
+        </View>
         <Pressable
           className="flex  align-middle m-1 bg-blue-950 rounded-2xl justify-center items-start p-3 shadow-lg shadow-cyan-500/50 "
           onPress={() => setShowModal(true)}
@@ -106,38 +111,19 @@ export default function HomeScreen() {
             <Ionicons name="search" size={24} color="white" />
           </View>
         </Pressable>
-        <ThemedView style={styles.titleContainer}>
-          <ThemedText type="title">Hola Mundo</ThemedText>
-          <HelloWave />
-        </ThemedView>
 
-        <Button color="blue" title="delete token" onPress={deleteToken} />
-    <SearchModal
+        <SearchModal
           showModal={showModal}
           setShowModal={setShowModal}
           text={text}
           items={items as Track}
+          // skipcq: JS-0417
           handleSearch={handleSearch}
+          // skipcq: JS-0417
           handleTextChange={handleTextChange}
+          // skipcq: JS-0417
           getSongDetails={getSongDetails}
         />
-        
-
-        {!isKeyboardVisible && (
-          <Link style={styles.LinkLogin} href="/login">
-            <Pressable>
-              <Text
-                style={{
-                  color: "white",
-                  fontStyle: "normal",
-                  fontWeight: "bold",
-                }}
-              >
-                Login
-              </Text>
-            </Pressable>
-          </Link>
-        )}
       </KeyboardAvoidingView>
     </SafeAreaView>
   );

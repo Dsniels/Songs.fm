@@ -5,6 +5,8 @@ import {
   ActivityIndicator,
   FlatList,
   Image,
+  TouchableOpacity,
+  Modal,
 } from "react-native";
 import { ThemedText } from "@/components/ThemedText";
 import { useCallback, useEffect, useState } from "react";
@@ -18,25 +20,26 @@ import { Picker } from "@react-native-picker/picker";
 import { ListSongs } from "@/components/ListSongs";
 import { ListOfArtists } from "@/components/ListOfArtists";
 import { SmallListSongs } from "@/components/SmallListSongs";
-
+import { Feather } from "@expo/vector-icons";
 import {
   artist,
   genero,
   ItemRespone,
   Recently,
   song,
-  
 } from "@/types/Card.types";
-
+import * as SecureStorage from "expo-secure-store";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { AntDesign } from "@expo/vector-icons";
 export default function TabTwoScreen() {
   const [{ sesionUsuario }, dispatch] = useStateValue();
   const [generos, setGeneros] = useState<{ name: string; value: number }[]>([]);
   const [loading, setLoading] = useState(false);
   const [usuario, setUsuario] = useState({
     display_name: "",
-    images: {url : ''},
+    images: { url: "" },
   });
-  
+  const [modal, setModal] = useState(false);
   const [selectDate, setSelectDate] = useState("short_term");
   const [recent, setRecent] = useState<song[]>([]);
   const [requestArtist, setRequestArtist] = useState<{
@@ -77,9 +80,16 @@ export default function TabTwoScreen() {
 
   const fetchData = useCallback(async () => {
     const [data, dataTopSongs] = await Promise.all([
-      getTop<ItemRespone<artist[]>>("artists", selectDate, requestArtist.offset),
-      getTop<ItemRespone<song[]>>("tracks", selectDate, requestMusic.offsetSongs),
-
+      getTop<ItemRespone<artist[]>>(
+        "artists",
+        selectDate,
+        requestArtist.offset
+      ),
+      getTop<ItemRespone<song[]>>(
+        "tracks",
+        selectDate,
+        requestMusic.offsetSongs
+      ),
     ]);
 
     setRequestArtist((prev) => ({
@@ -100,31 +110,27 @@ export default function TabTwoScreen() {
   }, [selectDate]);
 
   useEffect(() => {
-
     if (sesionUsuario) {
       setUsuario(sesionUsuario.usuario);
-
     }
   }, [sesionUsuario]);
 
-const onRefresh = useCallback(() => {
+  const onRefresh = useCallback(() => {
     setLoading(true);
 
-
-     return Promise.all([fetchData(), fetchRecentlySongs()]).then(() => (
-    setLoading(false)
-     ));
+    return Promise.all([fetchData(), fetchRecentlySongs()]).then(() =>
+      setLoading(false)
+    );
   }, [fetchData]);
 
   useEffect(() => {
-    onRefresh().then(()=>setLoading(false)).catch(() =>{ onRefresh();});
+    onRefresh()
+      .then(() => setLoading(false))
+      .catch(() => {
+        onRefresh();
+      });
   }, [selectDate]);
 
-  /** 
-   * Renders a single genre item within a list.
-   * @param {Object} item - The genre item to be rendered.
-   * @returns A JSX element representing the genre item.
-   */
   const renderGeneroItem = ({ item }: genero) => (
     <View className="m-3 rounded-lg" key={item.name}>
       <ThemedText type="defaultSemiBold">{item.name}</ThemedText>
@@ -137,8 +143,22 @@ const onRefresh = useCallback(() => {
     </View>
   );
 
+  const HandleSettings = () => {
+    setModal(false);
+    SecureStorage.deleteItemAsync("token").then(async () => {
+      await AsyncStorage.clear();
+      router.replace("/login");
+    });
+  };
+
   return (
-    <SafeAreaView style={[styles.container]}>
+    <SafeAreaView style={[styles.container]} className="flex-1">
+      <View className="w-10/12 m-2 mt-10 flex justify-end content-end items-end ">
+        {/* skipcq: JS-0417 */}
+        <TouchableOpacity onPress={() => setModal(true)}>
+          <Feather name="settings" size={24} color="white" />
+        </TouchableOpacity>
+      </View>
       <FlatList
         stickyHeaderHiddenOnScroll
         // skipcq: JS-0417
@@ -146,14 +166,35 @@ const onRefresh = useCallback(() => {
         data={[]}
         // skipcq: JS-0417
         ListHeaderComponent={() => (
-          <View className="m-1">
-            <View className="flex mt-16 items-center ">
+          <View className="flex-1 items-center justify-center m-1 mt-16">
+            <Modal
+              visible={modal}
+              transparent
+              onRequestClose={() => setModal(false)}
+              animationType="none"
+            >
+              <View className="bg-slate-800 flex h-36 m-12 p-5  rounded-2xl shadow-lg shadow-slate-300 justify-center items-center">
+                <View className="flex w-full p-3 m-2 flex-row-reverse justify-end items-end ">
+                  <TouchableOpacity onPress={() => setModal(false)}>
+                    <AntDesign name="close" size={20} color="white" />
+                  </TouchableOpacity>
+                </View>
+                <TouchableOpacity
+                  onPress={HandleSettings}
+                  className="bg-red-900 flex justify-center items-center content-center shadow-md w-20  h-14 m-7 p-4 rounded-md shadow-red-600"
+                >
+                  <ThemedText className="text-xs" type="default">Log out</ThemedText>
+                </TouchableOpacity>
+              </View>
+            </Modal>
+
+            <View className="flex items-center ">
               <Image
                 className="w-28 h-28 rounded-full m-4"
                 source={{
                   scale: 1,
                   uri:
-                  usuario.images.url ||
+                    usuario.images.url ||
                     "https://filestore.community.support.microsoft.com/api/images/0ce956b2-9787-4756-a580-299568810730?upload=true",
                 }}
               />
@@ -162,7 +203,7 @@ const onRefresh = useCallback(() => {
               </View>
             </View>
             <View className="m-3 flex text-center items-center justify-center flex-row">
-              <ThemedText type="defaultSemiBold">Estadisticas</ThemedText>
+              <ThemedText type="defaultSemiBold">Range</ThemedText>
               <Picker
                 dropdownIconColor="white"
                 mode="dialog"
@@ -195,7 +236,7 @@ const onRefresh = useCallback(() => {
                     className="m-3 opacity-100 rounded-full text-center p-5 mb-3"
                     type="subtitle"
                   >
-                    Generos que mas escuchas
+                    Most listened genres
                   </ThemedText>
                   <FlatList
                     data={generos}
@@ -207,7 +248,7 @@ const onRefresh = useCallback(() => {
                   type="subtitle"
                   className=" m-5 text-white font-bold mt-8"
                 >
-                  Artistas que mas escuchas
+                  Most listened artists
                 </ThemedText>
                 <FlatList
                   data={requestArtist.artists}
@@ -223,7 +264,7 @@ const onRefresh = useCallback(() => {
                   type="subtitle"
                   className=" m-5 text-white font-bold mt-8"
                 >
-                  Canciones mas escuchadas
+                  Most listened songs
                 </ThemedText>
                 <FlatList
                   data={requestMusic.songs}
@@ -239,9 +280,9 @@ const onRefresh = useCallback(() => {
                   type="subtitle"
                   className="m-5 m-t-6 text-center p-2 "
                 >
-                  Escuchadas Recientemente
+                Recently played
                 </ThemedText>
-                <View className="rounded-3xl p-5">
+                <View className=" flex-1 p-1 w-full">
                   {recent?.length > 0 ? (
                     <FlatList
                       data={recent}

@@ -11,14 +11,14 @@ export const getTop = <T>(
   time_range: string,
   offset = 0,
 ): Promise<T> => {
-  return new Promise((resolve, _) => {
+  return new Promise((resolve, reject) => {
     HttpCliente.get(`/me/top/${type}?offset=${offset}&time_range=${time_range}`)
       .then((response: AxiosResponse<T>) => {
         resolve(response.data);
       })
-      .catch(async(_) => {
+      .catch(async(e) => {
         await refreshToken();
-        await getTop;
+        reject(e)
 
       });
   });
@@ -59,14 +59,14 @@ export const getRecomendations = async (): Promise<Recommendatios[]> => {
 };
 
 export const getRecentlySongs = (): Promise<Recently> => {
-  return new Promise((resolve, _) => {
+  return new Promise((resolve, reject) => {
     HttpCliente.get("/me/player/recently-played?limit=20")
       .then((response) => {
         resolve(response.data);
       })
-      .catch(async() => {
+      .catch(async(e) => {
+        reject(e)
         await refreshToken();
-        await getRecentlySongs;
       });
   });
 };

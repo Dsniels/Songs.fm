@@ -44,7 +44,7 @@ export default function Applayout() {
       />
       <Stack.Screen
         name="login"
-        options={{ presentation: "modal", headerShown: false }}
+        options={{  headerShown: false }}
       />
       <Stack.Screen
         name="Detalles/[name]"

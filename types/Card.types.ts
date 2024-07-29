@@ -9,6 +9,10 @@ export type Track = {
   tracks: { items: Array<song> };
 };
 
+export type TrackResponse ={
+  tracks : Array<song>
+}
+
 export type album = {
   images: Array<{ url: string }>;
   id: string;
@@ -64,22 +68,12 @@ export type user = {
   images: Array<{ url: string }>;
 };
 
-<<<<<<< HEAD
-
-export type items<T>={
-        item : T
-}
-export type ItemRespone<T> ={
-  items:T
-}
-=======
 export type items<T> = {
   item: T;
 };
 export type ItemRespone<T> = {
   items: T;
 };
->>>>>>> f8f3028746e285ca8831e21a03413370c401d43d
 export type genero = {
   item: { name: string; value: number };
 };
