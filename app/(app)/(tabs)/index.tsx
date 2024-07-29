@@ -84,12 +84,12 @@ export default function TabTwoScreen() {
       getTop<ItemRespone<artist[]>>(
         "artists",
         selectDate,
-        requestArtist.offset
+        requestArtist.offset,
       ),
       getTop<ItemRespone<song[]>>(
         "tracks",
         selectDate,
-        requestMusic.offsetSongs
+        requestMusic.offsetSongs,
       ),
     ]);
 
