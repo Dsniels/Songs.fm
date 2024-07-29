@@ -20,7 +20,7 @@ import { Picker } from "@react-native-picker/picker";
 import { ListSongs } from "@/components/ListSongs";
 import { ListOfArtists } from "@/components/ListOfArtists";
 import { SmallListSongs } from "@/components/SmallListSongs";
-import { Feather } from "@expo/vector-icons";
+import { Feather, AntDesign  } from "@expo/vector-icons";
 import {
   artist,
   genero,
@@ -30,8 +30,11 @@ import {
 } from "@/types/Card.types";
 import * as SecureStorage from "expo-secure-store";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { AntDesign } from "@expo/vector-icons";
+
+
+
 export default function TabTwoScreen() {
+
   const [{ sesionUsuario }, dispatch] = useStateValue();
   const [generos, setGeneros] = useState<{ name: string; value: number }[]>([]);
   const [loading, setLoading] = useState(false);
