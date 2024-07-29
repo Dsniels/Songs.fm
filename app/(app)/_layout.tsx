@@ -42,10 +42,7 @@ export default function Applayout() {
           headerBlurEffect: "dark",
         }}
       />
-      <Stack.Screen
-        name="login"
-        options={{  headerShown: false }}
-      />
+      <Stack.Screen name="login" options={{ headerShown: false }} />
       <Stack.Screen
         name="Detalles/[name]"
         options={{

@@ -3,7 +3,6 @@ import HttpCliente from "../service/HttpCliente";
 import { refreshToken } from "./SpotifyAuth";
 import { AxiosResponse } from "axios";
 
-
 const infoArtista = (id: string): Promise<artist> => {
   return new Promise((resolve, reject) => {
     HttpCliente.get(`/artists/${id}`)
@@ -27,7 +26,7 @@ const TopSongsArtista = (id: string): Promise<song[]> => {
 const TopAlbumsArtista = (id: string): Promise<album[]> => {
   return new Promise((resolve, _) => {
     HttpCliente.get(`/artists/${id}/albums?limit=10`)
-      .then((response:AxiosResponse) => {
+      .then((response: AxiosResponse) => {
         resolve(response.data.items || []);
       })
       .catch((_) => refreshToken());
@@ -38,7 +37,6 @@ const similarArtist = (id: string): Promise<artist[]> => {
   return new Promise((resolve, _) => {
     HttpCliente.get(`/artists/${id}/related-artists`)
       .then((response: AxiosResponse) => {
-
         resolve(response.data.artists || []);
       })
       .catch((_) => refreshToken());

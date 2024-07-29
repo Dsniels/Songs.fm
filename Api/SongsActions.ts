@@ -4,7 +4,13 @@ import { seeds } from "@/service/seeds";
 import { refreshToken } from "./SpotifyAuth";
 import { ToastAndroid } from "react-native";
 import { notificationAsync, NotificationFeedbackType } from "expo-haptics";
-import { features, Recently, Recommendatios, song, Track } from "@/types/Card.types";
+import {
+  features,
+  Recently,
+  Recommendatios,
+  song,
+  Track,
+} from "@/types/Card.types";
 
 export const getTop = <T>(
   type: string,
@@ -16,10 +22,9 @@ export const getTop = <T>(
       .then((response: AxiosResponse<T>) => {
         resolve(response.data);
       })
-      .catch(async(e) => {
+      .catch(async (e) => {
         await refreshToken();
-        reject(e)
-
+        reject(e);
       });
   });
 };
@@ -64,8 +69,8 @@ export const getRecentlySongs = (): Promise<Recently> => {
       .then((response) => {
         resolve(response.data);
       })
-      .catch(async(e) => {
-        reject(e)
+      .catch(async (e) => {
+        reject(e);
         await refreshToken();
       });
   });

@@ -34,13 +34,13 @@ export default function HomeScreen() {
       "keyboardDidShow",
       () => {
         setKeyboardVisible(true);
-      }
+      },
     );
     const keyboardDidHideListener = Keyboard.addListener(
       "keyboardDidHide",
       () => {
         setKeyboardVisible(false);
-      }
+      },
     );
 
     return () => {
@@ -59,7 +59,7 @@ export default function HomeScreen() {
       return () => {
         handleRouteChange();
       };
-    }, [])
+    }, []),
   );
   const deleteToken = async () => {
     await AsyncStorage.clear();
@@ -99,7 +99,7 @@ export default function HomeScreen() {
         keyboardVerticalOffset={Platform.OS === "ios" ? 64 : 0}
       >
         <View style={styles.titleContainer}>
-          <ThemedText className="text-lg text-white font-bold" >
+          <ThemedText className="text-lg text-white font-bold">
             Search For Your Favorite Songs
           </ThemedText>
         </View>
