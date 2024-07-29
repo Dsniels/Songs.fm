@@ -21,6 +21,7 @@ import { ListSongs } from "@/components/ListSongs";
 import { ListOfArtists } from "@/components/ListOfArtists";
 import { SmallListSongs } from "@/components/SmallListSongs";
 import { Feather, AntDesign } from "@expo/vector-icons";
+import { Feather, AntDesign } from "@expo/vector-icons";
 import {
   artist,
   genero,
@@ -83,12 +84,12 @@ export default function TabTwoScreen() {
       getTop<ItemRespone<artist[]>>(
         "artists",
         selectDate,
-        requestArtist.offset
+        requestArtist.offset,
       ),
       getTop<ItemRespone<song[]>>(
         "tracks",
         selectDate,
-        requestMusic.offsetSongs
+        requestMusic.offsetSongs,
       ),
     ]);
 
@@ -182,6 +183,9 @@ export default function TabTwoScreen() {
                   onPress={HandleSettings}
                   className="bg-red-900 flex justify-center items-center content-center shadow-md w-20 h-11 m-7 p-2 rounded-md shadow-red-600"
                 >
+                  <ThemedText className="text-xs" type="default">
+                    Log out
+                  </ThemedText>
                   <ThemedText className="text-xs" type="default">
                     Log out
                   </ThemedText>
@@ -281,6 +285,7 @@ export default function TabTwoScreen() {
                   type="subtitle"
                   className="m-5 m-t-6 text-center p-2 "
                 >
+                  Recently played
                   Recently played
                 </ThemedText>
                 <View className=" flex-1 p-1 w-full">
