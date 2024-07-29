@@ -20,7 +20,7 @@ import { Picker } from "@react-native-picker/picker";
 import { ListSongs } from "@/components/ListSongs";
 import { ListOfArtists } from "@/components/ListOfArtists";
 import { SmallListSongs } from "@/components/SmallListSongs";
-import { Feather, AntDesign  } from "@expo/vector-icons";
+import { Feather, AntDesign } from "@expo/vector-icons";
 import {
   artist,
   genero,
@@ -31,10 +31,7 @@ import {
 import * as SecureStorage from "expo-secure-store";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-
-
 export default function TabTwoScreen() {
-
   const [{ sesionUsuario }, dispatch] = useStateValue();
   const [generos, setGeneros] = useState<{ name: string; value: number }[]>([]);
   const [loading, setLoading] = useState(false);
@@ -118,20 +115,19 @@ export default function TabTwoScreen() {
     }
   }, [sesionUsuario]);
 
-  const onRefresh = useCallback(() => {
-    setLoading(true);
-
-    return Promise.all([fetchData(), fetchRecentlySongs()]).then(() =>
-      setLoading(false)
-    );
+  const onRefresh = useCallback(async () => {
+    try {
+      setLoading(true);
+      await Promise.all([fetchData(), fetchRecentlySongs()]);
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+      onRefresh();
+    }
   }, [fetchData]);
 
   useEffect(() => {
-    onRefresh()
-      .then(() => setLoading(false))
-      .catch(() => {
-        onRefresh();
-      });
+    onRefresh();
   }, [selectDate]);
 
   const renderGeneroItem = ({ item }: genero) => (
@@ -184,9 +180,11 @@ export default function TabTwoScreen() {
                 </View>
                 <TouchableOpacity
                   onPress={HandleSettings}
-                  className="bg-red-900 flex justify-center items-center content-center shadow-md w-20  h-14 m-7 p-4 rounded-md shadow-red-600"
+                  className="bg-red-900 flex justify-center items-center content-center shadow-md w-20 h-11 m-7 p-2 rounded-md shadow-red-600"
                 >
-                  <ThemedText className="text-xs" type="default">Log out</ThemedText>
+                  <ThemedText className="text-xs" type="default">
+                    Log out
+                  </ThemedText>
                 </TouchableOpacity>
               </View>
             </Modal>
@@ -283,7 +281,7 @@ export default function TabTwoScreen() {
                   type="subtitle"
                   className="m-5 m-t-6 text-center p-2 "
                 >
-                Recently played
+                  Recently played
                 </ThemedText>
                 <View className=" flex-1 p-1 w-full">
                   {recent?.length > 0 ? (

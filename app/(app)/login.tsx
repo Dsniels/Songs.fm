@@ -14,6 +14,7 @@ import * as Haptics from "expo-haptics";
 import { checkToken, getAccessToken } from "@/Api/SpotifyAuth";
 import { getprofile } from "@/Api/UserAction";
 import { ResponseAxios, TokenResponse } from "@/types/Card.types";
+import ParallaxScrollView from "@/components/ParallaxScrollView";
 
 WebBrowser.maybeCompleteAuthSession();
 export default function login() {
@@ -80,6 +81,7 @@ export default function login() {
 
   return (
     <SafeAreaView className="flex-1 align-middle justify-center items-center bg-slate-900 ">
+
       <ThemedText type="subtitle">Connect your Account </ThemedText>
       <Pressable className="flex rounded-lg m-4 p-3 w-auto h-auto bg-green-500" onPress={() => promptAsync()}>
         <Text className="text-cyan-100 ">Log In</Text>
