@@ -16,20 +16,16 @@ export default function music() {
     }
   }, [data]);
 
-
-
   const fetchData = useCallback(async (): Promise<Recommendatios[]> => {
-    try{
-    const data_response: Recommendatios[] = await getRecomendations();
-    const data_result = data_response
-      .flat()
-      .filter((i: Recommendatios) => i.preview_url !== null);
-    const extractedData = data_result;
-    return extractedData;
-  
-  }
-    catch(_){
-     return fetchData();
+    try {
+      const data_response: Recommendatios[] = await getRecomendations();
+      const data_result = data_response
+        .flat()
+        .filter((i: Recommendatios) => i.preview_url !== null);
+      const extractedData = data_result;
+      return extractedData;
+    } catch (_) {
+      return fetchData();
     }
   }, []);
 

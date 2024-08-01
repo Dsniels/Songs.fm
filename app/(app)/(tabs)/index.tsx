@@ -77,7 +77,6 @@ export default function TabTwoScreen() {
     seedTracks(favSongs);
   }, []);
 
-
   const fetchRecentlySongs = useCallback(async () => {
     const recently = await getRecentlySongs();
     const newArray = recently.items.map((item) => item.track);
@@ -87,8 +86,16 @@ export default function TabTwoScreen() {
 
   const fetchData = useCallback(async () => {
     const [data, dataTopSongs] = await Promise.all([
-      getTop<ItemRespone<artist[]>>("artists", selectDate, requestArtist.offset),
-      getTop<ItemRespone<song[]>>("tracks", selectDate, requestMusic.offsetSongs),
+      getTop<ItemRespone<artist[]>>(
+        "artists",
+        selectDate,
+        requestArtist.offset,
+      ),
+      getTop<ItemRespone<song[]>>(
+        "tracks",
+        selectDate,
+        requestMusic.offsetSongs,
+      ),
     ]);
 
     setRequestArtist((prev) => ({ ...prev, artists: data.items }));
@@ -107,7 +114,11 @@ export default function TabTwoScreen() {
   const onRefresh = useCallback(async () => {
     try {
       setLoading(true);
-      await Promise.all([fetchData(), fetchRecentlySongs(), fetchFavoriteSongs()]);
+      await Promise.all([
+        fetchData(),
+        fetchRecentlySongs(),
+        fetchFavoriteSongs(),
+      ]);
       setLoading(false);
     } catch (_) {
       await onRefresh();
@@ -117,7 +128,6 @@ export default function TabTwoScreen() {
   useEffect(() => {
     onRefresh();
   }, [selectDate, onRefresh]);
-
 
   const renderGeneroItem = ({ item }: genero) => (
     <View className="m-3 rounded-lg" key={item.name}>
@@ -174,7 +184,6 @@ export default function TabTwoScreen() {
                   <ThemedText className="text-xs" type="default">
                     Log out
                   </ThemedText>
-  
                 </TouchableOpacity>
               </View>
             </Modal>

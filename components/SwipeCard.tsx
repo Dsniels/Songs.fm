@@ -64,46 +64,46 @@ export const SwipeCard = <T,>({
           friction: 5,
         }).start();
       },
-    })
+    }),
   ).current;
 
   const playSound = useCallback(
     async (soundUri: string) => {
       const sound = new Audio.Sound();
       try {
-        const {isLoaded} = await sound.loadAsync({ uri: soundUri });
+        const { isLoaded } = await sound.loadAsync({ uri: soundUri });
         if (isLoaded) {
           setCurrentSound(sound);
           await Promise.all([sound.setIsLoopingAsync(true), sound.playAsync()]);
         }
-
       } catch (_) {
         await sound.unloadAsync();
       }
     },
-    [currentSound]
+    [currentSound],
   );
 
   useEffect(() => {
     if (currentSound) {
-          currentSound.unloadAsync().then(() => {
-          setCurrentSound(null);
-          });
-      }
+      currentSound.unloadAsync().then(() => {
+        setCurrentSound(null);
+      });
+    }
     if (items.length > 0) {
       playSound(items[0].preview_url);
     }
-    return () => {currentSound?.unloadAsync()};
+    return () => {
+      currentSound?.unloadAsync();
+    };
   }, [items]);
 
-  const removeTopCard = useCallback(async() => {
+  const removeTopCard = useCallback(async () => {
     if (currentSound) {
       setCurrentSound(null);
 
       await Promise.all([currentSound.unloadAsync(), currentSound.stopAsync()]);
-      
     }
-    setItems((prevState) => prevState.slice(1))
+    setItems((prevState) => prevState.slice(1));
     swipe.setValue({ x: 0, y: 0 });
   }, [swipe, setItems, currentSound]);
 
@@ -113,14 +113,14 @@ export const SwipeCard = <T,>({
         inputRange: [-500, 0, 500],
         outputRange: ["8deg", "0deg", "-8deg"],
       }),
-    [swipe]
+    [swipe],
   );
 
   const animatedCardStyle = useMemo(
     () => ({
       transform: [...swipe.getTranslateTransform(), { rotate }],
     }),
-    [swipe, rotate]
+    [swipe, rotate],
   );
 
   const playCurrentSound = async () => {
@@ -145,7 +145,7 @@ export const SwipeCard = <T,>({
       };
 
       return () => onBlur();
-    }, [currentSound, isFocused])
+    }, [currentSound, isFocused]),
   );
   const getSongDetails = (Item: song) => {
     return router.push({

@@ -4,7 +4,14 @@ import { seeds } from "@/service/seeds";
 import { refreshToken } from "./SpotifyAuth";
 import { ToastAndroid } from "react-native";
 import { notificationAsync, NotificationFeedbackType } from "expo-haptics";
-import { features, ItemRespone, Recently, Recommendatios, song, Track } from "@/types/Card.types";
+import {
+  features,
+  ItemRespone,
+  Recently,
+  Recommendatios,
+  song,
+  Track,
+} from "@/types/Card.types";
 
 export const getTop = <T>(
   type: string,
@@ -17,9 +24,7 @@ export const getTop = <T>(
         resolve(response.data);
       })
       .catch((e) => {
-  
-        reject(e)
-
+        reject(e);
       });
   });
 };
@@ -40,7 +45,7 @@ export const getRecomendations = async (): Promise<Recommendatios[]> => {
   const randomEnergy = Math.random();
   const randomAcousticness = Math.random();
   const randomSpeechiness = Math.random();
-  
+
   return new Promise((resolve, reject) => {
     HttpCliente.get(
       `/recommendations?limit=40&seed_tracks=${songs.toString()}&seed_genres=${generos}&target_acousticness=${randomAcousticness}&target_energy=${randomEnergy}&target_speechiness${randomSpeechiness}&seed_artists=${artists.toString()}&target_danceability=${randomDanceability}&target_popularity=${randomPopularity}&target_valence${randomValence}`,
@@ -65,9 +70,8 @@ export const getRecentlySongs = (): Promise<Recently> => {
       .then((response) => {
         resolve(response.data);
       })
-      .catch(async(e) => {
-        reject(e)
-
+      .catch(async (e) => {
+        reject(e);
       });
   });
 };
@@ -95,14 +99,15 @@ export const getSongInfo = async (id: string) => {
   return { Info: info, Features: features, Like: like };
 };
 
-export const FavoriteSongs = () : Promise<song[]> =>{
-  return new Promise((resolve, reject)=>{
-    HttpCliente.get(`/me/tracks?limit=50`).then((Response : AxiosResponse<ItemRespone<song[]>>)=>{
-      resolve(Response.data.items)
-
-    }).catch(reject)
-  })
-}
+export const FavoriteSongs = (): Promise<song[]> => {
+  return new Promise((resolve, reject) => {
+    HttpCliente.get(`/me/tracks?limit=50`)
+      .then((Response: AxiosResponse<ItemRespone<song[]>>) => {
+        resolve(Response.data.items);
+      })
+      .catch(reject);
+  });
+};
 
 const songInfo = (id: string): Promise<song> => {
   return new Promise((resolve, reject) => {

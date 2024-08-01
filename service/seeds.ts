@@ -27,7 +27,8 @@ export const seedArtist = async (data: ItemRespone<artist[]>) => {
   await mergeAndStore("seedArtists", ids);
 };
 
-const getRandomIndex = (length: number) : number => Math.floor(Math.random() * length);
+const getRandomIndex = (length: number): number =>
+  Math.floor(Math.random() * length);
 
 const convertToArray = (str: string | null) => str?.split(",") || [];
 
