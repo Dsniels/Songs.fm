@@ -89,12 +89,12 @@ export default function TabTwoScreen() {
       getTop<ItemRespone<artist[]>>(
         "artists",
         selectDate,
-        requestArtist.offset
+        requestArtist.offset,
       ),
       getTop<ItemRespone<song[]>>(
         "tracks",
         selectDate,
-        requestMusic.offsetSongs
+        requestMusic.offsetSongs,
       ),
     ]);
 
@@ -122,7 +122,11 @@ export default function TabTwoScreen() {
   const onRefresh = useCallback(async () => {
     try {
       setLoading(true);
-      await Promise.all([fetchData(), fetchRecentlySongs(), FetchFavoriteSongs()]);
+      await Promise.all([
+        fetchData(),
+        fetchRecentlySongs(),
+        FetchFavoriteSongs(),
+      ]);
       setLoading(false);
     } catch (error) {
       onRefresh();
@@ -188,7 +192,6 @@ export default function TabTwoScreen() {
                   <ThemedText className="text-xs" type="default">
                     Log out
                   </ThemedText>
-  
                 </TouchableOpacity>
               </View>
             </Modal>
