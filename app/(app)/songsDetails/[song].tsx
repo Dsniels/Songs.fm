@@ -40,7 +40,6 @@ const SongDetails = () => {
 
   const playSound = async (soundUri: string) => {
     if (currentSound) {
-      await currentSound.stopAsync();
       await currentSound.unloadAsync();
       setCurrentSound(null);
     }
@@ -67,7 +66,6 @@ const SongDetails = () => {
 
   const pause = async () => {
     await currentSound?.stopAsync();
-    await currentSound?.unloadAsync();
     setCurrentSound(null);
   };
 
@@ -102,10 +100,12 @@ const SongDetails = () => {
     name = "",
     id = "",
     artists = "",
+    ImageSong = "",
   } = useLocalSearchParams<{
     name?: string;
     id?: string;
     artists?: string;
+    ImageSong?: string;
   }>();
   useFocusEffect(
     useCallback(() => {
@@ -113,7 +113,7 @@ const SongDetails = () => {
         if (currentSound) {
           const status = await currentSound.getStatusAsync();
           if (status?.isLoaded) {
-            currentSound.pauseAsync();
+            currentSound.unloadAsync();
           }
         }
       };
@@ -169,9 +169,7 @@ const SongDetails = () => {
         <Image
           source={{
             uri:
-              Track.info.album.images[0].url ||
-              "https://th.bing.com/th/id/OIP.dfpjYr0obWlvVKnjJ9ccyQHaHJ?rs=1&pid=ImgDetMain",
-          }}
+              Track.info.album.images[0].url || ImageSong,         }}
           style={{ width: "100%", height: 400 }}
         />
       }

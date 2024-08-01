@@ -98,7 +98,13 @@ const Detalles = () => {
   const getSongDetails = (Item: song) => {
     return router.push({
       pathname: "(app)/songsDetails/[song]",
-      params: { id: Item.id, name: Item.name, artists: Item.artists[0].name },
+      params: {
+        id: Item.id,
+        name: Item.name,
+        artists: Item.artists[0].name,
+        ImageSong: Item.album.images[0].url,
+        preview_url: Item.preview_url,
+      },
     });
   };
 

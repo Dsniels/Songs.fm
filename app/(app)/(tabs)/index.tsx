@@ -26,7 +26,6 @@ import {
   artist,
   genero,
   ItemRespone,
-  Recently,
   song,
 } from "@/types/Card.types";
 import * as SecureStorage from "expo-secure-store";
@@ -65,13 +64,6 @@ export default function TabTwoScreen() {
     });
   }, []);
 
-  const getSongDetails = useCallback((Item: song) => {
-    router.push({
-      pathname: "(app)/songsDetails/[song]",
-      params: { id: Item.id, name: Item.name, artists: Item.artists[0].name },
-    });
-  }, []);
-
   const fetchFavoriteSongs = useCallback(async () => {
     const favSongs = await FavoriteSongs();
     seedTracks(favSongs);
@@ -82,7 +74,7 @@ export default function TabTwoScreen() {
     const recently = await getRecentlySongs();
     const newArray = recently.items.map((item) => item.track);
     setRecent(newArray);
-    seedTracks(newArray);
+     seedTracks(newArray);
   }, []);
 
   const fetchData = useCallback(async () => {
@@ -130,6 +122,18 @@ export default function TabTwoScreen() {
       </View>
     </View>
   );
+    const getSongDetails = (Item: song) => {
+    return router.push({
+      pathname: "(app)/songsDetails/[song]",
+      params: {
+        id: Item.id,
+        name: Item.name,
+        artists: Item.artists[0].name,
+        ImageSong: Item.album.images[0].url,
+        preview_url: Item.preview_url,
+      },
+    });
+  };
 
   const HandleSettings = () => {
     setModal(false);

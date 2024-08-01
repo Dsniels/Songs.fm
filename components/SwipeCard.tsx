@@ -33,6 +33,16 @@ export const SwipeCard = <T,>({
   const titlSign = useRef(new Animated.Value(1)).current;
   const [currentSound, setCurrentSound] = useState<Audio.Sound | null>(null);
   const isFocused = useIsFocused();
+  const removeTopCard = useCallback(async () => {
+    if (currentSound) {
+      setCurrentSound(null);
+      await currentSound.unloadAsync();
+    }
+    setItems((prevState) => prevState.slice(1));
+    swipe.setValue({ x: 0, y: 0 });
+  }, [swipe, setItems, currentSound]);
+
+
   const panResponder = useRef(
     PanResponder.create({
       onMoveShouldSetPanResponder: () => true,
@@ -70,13 +80,16 @@ export const SwipeCard = <T,>({
   const playSound = useCallback(
     async (soundUri: string) => {
       const sound = new Audio.Sound();
+      if (currentSound) {
+        setCurrentSound(null);
+        await currentSound.unloadAsync();
+      }
       try {
-        const {isLoaded} = await sound.loadAsync({ uri: soundUri });
+        const { isLoaded } = await sound.loadAsync({ uri: soundUri });
         if (isLoaded) {
           setCurrentSound(sound);
-          await Promise.all([sound.setIsLoopingAsync(true), sound.playAsync()]);
+          sound.setIsLoopingAsync(true).then(() => sound.playAsync());
         }
-
       } catch (_) {
         await sound.unloadAsync();
       }
@@ -86,26 +99,17 @@ export const SwipeCard = <T,>({
 
   useEffect(() => {
     if (currentSound) {
-          currentSound.unloadAsync().then(() => {
-          setCurrentSound(null);
-          });
-      }
+      currentSound.unloadAsync().then(() => {
+        setCurrentSound(null);
+      });
+    }
     if (items.length > 0) {
       playSound(items[0].preview_url);
     }
-    return () => {currentSound?.unloadAsync()};
+    return () => {
+      currentSound?.unloadAsync();
+    };
   }, [items]);
-
-  const removeTopCard = useCallback(async() => {
-    if (currentSound) {
-      setCurrentSound(null);
-
-      await Promise.all([currentSound.unloadAsync(), currentSound.stopAsync()]);
-      
-    }
-    setItems((prevState) => prevState.slice(1))
-    swipe.setValue({ x: 0, y: 0 });
-  }, [swipe, setItems, currentSound]);
 
   const rotate = useMemo(
     () =>
@@ -150,7 +154,13 @@ export const SwipeCard = <T,>({
   const getSongDetails = (Item: song) => {
     return router.push({
       pathname: "(app)/songsDetails/[song]",
-      params: { id: Item.id, name: Item.name, artists: Item.artists[0].name },
+      params: {
+        id: Item.id,
+        name: Item.name,
+        artists: Item.artists[0].name,
+        ImageSong: Item.album.images[0].url,
+        preview_url: Item.preview_url,
+      },
     });
   };
   return (
