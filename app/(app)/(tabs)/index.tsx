@@ -11,7 +11,7 @@ import {
 import { ThemedText } from "@/components/ThemedText";
 import { useCallback, useEffect, useState } from "react";
 import { useStateValue } from "@/Context/store";
-import { getRecentlySongs, getTop } from "@/Api/SongsActions";
+import { FavoriteSongs, getRecentlySongs, getTop } from "@/Api/SongsActions";
 import { styles } from "@/Styles/styles";
 import { topGeneros } from "@/service/TopGeners";
 import { seedArtist, seedTracks } from "@/service/seeds";
@@ -72,6 +72,11 @@ export default function TabTwoScreen() {
     });
   }, []);
 
+  const FetchFavoriteSongs = useCallback(async () => {
+    const favSongs = await FavoriteSongs();
+    seedTracks(favSongs);
+  }, []);
+
   const fetchRecentlySongs = useCallback(async () => {
     const recently: Recently = await getRecentlySongs();
     const newArray = recently.items.map((item) => item.track);
@@ -102,10 +107,8 @@ export default function TabTwoScreen() {
       ...prev,
       songs: dataTopSongs.items,
     }));
-
     const top = topGeneros(data);
     setGeneros(top);
-
     seedTracks(dataTopSongs.items);
     seedArtist(data);
   }, [selectDate]);
@@ -119,7 +122,7 @@ export default function TabTwoScreen() {
   const onRefresh = useCallback(async () => {
     try {
       setLoading(true);
-      await Promise.all([fetchData(), fetchRecentlySongs()]);
+      await Promise.all([fetchData(), fetchRecentlySongs(), FetchFavoriteSongs()]);
       setLoading(false);
     } catch (error) {
       console.log(error);
@@ -186,9 +189,7 @@ export default function TabTwoScreen() {
                   <ThemedText className="text-xs" type="default">
                     Log out
                   </ThemedText>
-                  <ThemedText className="text-xs" type="default">
-                    Log out
-                  </ThemedText>
+  
                 </TouchableOpacity>
               </View>
             </Modal>
