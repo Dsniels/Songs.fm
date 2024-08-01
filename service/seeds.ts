@@ -48,6 +48,7 @@ const convertToArray = (string: string | null) => {
 const getRandomSeedItem = async (key: string) => {
   const seedString = await AsyncStorage.getItem(key);
   const seedArray = convertToArray(seedString);
+  console.log(key,seedArray.length)
   return seedArray[randomIndex(seedArray)];
 };
 
