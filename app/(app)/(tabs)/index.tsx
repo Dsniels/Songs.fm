@@ -72,13 +72,14 @@ export default function TabTwoScreen() {
     });
   }, []);
 
-  const FetchFavoriteSongs = useCallback(async () => {
+  const fetchFavoriteSongs = useCallback(async () => {
     const favSongs = await FavoriteSongs();
     seedTracks(favSongs);
   }, []);
 
+
   const fetchRecentlySongs = useCallback(async () => {
-    const recently: Recently = await getRecentlySongs();
+    const recently = await getRecentlySongs();
     const newArray = recently.items.map((item) => item.track);
     setRecent(newArray);
     seedTracks(newArray);
@@ -86,29 +87,13 @@ export default function TabTwoScreen() {
 
   const fetchData = useCallback(async () => {
     const [data, dataTopSongs] = await Promise.all([
-      getTop<ItemRespone<artist[]>>(
-        "artists",
-        selectDate,
-        requestArtist.offset
-      ),
-      getTop<ItemRespone<song[]>>(
-        "tracks",
-        selectDate,
-        requestMusic.offsetSongs
-      ),
+      getTop<ItemRespone<artist[]>>("artists", selectDate, requestArtist.offset),
+      getTop<ItemRespone<song[]>>("tracks", selectDate, requestMusic.offsetSongs),
     ]);
 
-    setRequestArtist((prev) => ({
-      ...prev,
-      artists: data.items,
-    }));
-
-    setRequestMusic((prev) => ({
-      ...prev,
-      songs: dataTopSongs.items,
-    }));
-    const top = topGeneros(data);
-    setGeneros(top);
+    setRequestArtist((prev) => ({ ...prev, artists: data.items }));
+    setRequestMusic((prev) => ({ ...prev, songs: dataTopSongs.items }));
+    setGeneros(topGeneros(data));
     seedTracks(dataTopSongs.items);
     seedArtist(data);
   }, [selectDate]);
@@ -122,16 +107,17 @@ export default function TabTwoScreen() {
   const onRefresh = useCallback(async () => {
     try {
       setLoading(true);
-      await Promise.all([fetchData(), fetchRecentlySongs(), FetchFavoriteSongs()]);
+      await Promise.all([fetchData(), fetchRecentlySongs(), fetchFavoriteSongs()]);
       setLoading(false);
-    } catch (error) {
-      onRefresh();
+    } catch (_) {
+      await onRefresh();
     }
   }, [fetchData]);
 
   useEffect(() => {
     onRefresh();
-  }, [selectDate]);
+  }, [selectDate, onRefresh]);
+
 
   const renderGeneroItem = ({ item }: genero) => (
     <View className="m-3 rounded-lg" key={item.name}>
