@@ -82,7 +82,6 @@ const Detalles = () => {
         artists: Artists,
       });
 
-
       const description = descriptionResult;
       let info = description.map((i) => extractInfo(i)).join(" ");
       if (informacion === "?") info = "I Dont found it  :(";
@@ -91,7 +90,7 @@ const Detalles = () => {
     };
 
     fetchData().catch((e) =>
-      ToastAndroid.showWithGravity(e, ToastAndroid.SHORT, ToastAndroid.CENTER)
+      ToastAndroid.showWithGravity(e, ToastAndroid.SHORT, ToastAndroid.CENTER),
     );
   }, [name, id, navigation]);
 
@@ -153,11 +152,12 @@ const Detalles = () => {
           </View>
           <View>
             <View style={{ margin: 30 }}>
-              <ThemedText type="subtitle">Popularity {infoArtist.info.popularity} of 100</ThemedText>
-          
+              <ThemedText type="subtitle">
+                Popularity {infoArtist.info.popularity} of 100
+              </ThemedText>
 
               <ThemedText style={{ marginTop: 20 }} type="subtitle">
-                Genres              
+                Genres
               </ThemedText>
               <ThemedText numberOfLines={3}>
                 {infoArtist.info.genres.join(", ") || "No disponible"}

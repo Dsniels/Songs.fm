@@ -138,7 +138,7 @@ const SongDetails = () => {
         // skipcq: JS-0323
         .map((item) => extractInfo(item))
         .join(" ");
-        if(informacion === '?') informacion = 'I Dont found it  :(';
+      if (informacion === "?") informacion = "I Dont found it  :(";
       setInformacion(informacion);
     };
     fetchData().catch((e) =>
@@ -163,13 +163,12 @@ const SongDetails = () => {
 
   return (
     <ParallaxScrollView
-    
       headerBackgroundColor={{ light: "#D0D0D0", dark: "#353636" }}
       headerImage={
         <Image
           source={{
-            uri:
-              Track.info.album.images[0].url || ImageSong,         }}
+            uri: Track.info.album.images[0].url || ImageSong,
+          }}
           style={{ width: "100%", height: 400 }}
         />
       }
@@ -239,7 +238,6 @@ const SongDetails = () => {
           {showAbout === false ? (
             <View className=" bg-opacity-80 bg-[#0f172a] m-1 mt-0 pt-0 -top-4 w-full p-7 rounded-b-md rounded-r-md shadow-sm shadow-gray-700">
               <ThemedText type="defaultSemiBold">Artists</ThemedText>
-
 
               <ThemedView className=" flex flex-row justify-center content-center items-center bg-[#0f172a]">
                 <ScrollView
