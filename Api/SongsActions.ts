@@ -16,8 +16,8 @@ export const getTop = <T>(
       .then((response: AxiosResponse<T>) => {
         resolve(response.data);
       })
-      .catch(async(e) => {
-        await refreshToken();
+      .catch((e) => {
+  
         reject(e)
 
       });
@@ -67,7 +67,7 @@ export const getRecentlySongs = (): Promise<Recently> => {
       })
       .catch(async(e) => {
         reject(e)
-        await refreshToken();
+
       });
   });
 };
@@ -81,7 +81,6 @@ export const getListOfSongs = (
         resolve(response.data.tracks);
       })
       .catch((e: AxiosResponse) => {
-        refreshToken();
         resolve(e);
       });
   });
@@ -101,17 +100,17 @@ export const FavoriteSongs = () : Promise<song[]> =>{
     HttpCliente.get(`/me/tracks?limit=50`).then((Response : AxiosResponse<ItemRespone<song[]>>)=>{
       resolve(Response.data.items)
 
-    }).catch(resolve)
+    }).catch(reject)
   })
 }
 
 const songInfo = (id: string): Promise<song> => {
-  return new Promise((resolve, _) => {
+  return new Promise((resolve, reject) => {
     HttpCliente.get(`/tracks/${id}`)
       .then((response: AxiosResponse) => {
         resolve(response.data || {});
       })
-      .catch((e) => resolve(e));
+      .catch((e) => reject(e));
   });
 };
 
