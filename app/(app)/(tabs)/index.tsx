@@ -102,7 +102,7 @@ export default function TabTwoScreen() {
       await Promise.all([fetchData(), fetchRecentlySongs(), fetchFavoriteSongs()]);
       setLoading(false);
     } catch (_) {
-      await onRefresh();
+      onRefresh();
     }
   }, [fetchData]);
 

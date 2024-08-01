@@ -35,8 +35,10 @@ export const SwipeCard = <T,>({
   const isFocused = useIsFocused();
   const removeTopCard = useCallback(async () => {
     if (currentSound) {
+      await currentSound.stopAsync();
+      await currentSound.unloadAsync();      
       setCurrentSound(null);
-      await currentSound.unloadAsync();
+
     }
     setItems((prevState) => prevState.slice(1));
     swipe.setValue({ x: 0, y: 0 });
@@ -81,34 +83,32 @@ export const SwipeCard = <T,>({
     async (soundUri: string) => {
       const sound = new Audio.Sound();
       if (currentSound) {
-        setCurrentSound(null);
+        await currentSound.stopAsync();
         await currentSound.unloadAsync();
+        setCurrentSound(null);
+
       }
       try {
         const { isLoaded } = await sound.loadAsync({ uri: soundUri });
         if (isLoaded) {
-          setCurrentSound(sound);
           sound.setIsLoopingAsync(true).then(() => sound.playAsync());
+          setCurrentSound(sound);
+
         }
       } catch (_) {
         await sound.unloadAsync();
+        setCurrentSound(null);
       }
     },
     [currentSound]
   );
 
   useEffect(() => {
-    if (currentSound) {
-      currentSound.unloadAsync().then(() => {
-        setCurrentSound(null);
-      });
-    }
+
     if (items.length > 0) {
       playSound(items[0].preview_url);
     }
-    return () => {
-      currentSound?.unloadAsync();
-    };
+
   }, [items]);
 
   const rotate = useMemo(
@@ -128,9 +128,12 @@ export const SwipeCard = <T,>({
   );
 
   const playCurrentSound = async () => {
-    const status = await currentSound?.getStatusAsync();
+    if (!currentSound) {
+      return;
+    }
+    const status = await currentSound.getStatusAsync();
     if (status?.isLoaded && !status.isPlaying) {
-      await currentSound?.playAsync();
+      await currentSound.playAsync();
     }
   };
   useFocusEffect(
