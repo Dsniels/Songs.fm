@@ -33,7 +33,7 @@ export const SwipeCard = <T,>({
   const titlSign = useRef(new Animated.Value(1)).current;
   const [currentSound, setCurrentSound] = useState<Audio.Sound | null>(null);
   const isFocused = useIsFocused();
-  const removeTopCard = useCallback(async () => {
+  const removeTopCard = async () => {
     if (currentSound) {
       await currentSound.stopAsync();
       await currentSound.unloadAsync();      
@@ -42,7 +42,7 @@ export const SwipeCard = <T,>({
     }
     setItems((prevState) => prevState.slice(1));
     swipe.setValue({ x: 0, y: 0 });
-  }, [swipe, setItems, currentSound]);
+  }
 
 
   const panResponder = useRef(
@@ -79,7 +79,7 @@ export const SwipeCard = <T,>({
     })
   ).current;
 
-  const playSound = useCallback(
+  const playSound = 
     async (soundUri: string) => {
       const sound = new Audio.Sound();
       if (currentSound) {
@@ -99,9 +99,7 @@ export const SwipeCard = <T,>({
         await sound.unloadAsync();
         setCurrentSound(null);
       }
-    },
-    [currentSound]
-  );
+    }
 
   useEffect(() => {
 
@@ -146,13 +144,13 @@ export const SwipeCard = <T,>({
         if (currentSound) {
           const status = await currentSound.getStatusAsync();
           if (status?.isLoaded) {
-            await currentSound.pauseAsync();
+            await currentSound.pauseAsync().then(() => currentSound.unloadAsync().then(()=> setCurrentSound(null)));
           }
         }
       };
 
       return () => onBlur();
-    }, [currentSound, isFocused])
+    }, [isFocused])
   );
   const getSongDetails = (Item: song) => {
     return router.push({
