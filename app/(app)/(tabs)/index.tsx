@@ -22,12 +22,7 @@ import { ListOfArtists } from "@/components/ListOfArtists";
 import { SmallListSongs } from "@/components/SmallListSongs";
 import { Feather, AntDesign } from "@expo/vector-icons";
 
-import {
-  artist,
-  genero,
-  ItemRespone,
-  song,
-} from "@/types/Card.types";
+import { artist, genero, ItemRespone, song } from "@/types/Card.types";
 import * as SecureStorage from "expo-secure-store";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -69,18 +64,25 @@ export default function TabTwoScreen() {
     seedTracks(favSongs);
   }, []);
 
-
   const fetchRecentlySongs = useCallback(async () => {
     const recently = await getRecentlySongs();
     const newArray = recently.items.map((item) => item.track);
     setRecent(newArray);
-     seedTracks(newArray);
+    seedTracks(newArray);
   }, []);
 
   const fetchData = useCallback(async () => {
     const [data, dataTopSongs] = await Promise.all([
-      getTop<ItemRespone<artist[]>>("artists", selectDate, requestArtist.offset),
-      getTop<ItemRespone<song[]>>("tracks", selectDate, requestMusic.offsetSongs),
+      getTop<ItemRespone<artist[]>>(
+        "artists",
+        selectDate,
+        requestArtist.offset,
+      ),
+      getTop<ItemRespone<song[]>>(
+        "tracks",
+        selectDate,
+        requestMusic.offsetSongs,
+      ),
     ]);
 
     setRequestArtist((prev) => ({ ...prev, artists: data.items }));
@@ -99,7 +101,11 @@ export default function TabTwoScreen() {
   const onRefresh = useCallback(async () => {
     try {
       setLoading(true);
-      await Promise.all([fetchData(), fetchRecentlySongs(), fetchFavoriteSongs()]);
+      await Promise.all([
+        fetchData(),
+        fetchRecentlySongs(),
+        fetchFavoriteSongs(),
+      ]);
       setLoading(false);
     } catch (_) {
       onRefresh();
@@ -109,7 +115,6 @@ export default function TabTwoScreen() {
   useEffect(() => {
     onRefresh();
   }, [selectDate, onRefresh]);
-
 
   const renderGeneroItem = ({ item }: genero) => (
     <View className="m-3 rounded-lg" key={item.name}>
@@ -122,7 +127,7 @@ export default function TabTwoScreen() {
       </View>
     </View>
   );
-    const getSongDetails = (Item: song) => {
+  const getSongDetails = (Item: song) => {
     return router.push({
       pathname: "(app)/songsDetails/[song]",
       params: {
@@ -178,7 +183,6 @@ export default function TabTwoScreen() {
                   <ThemedText className="text-xs" type="default">
                     Log out
                   </ThemedText>
-  
                 </TouchableOpacity>
               </View>
             </Modal>

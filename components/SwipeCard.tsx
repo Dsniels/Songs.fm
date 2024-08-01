@@ -36,14 +36,12 @@ export const SwipeCard = <T,>({
   const removeTopCard = useCallback(async () => {
     if (currentSound) {
       await currentSound.stopAsync();
-      await currentSound.unloadAsync();      
+      await currentSound.unloadAsync();
       setCurrentSound(null);
-
     }
     setItems((prevState) => prevState.slice(1));
     swipe.setValue({ x: 0, y: 0 });
   }, [swipe, setItems, currentSound]);
-
 
   const panResponder = useRef(
     PanResponder.create({
@@ -76,7 +74,7 @@ export const SwipeCard = <T,>({
           friction: 5,
         }).start();
       },
-    })
+    }),
   ).current;
 
   const playSound = useCallback(
@@ -86,29 +84,25 @@ export const SwipeCard = <T,>({
         await currentSound.stopAsync();
         await currentSound.unloadAsync();
         setCurrentSound(null);
-
       }
       try {
         const { isLoaded } = await sound.loadAsync({ uri: soundUri });
         if (isLoaded) {
           sound.setIsLoopingAsync(true).then(() => sound.playAsync());
           setCurrentSound(sound);
-
         }
       } catch (_) {
         await sound.unloadAsync();
         setCurrentSound(null);
       }
     },
-    [currentSound]
+    [currentSound],
   );
 
   useEffect(() => {
-
     if (items.length > 0) {
       playSound(items[0].preview_url);
     }
-
   }, [items]);
 
   const rotate = useMemo(
@@ -117,14 +111,14 @@ export const SwipeCard = <T,>({
         inputRange: [-500, 0, 500],
         outputRange: ["8deg", "0deg", "-8deg"],
       }),
-    [swipe]
+    [swipe],
   );
 
   const animatedCardStyle = useMemo(
     () => ({
       transform: [...swipe.getTranslateTransform(), { rotate }],
     }),
-    [swipe, rotate]
+    [swipe, rotate],
   );
 
   const playCurrentSound = async () => {
@@ -152,7 +146,7 @@ export const SwipeCard = <T,>({
       };
 
       return () => onBlur();
-    }, [currentSound, isFocused])
+    }, [currentSound, isFocused]),
   );
   const getSongDetails = (Item: song) => {
     return router.push({
