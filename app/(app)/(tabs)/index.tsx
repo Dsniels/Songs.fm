@@ -11,26 +11,20 @@ import {
 import { ThemedText } from "@/components/ThemedText";
 import { useCallback, useEffect, useState } from "react";
 import { useStateValue } from "@/Context/store";
-import {  getRecentlySongs, getTop } from "@/Api/SongsActions";
+import { getRecentlySongs, getTop } from "@/Api/SongsActions";
 import { styles } from "@/Styles/styles";
 import { topGeneros } from "@/service/TopGeners";
 import { seedArtist, seedTracks } from "@/service/seeds";
-import { router} from "expo-router";
+import { router } from "expo-router";
 import { Picker } from "@react-native-picker/picker";
 import { ListSongs } from "@/components/ListSongs";
 import { ListOfArtists } from "@/components/ListOfArtists";
 import { SmallListSongs } from "@/components/SmallListSongs";
 import { Feather, AntDesign } from "@expo/vector-icons";
 
-import {
-  artist,
-  genero,
-  ItemRespone,
-  song,
-} from "@/types/Card.types";
+import { artist, genero, ItemRespone, song } from "@/types/Card.types";
 import * as SecureStorage from "expo-secure-store";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
 
 export default function TabTwoScreen() {
   const [{ sesionUsuario }, dispatch] = useStateValue();
@@ -64,26 +58,32 @@ export default function TabTwoScreen() {
       params: { id: Item.id, name: Item.name },
     });
   }, []);
- const fetchRecentlySongs = useCallback(async () => {
-      const recently = await getRecentlySongs();
-      const newArray = recently.items.map((item) => item.track);
-      setRecent(newArray);
-      queueMicrotask(()=>seedTracks(newArray));
-    
+  const fetchRecentlySongs = useCallback(async () => {
+    const recently = await getRecentlySongs();
+    const newArray = recently.items.map((item) => item.track);
+    setRecent(newArray);
+    queueMicrotask(() => seedTracks(newArray));
   }, []);
 
-  const fetchData = useCallback (async () => {
-      const [data, dataTopSongs] = await Promise.all([
-        getTop<ItemRespone<artist[]>>("artists", selectDate, requestArtist.offset),
-        getTop<ItemRespone<song[]>>("tracks", selectDate, requestMusic.offsetSongs),
-      ]);
+  const fetchData = useCallback(async () => {
+    const [data, dataTopSongs] = await Promise.all([
+      getTop<ItemRespone<artist[]>>(
+        "artists",
+        selectDate,
+        requestArtist.offset,
+      ),
+      getTop<ItemRespone<song[]>>(
+        "tracks",
+        selectDate,
+        requestMusic.offsetSongs,
+      ),
+    ]);
 
-      setRequestArtist((prev) => ({ ...prev, artists: data.items }));
-      setRequestMusic((prev) => ({ ...prev, songs: dataTopSongs.items }));
-      setGeneros(topGeneros(data));
-      queueMicrotask(()=>seedTracks(dataTopSongs.items));
-      queueMicrotask(()=>seedArtist(data));
-
+    setRequestArtist((prev) => ({ ...prev, artists: data.items }));
+    setRequestMusic((prev) => ({ ...prev, songs: dataTopSongs.items }));
+    setGeneros(topGeneros(data));
+    queueMicrotask(() => seedTracks(dataTopSongs.items));
+    queueMicrotask(() => seedArtist(data));
   }, [selectDate]);
 
   useEffect(() => {
@@ -95,18 +95,18 @@ export default function TabTwoScreen() {
   const onRefresh = useCallback(() => {
     try {
       setLoading(true);
-      Promise.race([fetchData(), fetchRecentlySongs()]).then(() =>{
-      setLoading(false);});
+      Promise.race([fetchData(), fetchRecentlySongs()]).then(() => {
+        setLoading(false);
+      });
     } catch (_) {
       onRefresh();
     }
   }, [fetchData]);
 
   useEffect(() => {
-    onRefresh()
+    onRefresh();
     // fetchFavoriteSongs()
   }, [selectDate, onRefresh]);
-
 
   const renderGeneroItem = ({ item }: genero) => (
     <View className="m-3 rounded-lg" key={item.name}>
@@ -119,7 +119,7 @@ export default function TabTwoScreen() {
       </View>
     </View>
   );
-    const getSongDetails = (Item: song) => {
+  const getSongDetails = (Item: song) => {
     return router.push({
       pathname: "(app)/songsDetails/[song]",
       params: {
@@ -175,7 +175,6 @@ export default function TabTwoScreen() {
                   <ThemedText className="text-xs" type="default">
                     Log out
                   </ThemedText>
-  
                 </TouchableOpacity>
               </View>
             </Modal>

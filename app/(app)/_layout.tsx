@@ -30,17 +30,15 @@ export default function Applayout() {
         await AsyncStorage.clear();
       }
     });
-    if(sesionUsuario?.usuario){
+    if (sesionUsuario?.usuario) {
       SplashScreen.hideAsync();
     }
-  
   }, [sesionUsuario]);
 
   const value = useAuth(dispatch);
   if (value) {
     SplashScreen.hideAsync();
   }
-  
 
   return (
     <Stack screenOptions={{ headerTransparent: false }}>
@@ -51,10 +49,7 @@ export default function Applayout() {
           headerBlurEffect: "dark",
         }}
       />
-      <Stack.Screen
-        name="login"
-        options={{  headerShown: false }}
-      />
+      <Stack.Screen name="login" options={{ headerShown: false }} />
       <Stack.Screen
         name="Detalles/[name]"
         options={{

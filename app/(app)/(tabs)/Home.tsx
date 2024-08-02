@@ -8,7 +8,7 @@ import {
   Keyboard,
 } from "react-native";
 import { ThemedText } from "@/components/ThemedText";
-import {  useFocusEffect, useRouter } from "expo-router";
+import { useFocusEffect, useRouter } from "expo-router";
 import * as SecureStorage from "expo-secure-store";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { styles } from "@/Styles/styles";
@@ -30,13 +30,13 @@ export default function HomeScreen() {
       "keyboardDidShow",
       () => {
         setKeyboardVisible(true);
-      }
+      },
     );
     const keyboardDidHideListener = Keyboard.addListener(
       "keyboardDidHide",
       () => {
         setKeyboardVisible(false);
-      }
+      },
     );
 
     return () => {
@@ -55,7 +55,7 @@ export default function HomeScreen() {
       return () => {
         handleRouteChange();
       };
-    }, [])
+    }, []),
   );
   const deleteToken = async () => {
     await AsyncStorage.clear();
@@ -77,7 +77,7 @@ export default function HomeScreen() {
     setText(t);
     if (t) setItems(null);
   };
-    const getSongDetails = (Item: song) => {
+  const getSongDetails = (Item: song) => {
     return router.push({
       pathname: "(app)/songsDetails/[song]",
       params: {
@@ -100,7 +100,7 @@ export default function HomeScreen() {
         keyboardVerticalOffset={Platform.OS === "ios" ? 64 : 0}
       >
         <View style={styles.titleContainer}>
-          <ThemedText className="text-lg text-white font-bold" >
+          <ThemedText className="text-lg text-white font-bold">
             Search For Your Favorite Songs
           </ThemedText>
         </View>

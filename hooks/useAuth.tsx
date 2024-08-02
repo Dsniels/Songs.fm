@@ -31,12 +31,12 @@ export const useAuth = (dispatch: Dispatch<any>) => {
       }
 
       if (!servidorResponse) {
-       Promise.race([getprofile(dispatch), FavoriteSongs()]);
+        Promise.race([getprofile(dispatch), FavoriteSongs()]);
         setServidorResponse(true);
       }
 
       return () => {
-        setTimeout( () =>  getData(), 3600000);
+        setTimeout(() => getData(), 3600000);
       };
     };
     getData().catch((e) =>

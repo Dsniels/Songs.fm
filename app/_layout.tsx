@@ -10,9 +10,6 @@ import { mainReducer } from "@/Context/Reducers";
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-  
-
-
   return (
     <StateProvider initialState={initialState} reducer={mainReducer}>
       <Slot />
