@@ -10,30 +10,28 @@ export default function music() {
   const [error, setError] = useState<boolean>(false);
   useEffect(() => {
     if (data.length <= 10) {
-      fetchData().then((traks: song[]) => {
-        setData((prev: song[]) => [...prev, ...traks]);
-        
-      }).catch(() => {setError(true)} );
+      fetchData()
+        .then((traks: song[]) => {
+          setData((prev: song[]) => [...prev, ...traks]);
+        })
+        .catch(() => {
+          setError(true);
+        });
     }
   }, [data, error]);
 
-
-
   const fetchData = useCallback(async (): Promise<Recommendatios[]> => {
-
     const data_response: Recommendatios[] = await getRecomendations();
-    const data_result = data_response
-      .filter((i: Recommendatios) => i.preview_url !== null);
+    const data_result = data_response.filter(
+      (i: Recommendatios) => i.preview_url !== null,
+    );
     const extractedData = data_result;
     return extractedData;
-  
-  
-
   }, []);
 
   return (
     <SafeAreaView style={{ backgroundColor: "#000818", flex: 1 }}>
-      { data.length > 0 ? (
+      {data.length > 0 ? (
         <View style={{ display: "flex", marginTop: 10, marginBottom: 10 }}>
           <SwipeCard items={data} setItems={setData}>
             {(item: Recommendatios) => <Card card={item} />}
@@ -41,7 +39,7 @@ export default function music() {
         </View>
       ) : (
         <View style={{ flex: 1, justifyContent: "center" }}>
-        <ActivityIndicator size="large" />
+          <ActivityIndicator size="large" />
         </View>
       )}
     </SafeAreaView>

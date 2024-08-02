@@ -12,5 +12,4 @@ export const generos = [
   "soul",
   "rap",
   "trap",
-  
 ];

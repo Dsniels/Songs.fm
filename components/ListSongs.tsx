@@ -3,7 +3,13 @@ import { song } from "@/types/Card.types";
 import { LinearGradient } from "expo-linear-gradient";
 import { ImageBackground, Text, TouchableOpacity, View } from "react-native";
 
-export const ListSongs = ({ item, getSongDetails }: {item:song, getSongDetails: (item:song)=>void}) => {
+export const ListSongs = ({
+  item,
+  getSongDetails,
+}: {
+  item: song;
+  getSongDetails: (item: song) => void;
+}) => {
   return (
     <TouchableOpacity key={item.id} onPress={() => getSongDetails(item)}>
       <ImageBackground
@@ -30,7 +36,6 @@ export const ListSongs = ({ item, getSongDetails }: {item:song, getSongDetails: 
               numberOfLines={1}
               className="capitalize text-white font-bold"
             >
-
               {item.name}
             </Text>
           </View>
