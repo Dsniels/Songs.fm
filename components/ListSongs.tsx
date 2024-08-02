@@ -30,6 +30,7 @@ export const ListSongs = ({ item, getSongDetails }: {item:song, getSongDetails: 
               numberOfLines={1}
               className="capitalize text-white font-bold"
             >
+
               {item.name}
             </Text>
           </View>

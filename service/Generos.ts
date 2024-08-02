@@ -10,4 +10,7 @@ export const generos = [
   "rock",
   "rock-n-roll",
   "soul",
+  "rap",
+  "trap",
+  
 ];

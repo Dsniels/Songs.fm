@@ -92,11 +92,11 @@ export default function TabTwoScreen() {
     }
   }, [sesionUsuario]);
 
-  const onRefresh = useCallback(() => {
+  const onRefresh = useCallback(async() => {
     try {
       setLoading(true);
-      Promise.race([fetchData(), fetchRecentlySongs()]).then(() =>{
-      setLoading(false);});
+      await Promise.race([fetchData(), fetchRecentlySongs()])   
+      setLoading(false);
     } catch (_) {
       onRefresh();
     }
@@ -104,7 +104,6 @@ export default function TabTwoScreen() {
 
   useEffect(() => {
     onRefresh()
-    // fetchFavoriteSongs()
   }, [selectDate, onRefresh]);
 
 

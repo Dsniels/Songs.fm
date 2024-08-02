@@ -43,7 +43,7 @@ export const getRecomendations = async (): Promise<Recommendatios[]> => {
   
   return new Promise((resolve, reject) => {
     HttpCliente.get(
-      `/recommendations?limit=40&seed_tracks=${songs.toString()}&seed_genres=${generos}&target_acousticness=${randomAcousticness}&target_energy=${randomEnergy}&target_speechiness${randomSpeechiness}&seed_artists=${artists.toString()}&target_danceability=${randomDanceability}&target_popularity=${randomPopularity}&target_valence${randomValence}`,
+      `/recommendations?limit=50&seed_tracks=${songs.toString()}&seed_genres=${generos}&target_acousticness=${randomAcousticness}&target_energy=${randomEnergy}&target_speechiness${randomSpeechiness}&seed_artists=${artists.toString()}&target_danceability=${randomDanceability}&target_popularity=${randomPopularity}&target_valence${randomValence}`,
     )
       .then((response: AxiosResponse) => {
         resolve(response.data?.tracks);
@@ -97,7 +97,7 @@ export const getSongInfo = async (id: string) => {
 
 export const FavoriteSongs = () : Promise<song[]> =>{
   return new Promise((resolve, reject)=>{
-    HttpCliente.get(`/me/tracks?limit=50`).then((Response : AxiosResponse<ItemRespone<song[]>>)=>{
+    HttpCliente.get(`/me/tracks?limit=50&offset=400`).then((Response : AxiosResponse<ItemRespone<song[]>>)=>{
       queueMicrotask(()=>seedTracks(Response.data.items))
       resolve(Response.data.items)
 

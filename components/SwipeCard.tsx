@@ -110,6 +110,10 @@ export const SwipeCard = <T,>({
   useEffect(() => {
     if (items.length > 0 && isFocused) {
       playSound(items[0].preview_url);
+    }else{
+      if (currentSound) {
+        currentSound.stopAsync();
+      }
     }
   }, [items, isFocused]);
 

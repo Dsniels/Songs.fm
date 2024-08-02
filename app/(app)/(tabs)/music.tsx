@@ -7,20 +7,19 @@ import { Recommendatios, song } from "@/types/Card.types";
 
 export default function music() {
   const [data, setData] = useState<song[]>([]);
-
+  const [error, setError] = useState<boolean>(false);
   useEffect(() => {
-    if (data.length <= 5) {
+    if (data.length <= 10) {
       fetchData().then((traks: song[]) => {
         setData((prev: song[]) => [...prev, ...traks]);
-      });
+        
+      }).catch(() => {setError(true)} );
     }
-  }, [data]);
+  }, [data, error]);
 
 
 
   const fetchData = useCallback(async (): Promise<Recommendatios[]> => {
-    
-    try{
 
     const data_response: Recommendatios[] = await getRecomendations();
     const data_result = data_response
@@ -28,22 +27,22 @@ export default function music() {
     const extractedData = data_result;
     return extractedData;
   
-  }
-    catch(_){
-     return fetchData();
-    }
+  
+
   }, []);
 
   return (
     <SafeAreaView style={{ backgroundColor: "#000818", flex: 1 }}>
-      {data.length >= 0 ? (
+      { data.length > 0 ? (
         <View style={{ display: "flex", marginTop: 10, marginBottom: 10 }}>
           <SwipeCard items={data} setItems={setData}>
             {(item: Recommendatios) => <Card card={item} />}
           </SwipeCard>
         </View>
       ) : (
+        <View style={{ flex: 1, justifyContent: "center" }}>
         <ActivityIndicator size="large" />
+        </View>
       )}
     </SafeAreaView>
   );
