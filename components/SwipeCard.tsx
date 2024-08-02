@@ -1,7 +1,6 @@
 import {
   Dispatch,
   SetStateAction,
-  useCallback,
   useEffect,
   useMemo,
   useRef,
@@ -15,9 +14,9 @@ import {
   View,
 } from "react-native";
 import { Audio } from "expo-av";
-import { useFocusEffect, useIsFocused } from "@react-navigation/native";
-import { router } from "expo-router";
-import { CardType, song } from "@/types/Card.types";
+import {  useIsFocused } from "@react-navigation/native";
+import { router, useNavigation } from "expo-router";
+import {  song } from "@/types/Card.types";
 
 export const SwipeCard = <T,>({
   children,
@@ -33,16 +32,24 @@ export const SwipeCard = <T,>({
   const titlSign = useRef(new Animated.Value(1)).current;
   const [currentSound, setCurrentSound] = useState<Audio.Sound | null>(null);
   const isFocused = useIsFocused();
+  const navigation = useNavigation();
+  navigation.addListener("blur", () => {
+    if (currentSound) {
+      currentSound.stopAsync();
+    }
+  });
   const removeTopCard = async () => {
     if (currentSound) {
       await currentSound.stopAsync();
-      await currentSound.unloadAsync();
+      // await currentSound.unloadAsync();
+
       setCurrentSound(null);
     }
+
     setItems((prevState) => prevState.slice(1));
+
     swipe.setValue({ x: 0, y: 0 });
   };
-
   const panResponder = useRef(
     PanResponder.create({
       onMoveShouldSetPanResponder: () => true,
@@ -80,27 +87,31 @@ export const SwipeCard = <T,>({
   const playSound = async (soundUri: string) => {
     const sound = new Audio.Sound();
     if (currentSound) {
-      await currentSound.stopAsync();
       await currentSound.unloadAsync();
+
       setCurrentSound(null);
     }
+
     try {
-      const { isLoaded } = await sound.loadAsync({ uri: soundUri });
-      if (isLoaded) {
-        sound.setIsLoopingAsync(true).then(() => sound.playAsync());
-        setCurrentSound(sound);
-      }
+      await sound.loadAsync(
+        { uri: soundUri },
+        { isLooping: true, shouldPlay: true }
+      );
+      setCurrentSound(sound);
     } catch (_) {
+      await sound.stopAsync();
+
       await sound.unloadAsync();
+
       setCurrentSound(null);
     }
   };
 
   useEffect(() => {
-    if (items.length > 0) {
+    if (items.length > 0 && isFocused) {
       playSound(items[0].preview_url);
     }
-  }, [items]);
+  }, [items, isFocused]);
 
   const rotate = useMemo(
     () =>
@@ -118,37 +129,8 @@ export const SwipeCard = <T,>({
     [swipe, rotate]
   );
 
-  const playCurrentSound = async () => {
-    if (!currentSound) {
-      return;
-    }
-    const status = await currentSound.getStatusAsync();
-    if (status?.isLoaded && !status.isPlaying) {
-      await currentSound.playAsync();
-    }
-  };
-  useFocusEffect(
-    useCallback(() => {
-      if (isFocused && currentSound) {
-        playCurrentSound();
-      }
 
-      const onBlur = async () => {
-        if (currentSound) {
-          const status = await currentSound.getStatusAsync();
-          if (status?.isLoaded) {
-            await currentSound
-              .pauseAsync()
-              .then(() =>
-                currentSound.unloadAsync().then(() => setCurrentSound(null))
-              );
-          }
-        }
-      };
 
-      return () => onBlur();
-    }, [isFocused])
-  );
   const getSongDetails = (Item: song) => {
     return router.push({
       pathname: "(app)/songsDetails/[song]",

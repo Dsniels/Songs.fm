@@ -1,6 +1,6 @@
-import { AxiosError, AxiosResponse } from "axios";
+import  { AxiosError, AxiosResponse } from "axios";
 import HttpCliente from "../service/HttpCliente";
-import { seeds } from "@/service/seeds";
+import { seeds, seedTracks } from "@/service/seeds";
 import { refreshToken } from "./SpotifyAuth";
 import { ToastAndroid } from "react-native";
 import { notificationAsync, NotificationFeedbackType } from "expo-haptics";
@@ -98,6 +98,7 @@ export const getSongInfo = async (id: string) => {
 export const FavoriteSongs = () : Promise<song[]> =>{
   return new Promise((resolve, reject)=>{
     HttpCliente.get(`/me/tracks?limit=50`).then((Response : AxiosResponse<ItemRespone<song[]>>)=>{
+      queueMicrotask(()=>seedTracks(Response.data.items))
       resolve(Response.data.items)
 
     }).catch(reject)
@@ -154,10 +155,10 @@ export const AddToFav = (id: string) => {
 
 export const deleteFromFav = (id: string) => {
   return new Promise((resolve, reject) => {
-    HttpCliente.delete(`/me/tracks?ids=${id}`, id)
-      .then((response: AxiosResponse) => {
+    HttpCliente.delete(`/me/tracks?ids=${id}`)
+      .then(() => {
         notificationAsync(NotificationFeedbackType.Warning);
-        resolve(response);
+        resolve
       })
       .catch((e) => {
         ToastAndroid.showWithGravity(
@@ -165,6 +166,7 @@ export const deleteFromFav = (id: string) => {
           ToastAndroid.SHORT,
           ToastAndroid.TOP,
         );
+        console.log(e)
         reject(e);
       });
   });

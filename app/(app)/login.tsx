@@ -2,9 +2,7 @@ import { Pressable, SafeAreaView, Text, ToastAndroid } from "react-native";
 import * as AuthSession from "expo-auth-session";
 import { useEffect } from "react";
 import * as WebBrowser from "expo-web-browser";
-import { ThemedView } from "@/components/ThemedView";
 import { ThemedText } from "@/components/ThemedText";
-import { styles } from "@/Styles/styles";
 import { router } from "expo-router";
 import { useStateValue } from "@/Context/store";
 import * as Linking from "expo-linking";
@@ -14,7 +12,6 @@ import * as Haptics from "expo-haptics";
 import { checkToken, getAccessToken } from "@/Api/SpotifyAuth";
 import { getprofile } from "@/Api/UserAction";
 import { ResponseAxios, TokenResponse } from "@/types/Card.types";
-import ParallaxScrollView from "@/components/ParallaxScrollView";
 
 WebBrowser.maybeCompleteAuthSession();
 export default function login() {

@@ -4,6 +4,7 @@ import * as SecureStorage from "expo-secure-store";
 import { router } from "expo-router";
 import { refreshToken } from "@/Api/SpotifyAuth";
 import { getprofile } from "@/Api/UserAction";
+import { FavoriteSongs } from "@/Api/SongsActions";
 
 export const useAuth = (dispatch: Dispatch<any>) => {
   const [servidorResponse, setServidorResponse] = useState(false);
@@ -30,16 +31,17 @@ export const useAuth = (dispatch: Dispatch<any>) => {
       }
 
       if (!servidorResponse) {
-        await getprofile(dispatch);
+       Promise.race([getprofile(dispatch), FavoriteSongs()]);
         setServidorResponse(true);
       }
 
       return () => {
-        setTimeout(async () => await getData(), 360000);
+        setTimeout( () =>  getData(), 3600000);
       };
     };
     getData().catch((e) =>
       ToastAndroid.showWithGravity(e, ToastAndroid.SHORT, ToastAndroid.CENTER),
     );
   }, []);
+  return true;
 };

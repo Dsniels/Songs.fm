@@ -1,7 +1,7 @@
 import { useStateValue } from "@/Context/store";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { LinearGradient } from "expo-linear-gradient";
-import { Stack } from "expo-router";
+import { SplashScreen, Stack } from "expo-router";
 import { AppState, StyleSheet, View } from "react-native";
 import { useAuth } from "@/hooks/useAuth";
 import { useEffect } from "react";
@@ -20,6 +20,7 @@ const CustomHeader = () => {
     </View>
   );
 };
+SplashScreen.preventAutoHideAsync();
 
 export default function Applayout() {
   const [{ sesionUsuario }, dispatch] = useStateValue();
@@ -29,9 +30,17 @@ export default function Applayout() {
         await AsyncStorage.clear();
       }
     });
-  }, []);
+    if(sesionUsuario?.usuario){
+      SplashScreen.hideAsync();
+    }
+  
+  }, [sesionUsuario]);
 
-  useAuth(dispatch);
+  const value = useAuth(dispatch);
+  if (value) {
+    SplashScreen.hideAsync();
+  }
+  
 
   return (
     <Stack screenOptions={{ headerTransparent: false }}>

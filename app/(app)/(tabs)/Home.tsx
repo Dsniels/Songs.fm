@@ -1,18 +1,14 @@
 import {
   View,
-  Button,
   Pressable,
-  Text,
   ToastAndroid,
   SafeAreaView,
   KeyboardAvoidingView,
   Platform,
   Keyboard,
 } from "react-native";
-import { HelloWave } from "@/components/HelloWave";
 import { ThemedText } from "@/components/ThemedText";
-import { ThemedView } from "@/components/ThemedView";
-import { Link, useFocusEffect, useRouter } from "expo-router";
+import {  useFocusEffect, useRouter } from "expo-router";
 import * as SecureStorage from "expo-secure-store";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { styles } from "@/Styles/styles";
@@ -81,11 +77,16 @@ export default function HomeScreen() {
     setText(t);
     if (t) setItems(null);
   };
-
-  const getSongDetails = (Item: song) => {
+    const getSongDetails = (Item: song) => {
     return router.push({
       pathname: "(app)/songsDetails/[song]",
-      params: { id: Item.id, name: Item.name, artists: Item.artists[0].name },
+      params: {
+        id: Item.id,
+        name: Item.name,
+        artists: Item.artists[0].name,
+        ImageSong: Item.album.images[0].url,
+        preview_url: Item.preview_url,
+      },
     });
   };
 

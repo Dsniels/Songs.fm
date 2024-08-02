@@ -45,10 +45,9 @@ const SongDetails = () => {
     }
     const sound = new Audio.Sound();
     try {
-      const soundLoaded = (await sound.loadAsync({ uri: soundUri })).isLoaded;
+      const soundLoaded = (await sound.loadAsync({ uri: soundUri },{isLooping : true, shouldPlay:true })).isLoaded;
       if (soundLoaded) {
         setCurrentSound(sound);
-        await sound.setIsLoopingAsync(true);
         sound
           .playAsync()
           .catch((e) =>
@@ -66,7 +65,6 @@ const SongDetails = () => {
 
   const pause = async () => {
     await currentSound?.stopAsync();
-    setCurrentSound(null);
   };
 
   const navigation = useNavigation();
@@ -111,10 +109,8 @@ const SongDetails = () => {
     useCallback(() => {
       const onBlur = async () => {
         if (currentSound) {
-          const status = await currentSound.getStatusAsync();
-          if (status?.isLoaded) {
+            await currentSound.stopAsync();
             currentSound.unloadAsync();
-          }
         }
       };
       return () => onBlur();
@@ -152,12 +148,12 @@ const SongDetails = () => {
       params: { id: Item.id, name: Item.name },
     });
   }, []);
-  const handleLike = async (id: string) => {
-    await AddToFav(id);
+  const handleLike = (id: string) => {
+    queueMicrotask(()=>AddToFav(id))
     setLike(true);
   };
-  const handleUnLike = async (id: string) => {
-    await deleteFromFav(id);
+  const handleUnLike = (id: string) => {
+    queueMicrotask(()=>deleteFromFav(id))
     setLike(false);
   };
 

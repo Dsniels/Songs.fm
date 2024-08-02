@@ -11,11 +11,11 @@ import {
 import { ThemedText } from "@/components/ThemedText";
 import { useCallback, useEffect, useState } from "react";
 import { useStateValue } from "@/Context/store";
-import { FavoriteSongs, getRecentlySongs, getTop } from "@/Api/SongsActions";
+import {  getRecentlySongs, getTop } from "@/Api/SongsActions";
 import { styles } from "@/Styles/styles";
 import { topGeneros } from "@/service/TopGeners";
 import { seedArtist, seedTracks } from "@/service/seeds";
-import { router } from "expo-router";
+import { router} from "expo-router";
 import { Picker } from "@react-native-picker/picker";
 import { ListSongs } from "@/components/ListSongs";
 import { ListOfArtists } from "@/components/ListOfArtists";
@@ -30,6 +30,7 @@ import {
 } from "@/types/Card.types";
 import * as SecureStorage from "expo-secure-store";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+
 
 export default function TabTwoScreen() {
   const [{ sesionUsuario }, dispatch] = useStateValue();
@@ -63,31 +64,26 @@ export default function TabTwoScreen() {
       params: { id: Item.id, name: Item.name },
     });
   }, []);
-
-  const fetchFavoriteSongs = useCallback(async () => {
-    const favSongs = await FavoriteSongs();
-    seedTracks(favSongs);
+ const fetchRecentlySongs = useCallback(async () => {
+      const recently = await getRecentlySongs();
+      const newArray = recently.items.map((item) => item.track);
+      setRecent(newArray);
+      queueMicrotask(()=>seedTracks(newArray));
+    
   }, []);
 
+  const fetchData = useCallback (async () => {
+      const [data, dataTopSongs] = await Promise.all([
+        getTop<ItemRespone<artist[]>>("artists", selectDate, requestArtist.offset),
+        getTop<ItemRespone<song[]>>("tracks", selectDate, requestMusic.offsetSongs),
+      ]);
 
-  const fetchRecentlySongs = useCallback(async () => {
-    const recently = await getRecentlySongs();
-    const newArray = recently.items.map((item) => item.track);
-    setRecent(newArray);
-     seedTracks(newArray);
-  }, []);
+      setRequestArtist((prev) => ({ ...prev, artists: data.items }));
+      setRequestMusic((prev) => ({ ...prev, songs: dataTopSongs.items }));
+      setGeneros(topGeneros(data));
+      queueMicrotask(()=>seedTracks(dataTopSongs.items));
+      queueMicrotask(()=>seedArtist(data));
 
-  const fetchData = useCallback(async () => {
-    const [data, dataTopSongs] = await Promise.all([
-      getTop<ItemRespone<artist[]>>("artists", selectDate, requestArtist.offset),
-      getTop<ItemRespone<song[]>>("tracks", selectDate, requestMusic.offsetSongs),
-    ]);
-
-    setRequestArtist((prev) => ({ ...prev, artists: data.items }));
-    setRequestMusic((prev) => ({ ...prev, songs: dataTopSongs.items }));
-    setGeneros(topGeneros(data));
-    seedTracks(dataTopSongs.items);
-    seedArtist(data);
   }, [selectDate]);
 
   useEffect(() => {
@@ -96,18 +92,19 @@ export default function TabTwoScreen() {
     }
   }, [sesionUsuario]);
 
-  const onRefresh = useCallback(async () => {
+  const onRefresh = useCallback(() => {
     try {
       setLoading(true);
-      await Promise.all([fetchData(), fetchRecentlySongs(), fetchFavoriteSongs()]);
-      setLoading(false);
+      Promise.race([fetchData(), fetchRecentlySongs()]).then(() =>{
+      setLoading(false);});
     } catch (_) {
       onRefresh();
     }
   }, [fetchData]);
 
   useEffect(() => {
-    onRefresh();
+    onRefresh()
+    // fetchFavoriteSongs()
   }, [selectDate, onRefresh]);
 
 

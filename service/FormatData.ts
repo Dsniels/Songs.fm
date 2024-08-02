@@ -5,10 +5,10 @@ import { childrenType} from "@/types/Card.types";
     
     
     if (typeof node === "string" && node !== ".") {
-      data.push(node);
+      data.push(node.trim());
     } else if (typeof node !== "string" && node.children) {
       node.children.forEach((i) => {
-        data.push(extractInfo(i));
+        data.push(extractInfo(i).trim());
       });
     }
     return data.join("");
