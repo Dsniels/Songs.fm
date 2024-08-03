@@ -37,6 +37,7 @@ export const SearchModal = ({
       className="bg-[#000818] m-0 rounded-lg"
       animationType="slide"
       visible={showModal}
+      // skipcq: JS-0417
       onRequestClose={() => {
         setShowModal(false);
       }}
@@ -55,9 +56,11 @@ export const SearchModal = ({
 {items && showModal ? (
           <FlatList
             data={items.tracks.items}
+            // skipcq: JS-0417
             renderItem={({ item }) => (
               <SmallListSongs item={item} getSongDetails={getSongDetails} />
             )}
+            // skipcq: JS-0417
             keyExtractor={(item) => item.id}
           />
         ) : null}

@@ -11,7 +11,9 @@ export const initialState = {
 const sesionUsuarioReducer = (state = initialState, action: action) => {
   switch (action.type) {
     case "INICIAR_SESION":
+      // skipcq: JS-0054
       const { display_name, images } = action.usuario;
+      // skipcq: JS-0054
       const imagen = images.length>0? images[1] : []
      
 

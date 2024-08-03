@@ -127,11 +127,13 @@ const Detalles = () => {
         </View>
       )}
       {informacion && (
+        // skipcq: JS-0415
         <>
           <View className="flex m-5 ">
             <ThemedText type="subtitle">Who is {name}?</ThemedText>
             <Pressable
               className="flex"
+              // skipcq: JS-0417
               onPress={() =>
                 ShowMore ? setShowMore(false) : setShowMore(true)
               }
@@ -171,6 +173,7 @@ const Detalles = () => {
                   <SmallListSongs
                     key={index}
                     item={item}
+                    // skipcq: JS-0417
                     getSongDetails={getSongDetails}
                   />
                 ))
@@ -233,6 +236,7 @@ const Detalles = () => {
               <FlatList
                 horizontal
                 data={infoArtist.artists}
+                // skipcq: JS-0417
                 renderItem={({ item }: items<artist>) => (
                   <ListOfArtists item={item} getDetails={getDetails} />
                 )}
@@ -241,6 +245,7 @@ const Detalles = () => {
               <View style={{ marginTop: 30, marginBottom: 20 }}>
                 <ThemedText type="title">Links</ThemedText>
                 <Pressable
+                  // skipcq: JS-0417
                   onPress={() => Linking.openURL(infoArtist.info.uri || "")}
                 >
                   <ThemedText

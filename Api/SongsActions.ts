@@ -157,8 +157,8 @@ export const deleteFromFav = (id: string) => {
   return new Promise((resolve, reject) => {
     HttpCliente.delete(`/me/tracks?ids=${id}`)
       .then(() => {
-        notificationAsync(NotificationFeedbackType.Warning);
-        resolve
+        resolve(notificationAsync(NotificationFeedbackType.Warning));
+        
       })
       .catch((e) => {
         ToastAndroid.showWithGravity(
@@ -166,7 +166,7 @@ export const deleteFromFav = (id: string) => {
           ToastAndroid.SHORT,
           ToastAndroid.TOP,
         );
-        console.log(e)
+
         reject(e);
       });
   });

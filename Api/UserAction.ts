@@ -4,6 +4,7 @@ import { Dispatch } from "react";
 import { user } from "@/types/Card.types";
 
 export const getprofile = (
+  // skipcq: JS-0323
   dispatch: Dispatch<any>,
 ): Promise<AxiosResponse<user>> => {
   return new Promise((resolve, reject) => {

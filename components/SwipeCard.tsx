@@ -18,7 +18,7 @@ import {  useIsFocused } from "@react-navigation/native";
 import { router, useNavigation } from "expo-router";
 import {  song } from "@/types/Card.types";
 
-export const SwipeCard = <T,>({
+export const SwipeCard = ({
   children,
   items,
   setItems,

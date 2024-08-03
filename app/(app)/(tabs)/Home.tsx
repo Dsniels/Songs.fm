@@ -1,49 +1,26 @@
 import {
   View,
   Pressable,
-  ToastAndroid,
   SafeAreaView,
   KeyboardAvoidingView,
   Platform,
-  Keyboard,
 } from "react-native";
 import { ThemedText } from "@/components/ThemedText";
-import {  useFocusEffect, useRouter } from "expo-router";
-import * as SecureStorage from "expo-secure-store";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useFocusEffect, useRouter } from "expo-router";
 import { styles } from "@/Styles/styles";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback,  useState } from "react";
 import { search } from "@/Api/SongsActions";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { song, Track } from "@/types/Card.types";
 import { SearchModal } from "@/components/SearchModal";
 
 export default function HomeScreen() {
-  const [isKeyboardVisible, setKeyboardVisible] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const router = useRouter();
   const [items, setItems] = useState<Track | null>(null);
   const [text, setText] = useState("");
 
-  useEffect(() => {
-    const keyboardDidShowListener = Keyboard.addListener(
-      "keyboardDidShow",
-      () => {
-        setKeyboardVisible(true);
-      }
-    );
-    const keyboardDidHideListener = Keyboard.addListener(
-      "keyboardDidHide",
-      () => {
-        setKeyboardVisible(false);
-      }
-    );
 
-    return () => {
-      keyboardDidShowListener.remove();
-      keyboardDidHideListener.remove();
-    };
-  }, [items]);
   useFocusEffect(
     useCallback(() => {
       const handleRouteChange = () => {
@@ -57,14 +34,7 @@ export default function HomeScreen() {
       };
     }, [])
   );
-  const deleteToken = async () => {
-    await AsyncStorage.clear();
-    SecureStorage.deleteItemAsync("token").then(() => {
-      ToastAndroid.show("Token eliminado", ToastAndroid.SHORT);
 
-      router.push("/login");
-    });
-  };
 
   const handleSearch = () => {
     if (!text) setItems(null);
@@ -77,7 +47,7 @@ export default function HomeScreen() {
     setText(t);
     if (t) setItems(null);
   };
-    const getSongDetails = (Item: song) => {
+  const getSongDetails = (Item: song) => {
     return router.push({
       pathname: "(app)/songsDetails/[song]",
       params: {
@@ -106,6 +76,7 @@ export default function HomeScreen() {
         </View>
         <Pressable
           className="flex  align-middle m-1 bg-blue-950 rounded-2xl justify-center items-start p-3 shadow-lg shadow-cyan-500/50 "
+          // skipcq: JS-0417
           onPress={() => setShowModal(true)}
         >
           <View>

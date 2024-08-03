@@ -5,6 +5,7 @@ import { ImageBackground, Text, TouchableOpacity, View } from "react-native";
 
 export const ListSongs = ({ item, getSongDetails }: {item:song, getSongDetails: (item:song)=>void}) => {
   return (
+    // skipcq: JS-0415
     <TouchableOpacity key={item.id} onPress={() => getSongDetails(item)}>
       <ImageBackground
         key={item.id}

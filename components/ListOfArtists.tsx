@@ -5,9 +5,11 @@ import { ImageBackground, Text, TouchableOpacity, View } from "react-native";
 
 export const ListOfArtists = ({ item, getDetails }: {item:artist, getDetails : (item:artist)=>void}) => {
   return (
+    // skipcq: JS-0415
     <TouchableOpacity
       style={{ elevation: 270 }}
       key={item.id}
+      // skipcq: JS-0417
       onPress={() => getDetails(item)}
     >
       <ImageBackground

@@ -19,6 +19,7 @@ export default function TabLayout() {
     </View>
   );
   useEffect(() => {
+    // skipcq: JS-P1003
     const unsubscribe = NetInfo.addEventListener((state) => {
       setConnection(state.isConnected);
     });

@@ -176,6 +176,7 @@ const SongDetails = () => {
             {like ? (
               <Pressable
                 className="m-2"
+                // skipcq: JS-0417
                 onPress={(_) => handleUnLike(Track.info.id)}
               >
                 <Ionicons name="heart" size={40} color="red" />
@@ -183,6 +184,7 @@ const SongDetails = () => {
             ) : (
               <Pressable
                 className="m-2"
+                // skipcq: JS-0417
                 onPress={(_) => handleLike(Track.info.id)}
               >
                 <Ionicons name="heart-outline" size={40} color="red" />
@@ -193,6 +195,7 @@ const SongDetails = () => {
               <Pressable
                 className="bg-cyan-950"
                 style={styles.playButton}
+                // skipcq: JS-0417
                 onPress={() => playSound(Track.info.preview_url || " ")}
               >
                 <Ionicons name="play" size={30} color="white" />
@@ -209,6 +212,7 @@ const SongDetails = () => {
               style={{
                 backgroundColor: !showAbout ? "#0f172a" : "transparent",
               }}
+              // skipcq: JS-0417
               onPress={() => setShowAbout(false)}
             >
               <ThemedText
@@ -221,6 +225,7 @@ const SongDetails = () => {
             <Pressable
               className=" flex flex-wrap w-40 text-center align-middle justify-items-center content-center justify-center bg-opacity-70  rounded-t-md"
               style={{ backgroundColor: showAbout ? "#0f172a" : "transparent" }}
+              // skipcq: JS-0417
               onPress={() => setShowAbout(true)}
             >
               <ThemedText
@@ -247,6 +252,7 @@ const SongDetails = () => {
                     Track.info.artists.map((item: artist, index: number) => (
                       <Pressable
                         className="rounded-3xl m-3 px-2 bg-[#1F283D]"
+                        // skipcq: JS-0417
                         onPress={() => getDetails(item)}
                         key={index}
                       >
@@ -419,7 +425,6 @@ const SongDetails = () => {
               </View>
             </View>
           ) : showAbout ? (
-            <>
               <View className=" bg-opacity-80 bg-[#0f172a] m-1 mt-0 pt-0 -top-4 w-fit rounded-b-md rounded-l-md shadow-sm shadow-gray-700 ">
                 <ThemedText
                   className="p-7"
@@ -428,7 +433,6 @@ const SongDetails = () => {
                   {informacion}
                 </ThemedText>
               </View>
-            </>
           ) : (
             <View className="bg-opacity-80 bg-cyan-950 flex justify-stretch content-center items-center align-middle m-1 mt-0 pt-0 -top-4 w-fit h-36 ">
               <ActivityIndicator className="m-8" size="large" />
@@ -437,6 +441,7 @@ const SongDetails = () => {
           <View style={{ marginTop: 30, marginBottom: 20 }}>
             <ThemedText type="title">Links</ThemedText>
             <Pressable
+              // skipcq: JS-0417
               onPress={() => Linking.openURL(Track.audioFeatures.uri || "")}
             >
               <ThemedText

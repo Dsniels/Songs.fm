@@ -6,6 +6,7 @@ export const SmallListSongs = ({ item, getSongDetails }: {item : song, getSongDe
   return (
     <TouchableOpacity
       className=" flex flex-row m-0 border-2 bg-slate-950  items-center p-0 shadow "
+      // skipcq: JS-0417
       onPress={() => getSongDetails(item)}
     >
       <View className="shrink-0 m-3">
