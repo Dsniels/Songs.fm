@@ -11,8 +11,6 @@ const mergeAndStore = async (key: string, newItems: string[]) => {
   const existingArray = existingItems ? convertToArray(existingItems) : [];
   const mergedArray = [...existingArray, ...newItems];
   await AsyncStorage.setItem(key, mergedArray.toString());
-  
-
 };
 
 export const seedGeners = async (seedGeners: string) => {
@@ -21,15 +19,16 @@ export const seedGeners = async (seedGeners: string) => {
 
 export const seedTracks = (data: song[]) => {
   const ids = extractIDs(data);
-  queueMicrotask(()=> mergeAndStore("seedTrack", ids));
+  queueMicrotask(() => mergeAndStore("seedTrack", ids));
 };
 
 export const seedArtist = (data: ItemRespone<artist[]>) => {
   const ids = extractIDs(data.items);
-  queueMicrotask(()=> mergeAndStore("seedArtists", ids));
+  queueMicrotask(() => mergeAndStore("seedArtists", ids));
 };
 
-const getRandomIndex = (length: number) : number => Math.floor(Math.random() * length);
+const getRandomIndex = (length: number): number =>
+  Math.floor(Math.random() * length);
 
 const convertToArray = (str: string | null) => str?.split(",") || [];
 

@@ -16,7 +16,7 @@ import {
 export const getTop = <T>(
   type: string,
   time_range: string,
-  offset = 0
+  offset = 0,
 ): Promise<T> => {
   return new Promise((resolve, reject) => {
     HttpCliente.get(`/me/top/${type}?offset=${offset}&time_range=${time_range}`)
@@ -47,7 +47,7 @@ export const getRecomendations = async (): Promise<Recommendatios[]> => {
   const randomSpeechiness = Math.random() * 0.3 + 0.3;
   return new Promise((resolve, reject) => {
     HttpCliente.get(
-      `/recommendations?limit=50&seed_tracks=${songs.toString()}&seed_genres=${generos}&target_acousticness=${randomAcousticness}&target_energy=${randomEnergy}&target_speechiness${randomSpeechiness}&seed_artists=${artists.toString()}&target_danceability=${randomDanceability}&target_popularity=${randomPopularity}&target_valence${randomValence}`
+      `/recommendations?limit=50&seed_tracks=${songs.toString()}&seed_genres=${generos}&target_acousticness=${randomAcousticness}&target_energy=${randomEnergy}&target_speechiness${randomSpeechiness}&seed_artists=${artists.toString()}&target_danceability=${randomDanceability}&target_popularity=${randomPopularity}&target_valence${randomValence}`,
     )
       .then((response: AxiosResponse) => {
         resolve(response.data?.tracks);
@@ -64,14 +64,14 @@ export const getRecentlySongs = (): Promise<Recently> => {
       .then((response) => {
         resolve(response.data);
       })
-      .catch( (e) => {
+      .catch((e) => {
         reject(e);
       });
   });
 };
 
 export const getListOfSongs = (
-  tracks: string[]
+  tracks: string[],
 ): Promise<AxiosResponse<song[]>> => {
   return new Promise((resolve, _) => {
     HttpCliente.get(`/tracks?ids=${tracks}`)
@@ -84,10 +84,9 @@ export const getListOfSongs = (
   });
 };
 
-
 export const FavoriteSongs = (): Promise<song[]> => {
   return new Promise((resolve, reject) => {
-    HttpCliente.get('/me/tracks?limit=50&offset=400')
+    HttpCliente.get("/me/tracks?limit=50&offset=400")
       .then((Response: AxiosResponse<ItemRespone<song[]>>) => {
         queueMicrotask(() => seedTracks(Response.data.items));
         resolve(Response.data.items);
@@ -137,7 +136,7 @@ export const AddToFav = (id: string) => {
         ToastAndroid.showWithGravity(
           `Ocurrio un error: ${e.code}`,
           ToastAndroid.SHORT,
-          ToastAndroid.TOP
+          ToastAndroid.TOP,
         );
         reject(e);
       });
@@ -154,7 +153,7 @@ export const deleteFromFav = (id: string) => {
         ToastAndroid.showWithGravity(
           `Ocurrio un error: ${e.code}`,
           ToastAndroid.SHORT,
-          ToastAndroid.TOP
+          ToastAndroid.TOP,
         );
 
         reject(e);
