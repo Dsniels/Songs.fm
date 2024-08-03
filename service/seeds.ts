@@ -10,7 +10,7 @@ const mergeAndStore = async (key: string, newItems: string[]) => {
   const existingItems = await AsyncStorage.getItem(key);
   const existingArray = existingItems ? convertToArray(existingItems) : [];
   const mergedArray = [...existingArray, ...newItems];
-  await AsyncStorage.setItem(key, mergedArray.join(","));
+  await AsyncStorage.setItem(key, mergedArray.toString());
   
 
 };
@@ -35,6 +35,7 @@ const convertToArray = (str: string | null) => str?.split(",") || [];
 
 const getRandomSeedItem = async (key: string) => {
   const seedString = await AsyncStorage.getItem(key);
+  console.log(key,seedString)
   const seedArray = convertToArray(seedString);
   return seedArray[getRandomIndex(seedArray.length)];
 };
@@ -48,7 +49,6 @@ export const seeds = async () => {
   ]);
 
   const seedGeneros = generos[getRandomIndex(generos.length)];
-
   return {
     songs: [seedTrack1, seedTrack2],
     artists: [seedArtist1, seedArtist2],

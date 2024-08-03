@@ -1,15 +1,22 @@
-import  { AxiosError, AxiosResponse } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
 import HttpCliente from "../service/HttpCliente";
 import { seeds, seedTracks } from "@/service/seeds";
 import { refreshToken } from "./SpotifyAuth";
 import { ToastAndroid } from "react-native";
 import { notificationAsync, NotificationFeedbackType } from "expo-haptics";
-import { features, ItemRespone, Recently, Recommendatios, song, Track } from "@/types/Card.types";
+import {
+  features,
+  ItemRespone,
+  Recently,
+  Recommendatios,
+  song,
+  Track,
+} from "@/types/Card.types";
 
 export const getTop = <T>(
   type: string,
   time_range: string,
-  offset = 0,
+  offset = 0
 ): Promise<T> => {
   return new Promise((resolve, reject) => {
     HttpCliente.get(`/me/top/${type}?offset=${offset}&time_range=${time_range}`)
@@ -17,9 +24,7 @@ export const getTop = <T>(
         resolve(response.data);
       })
       .catch((e) => {
-  
-        reject(e)
-
+        reject(e);
       });
   });
 };
@@ -36,24 +41,28 @@ export const getRecomendations = async (): Promise<Recommendatios[]> => {
   const { songs, artists, generos } = await seeds();
   const randomDanceability = Math.random();
   const randomPopularity = Math.floor(Math.random() * 100);
-  const randomValence = Math.random() * 0.3 + 0.3;
-  const randomEnergy = Math.random();
-  const randomAcousticness = Math.random();
-  const randomSpeechiness = Math.random();
-  
+  const randomValence = Math.random() * 0.2 + 0.2;
+  const randomEnergy = Math.random() * 0.3 + 0.3;
+  const randomAcousticness = Math.random() * 0.3 + 0.3;
+  const randomSpeechiness = Math.random() * 0.3 + 0.3;
+  console.log(songs.toString(), artists.toString(), generos);
+  console.log(
+    randomAcousticness,
+    randomDanceability,
+    randomEnergy,
+    randomPopularity,
+    randomSpeechiness,
+    randomValence
+  );
   return new Promise((resolve, reject) => {
     HttpCliente.get(
-      `/recommendations?limit=50&seed_tracks=${songs.toString()}&seed_genres=${generos}&target_acousticness=${randomAcousticness}&target_energy=${randomEnergy}&target_speechiness${randomSpeechiness}&seed_artists=${artists.toString()}&target_danceability=${randomDanceability}&target_popularity=${randomPopularity}&target_valence${randomValence}`,
+      `/recommendations?limit=50&seed_tracks=${songs.toString()}&seed_genres=${generos}&target_acousticness=${randomAcousticness}&target_energy=${randomEnergy}&target_speechiness${randomSpeechiness}&seed_artists=${artists.toString()}&target_danceability=${randomDanceability}&target_popularity=${randomPopularity}&target_valence${randomValence}`
     )
       .then((response: AxiosResponse) => {
+        console.log(JSON.stringify(response.data.seeds, null, 2));
         resolve(response.data?.tracks);
       })
       .catch((e: AxiosError) => {
-        ToastAndroid.showWithGravity(
-          "Something went wrong",
-          ToastAndroid.SHORT,
-          ToastAndroid.CENTER,
-        );
         reject(e);
       });
   });
@@ -65,15 +74,14 @@ export const getRecentlySongs = (): Promise<Recently> => {
       .then((response) => {
         resolve(response.data);
       })
-      .catch(async(e) => {
-        reject(e)
-
+      .catch(async (e) => {
+        reject(e);
       });
   });
 };
 
 export const getListOfSongs = (
-  tracks: string[],
+  tracks: string[]
 ): Promise<AxiosResponse<song[]>> => {
   return new Promise((resolve, _) => {
     HttpCliente.get(`/tracks?ids=${tracks}`)
@@ -95,15 +103,16 @@ export const getSongInfo = async (id: string) => {
   return { Info: info, Features: features, Like: like };
 };
 
-export const FavoriteSongs = () : Promise<song[]> =>{
-  return new Promise((resolve, reject)=>{
-    HttpCliente.get(`/me/tracks?limit=50&offset=400`).then((Response : AxiosResponse<ItemRespone<song[]>>)=>{
-      queueMicrotask(()=>seedTracks(Response.data.items))
-      resolve(Response.data.items)
-
-    }).catch(reject)
-  })
-}
+export const FavoriteSongs = (): Promise<song[]> => {
+  return new Promise((resolve, reject) => {
+    HttpCliente.get('/me/tracks?limit=50&offset=400')
+      .then((Response: AxiosResponse<ItemRespone<song[]>>) => {
+        queueMicrotask(() => seedTracks(Response.data.items));
+        resolve(Response.data.items);
+      })
+      .catch(reject);
+  });
+};
 
 const songInfo = (id: string): Promise<song> => {
   return new Promise((resolve, reject) => {
@@ -146,7 +155,7 @@ export const AddToFav = (id: string) => {
         ToastAndroid.showWithGravity(
           `Ocurrio un error: ${e.code}`,
           ToastAndroid.SHORT,
-          ToastAndroid.TOP,
+          ToastAndroid.TOP
         );
         reject(e);
       });
@@ -158,13 +167,12 @@ export const deleteFromFav = (id: string) => {
     HttpCliente.delete(`/me/tracks?ids=${id}`)
       .then(() => {
         resolve(notificationAsync(NotificationFeedbackType.Warning));
-        
       })
       .catch((e) => {
         ToastAndroid.showWithGravity(
           `Ocurrio un error: ${e.code}`,
           ToastAndroid.SHORT,
-          ToastAndroid.TOP,
+          ToastAndroid.TOP
         );
 
         reject(e);

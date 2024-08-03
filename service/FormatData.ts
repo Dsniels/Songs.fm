@@ -4,7 +4,7 @@ import { childrenType} from "@/types/Card.types";
     const data : Array<string> = [];
     
     
-    if (typeof node === "string" && node !== ".") {
+    if (typeof node === "string" && node !== " ") {
       data.push(node.trim());
     } else if (typeof node !== "string" && node.children) {
       node.children.forEach((i) => {
