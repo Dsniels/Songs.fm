@@ -78,12 +78,13 @@ export default function login() {
 
   return (
     <SafeAreaView className="flex-1 align-middle justify-center items-center bg-slate-900 ">
-
       <ThemedText type="subtitle">Connect your Account </ThemedText>
-      <Pressable className="flex rounded-lg m-4 p-3 w-auto h-auto bg-green-500" onPress={() => promptAsync()}>
+      <Pressable
+        className="flex rounded-lg m-4 p-3 w-auto h-auto bg-green-500"
+        onPress={() => promptAsync()}
+      >
         <Text className="text-cyan-100 ">Log In</Text>
       </Pressable>
-
     </SafeAreaView>
   );
 }
