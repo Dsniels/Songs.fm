@@ -33,7 +33,7 @@ export const getAccessToken = (
         resolve(response);
       })
       .catch((e: AxiosError) => {
-        throw new Error(`${e}`);
+        reject(e);
       });
   });
 };
@@ -65,7 +65,7 @@ export const refreshToken = async (): Promise<AxiosResponse> => {
         resolve(response);
       })
       .catch((e) => {
-        resolve(e);
+        reject(e);
       });
   });
 };

@@ -1,11 +1,11 @@
-import { album, artist, song, Track, TrackResponse } from "@/types/Card.types";
+import { album, artist, song, TrackResponse } from "@/types/Card.types";
 import HttpCliente from "../service/HttpCliente";
 import { refreshToken } from "./SpotifyAuth";
 import { AxiosResponse } from "axios";
 
 
 const infoArtista = (id: string): Promise<artist> => {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve, _) => {
     HttpCliente.get(`/artists/${id}`)
       .then((response: AxiosResponse) => {
         resolve(response.data || {});

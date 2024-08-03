@@ -7,7 +7,7 @@ export const getprofile = (
   // skipcq: JS-0323
   dispatch: Dispatch<any>,
 ): Promise<AxiosResponse<user>> => {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve, _) => {
     HttpCliente.get("/me")
       .then((response: AxiosResponse) => {
 
