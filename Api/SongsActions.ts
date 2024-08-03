@@ -45,21 +45,11 @@ export const getRecomendations = async (): Promise<Recommendatios[]> => {
   const randomEnergy = Math.random() * 0.3 + 0.3;
   const randomAcousticness = Math.random() * 0.3 + 0.3;
   const randomSpeechiness = Math.random() * 0.3 + 0.3;
-  console.log(songs.toString(), artists.toString(), generos);
-  console.log(
-    randomAcousticness,
-    randomDanceability,
-    randomEnergy,
-    randomPopularity,
-    randomSpeechiness,
-    randomValence
-  );
   return new Promise((resolve, reject) => {
     HttpCliente.get(
       `/recommendations?limit=50&seed_tracks=${songs.toString()}&seed_genres=${generos}&target_acousticness=${randomAcousticness}&target_energy=${randomEnergy}&target_speechiness${randomSpeechiness}&seed_artists=${artists.toString()}&target_danceability=${randomDanceability}&target_popularity=${randomPopularity}&target_valence${randomValence}`
     )
       .then((response: AxiosResponse) => {
-        console.log(JSON.stringify(response.data.seeds, null, 2));
         resolve(response.data?.tracks);
       })
       .catch((e: AxiosError) => {
@@ -74,7 +64,7 @@ export const getRecentlySongs = (): Promise<Recently> => {
       .then((response) => {
         resolve(response.data);
       })
-      .catch(async (e) => {
+      .catch( (e) => {
         reject(e);
       });
   });
@@ -94,14 +84,6 @@ export const getListOfSongs = (
   });
 };
 
-export const getSongInfo = async (id: string) => {
-  const [info, features, like] = await Promise.all([
-    songInfo(id),
-    AudioFeatures(id),
-    checkLikeTrack(id),
-  ]);
-  return { Info: info, Features: features, Like: like };
-};
 
 export const FavoriteSongs = (): Promise<song[]> => {
   return new Promise((resolve, reject) => {
@@ -178,4 +160,13 @@ export const deleteFromFav = (id: string) => {
         reject(e);
       });
   });
+};
+
+export const getSongInfo = async (id: string) => {
+  const [info, features, like] = await Promise.all([
+    songInfo(id),
+    AudioFeatures(id),
+    checkLikeTrack(id),
+  ]);
+  return { Info: info, Features: features, Like: like };
 };

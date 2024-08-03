@@ -35,7 +35,6 @@ const convertToArray = (str: string | null) => str?.split(",") || [];
 
 const getRandomSeedItem = async (key: string) => {
   const seedString = await AsyncStorage.getItem(key);
-  console.log(key,seedString)
   const seedArray = convertToArray(seedString);
   return seedArray[getRandomIndex(seedArray.length)];
 };
