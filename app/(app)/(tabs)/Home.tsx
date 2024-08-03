@@ -8,7 +8,7 @@ import {
 import { ThemedText } from "@/components/ThemedText";
 import { useFocusEffect, useRouter } from "expo-router";
 import { styles } from "@/Styles/styles";
-import { useCallback,  useState } from "react";
+import { useCallback, useState } from "react";
 import { search } from "@/Api/SongsActions";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { song, Track } from "@/types/Card.types";
@@ -19,7 +19,6 @@ export default function HomeScreen() {
   const router = useRouter();
   const [items, setItems] = useState<Track | null>(null);
   const [text, setText] = useState("");
-
 
   useFocusEffect(
     useCallback(() => {
@@ -32,9 +31,8 @@ export default function HomeScreen() {
       return () => {
         handleRouteChange();
       };
-    }, [])
+    }, []),
   );
-
 
   const handleSearch = () => {
     if (!text) setItems(null);
@@ -70,7 +68,7 @@ export default function HomeScreen() {
         keyboardVerticalOffset={Platform.OS === "ios" ? 64 : 0}
       >
         <View style={styles.titleContainer}>
-          <ThemedText className="text-lg text-white font-bold" >
+          <ThemedText className="text-lg text-white font-bold">
             Search For Your Favorite Songs
           </ThemedText>
         </View>

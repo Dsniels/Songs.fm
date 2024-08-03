@@ -2,7 +2,13 @@ import { View, Image, TouchableOpacity } from "react-native";
 import { ThemedText } from "./ThemedText";
 import { artist, song } from "@/types/Card.types";
 
-export const SmallListSongs = ({ item, getSongDetails }: {item : song, getSongDetails : (item : song)=>void}) => {
+export const SmallListSongs = ({
+  item,
+  getSongDetails,
+}: {
+  item: song;
+  getSongDetails: (item: song) => void;
+}) => {
   return (
     <TouchableOpacity
       className=" flex flex-row m-0 border-2 bg-slate-950  items-center p-0 shadow "
@@ -11,7 +17,7 @@ export const SmallListSongs = ({ item, getSongDetails }: {item : song, getSongDe
     >
       <View className="shrink-0 m-3">
         <Image
-          source={{ uri: item.album.images[0].url  }}
+          source={{ uri: item.album.images[0].url }}
           className=" w-14 h-14 "
         />
       </View>
