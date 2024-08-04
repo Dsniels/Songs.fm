@@ -1,9 +1,8 @@
 import { router, Tabs } from "expo-router";
-import { useCallback, useEffect, } from "react";
+import { useCallback, useEffect } from "react";
 import { TabBarIcon } from "@/components/navigation/TabBarIcon";
 import { Colors } from "@/constants/Colors";
 import * as SecureStorage from "expo-secure-store";
-
 
 export default function TabLayout() {
   const colorScheme = "dark";
@@ -73,5 +72,5 @@ export default function TabLayout() {
         }}
       />
     </Tabs>
-  ) 
+  );
 }

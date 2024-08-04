@@ -11,6 +11,5 @@ export const generos = [
   "rock-n-roll",
   "soul",
   "british",
-  "afrobeat"
-  
+  "afrobeat",
 ];

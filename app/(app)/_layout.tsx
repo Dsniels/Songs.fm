@@ -27,19 +27,18 @@ SplashScreen.preventAutoHideAsync();
 
 export default function Applayout() {
   const [{ sesionUsuario }, dispatch] = useStateValue();
-  const [Connection, setConnection] = useState<boolean|null>(true);
+  const [Connection, setConnection] = useState<boolean | null>(true);
   useEffect(() => {
     AppState.addEventListener("change", async (state) => {
       if (state === "inactive") {
         await AsyncStorage.clear();
       }
     });
-        const unsubscribe = NetInfo.addEventListener((state) => {
+    const unsubscribe = NetInfo.addEventListener((state) => {
       setConnection(state.isConnected);
     });
 
     return () => unsubscribe();
-  
   }, []);
 
   const NotConnection = () => (
@@ -49,10 +48,8 @@ export default function Applayout() {
     </View>
   );
   useAuth(dispatch).finally(() => {
-      SplashScreen.hideAsync();
+    SplashScreen.hideAsync();
   });
-
-  
 
   return Connection ? (
     <Stack screenOptions={{ headerTransparent: false }}>
@@ -63,10 +60,7 @@ export default function Applayout() {
           headerBlurEffect: "dark",
         }}
       />
-      <Stack.Screen
-        name="login"
-        options={{  headerShown: false }}
-      />
+      <Stack.Screen name="login" options={{ headerShown: false }} />
       <Stack.Screen
         name="Detalles/[name]"
         options={{
@@ -87,7 +81,9 @@ export default function Applayout() {
         }}
       />
     </Stack>
-  ) : (<NotConnection />);
+  ) : (
+    <NotConnection />
+  );
 }
 
 const styles = StyleSheet.create({

@@ -21,12 +21,7 @@ import { getInfo } from "@/Api/AnnotatiosActions";
 import { extractInfo } from "@/service/FormatData";
 import { ListOfArtists } from "@/components/ListOfArtists";
 import { SmallListSongs } from "@/components/SmallListSongs";
-import {
-  album,
-  artist,
-  items,
-  song,
-} from "@/types/Card.types";
+import { album, artist, items, song } from "@/types/Card.types";
 
 type ArtistInfo = {
   info: artist;
@@ -39,7 +34,11 @@ const Detalles = () => {
   const navigation = useNavigation();
   const [informacion, setInformacion] = useState<string>("");
   const [ShowMore, setShowMore] = useState(false);
-  const { name = "", id = "", imagenArtist} = useLocalSearchParams<{
+  const {
+    name = "",
+    id = "",
+    imagenArtist,
+  } = useLocalSearchParams<{
     name?: string;
     id?: string;
     imagenArtist?: string;
@@ -61,7 +60,11 @@ const Detalles = () => {
   const getDetails = (Item: artist) => {
     return router.push({
       pathname: "(app)/Detalles/[name]",
-      params: { id: Item.id, name: Item.name, imagenArtist: Item.images[0].url },
+      params: {
+        id: Item.id,
+        name: Item.name,
+        imagenArtist: Item.images[0].url,
+      },
     });
   };
 
@@ -69,34 +72,41 @@ const Detalles = () => {
     navigation.setOptions({ title: name, headerBlurEffect: "regular" });
 
     const fetchData = async () => {
-      try{
-      const [artistInfoResult, descriptionResult] = await Promise.all([
-        getArtistInformation(id),
-        getInfo(name, name, false),
-      ]);
+      try {
+        const [artistInfoResult, descriptionResult] = await Promise.all([
+          getArtistInformation(id),
+          getInfo(name, name, false),
+        ]);
 
-      const { Info, Songs = [], Albums = [], Artists = [] } = artistInfoResult;
-      setInfo({
-        info: Info,
-        songs: Songs,
-        albums: Albums,
-        artists: Artists,
-      });
+        const {
+          Info,
+          Songs = [],
+          Albums = [],
+          Artists = [],
+        } = artistInfoResult;
+        setInfo({
+          info: Info,
+          songs: Songs,
+          albums: Albums,
+          artists: Artists,
+        });
 
+        const description = descriptionResult;
+        let info = description.map((i) => extractInfo(i)).join(" ");
+        if (informacion === "?") info = "I Dont found it  :(";
 
-      const description = descriptionResult;
-      let info = description.map((i) => extractInfo(i)).join(" ");
-      if (informacion === "?") info = "I Dont found it  :(";
-
-      setInformacion(info);
-    }
-    catch(e){
-      ToastAndroid.showWithGravity(`${e}`, ToastAndroid.SHORT, ToastAndroid.CENTER)
-    }
+        setInformacion(info);
+      } catch (e) {
+        ToastAndroid.showWithGravity(
+          `${e}`,
+          ToastAndroid.SHORT,
+          ToastAndroid.CENTER,
+        );
+      }
     };
 
-    fetchData()
-    }, [name, id, navigation]);
+    fetchData();
+  }, [name, id, navigation]);
 
   const getSongDetails = (Item: song) => {
     return router.push({
@@ -117,7 +127,7 @@ const Detalles = () => {
       headerImage={
         <Image
           source={{
-            uri: imagenArtist ||  infoArtist.info.images[0].url
+            uri: imagenArtist || infoArtist.info.images[0].url,
           }}
           style={{ width: "100%", height: 400 }}
         />
@@ -156,11 +166,12 @@ const Detalles = () => {
           </View>
           <View>
             <View style={{ margin: 30 }}>
-              <ThemedText type="subtitle">Popularity {infoArtist.info.popularity} of 100</ThemedText>
-          
+              <ThemedText type="subtitle">
+                Popularity {infoArtist.info.popularity} of 100
+              </ThemedText>
 
               <ThemedText style={{ marginTop: 20 }} type="subtitle">
-                Genres              
+                Genres
               </ThemedText>
               <ThemedText numberOfLines={3}>
                 {infoArtist.info.genres.join(", ") || "No disponible"}
