@@ -4,12 +4,12 @@ import { childrenType} from "@/types/Card.types";
     const data : Array<string> = [];
     
     
-    if (typeof node === "string" && node !== " ") {
+    if (typeof node === "string" && node.trim() !== " ") {
       data.push(node.trim());
     } else if (typeof node !== "string" && node.children) {
       node.children.forEach((i) => {
         data.push(extractInfo(i).trim());
       });
     }
-    return data.join("");
+    return data.join(" ");
   };

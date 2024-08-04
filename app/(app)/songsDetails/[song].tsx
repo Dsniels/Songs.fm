@@ -143,9 +143,10 @@ const SongDetails = () => {
   }, [navigation]);
 
   const getDetails = useCallback((Item: artist) => {
+
     return router.replace({
       pathname: "(app)/Detalles/[name]",
-      params: { id: Item.id, name: Item.name },
+      params: { id: Item.id, name: Item.name},
     });
   }, []);
   const handleLike = (id: string) => {

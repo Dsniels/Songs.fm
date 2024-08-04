@@ -1,31 +1,12 @@
 import { router, Tabs } from "expo-router";
-import { useCallback, useEffect, useState } from "react";
-import NetInfo from "@react-native-community/netinfo";
+import { useCallback, useEffect, } from "react";
 import { TabBarIcon } from "@/components/navigation/TabBarIcon";
 import { Colors } from "@/constants/Colors";
 import * as SecureStorage from "expo-secure-store";
-import { View } from "react-native";
-import { Feather } from "@expo/vector-icons";
-import { ThemedText } from "@/components/ThemedText";
+
 
 export default function TabLayout() {
   const colorScheme = "dark";
-  const [Connection, setConnection] = useState<boolean | null>(true);
-
-  const NotConnection = () => (
-    <View className="flex-1 bg-slate-900 items-center justify-center">
-      <Feather name="wifi-off" size={100} color="white" />
-      <ThemedText type="subtitle">Sin Conexion a internet</ThemedText>
-    </View>
-  );
-  useEffect(() => {
-    // skipcq: JS-P1003
-    const unsubscribe = NetInfo.addEventListener((state) => {
-      setConnection(state.isConnected);
-    });
-
-    return () => unsubscribe();
-  }, []);
 
   useEffect(
     useCallback(() => {
@@ -40,7 +21,7 @@ export default function TabLayout() {
       return;
     }, []),
   );
-  return Connection ? (
+  return (
     <Tabs
       screenOptions={{
         tabBarStyle: {
@@ -92,7 +73,5 @@ export default function TabLayout() {
         }}
       />
     </Tabs>
-  ) : (
-    <NotConnection />
-  );
+  ) 
 }

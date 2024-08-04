@@ -39,9 +39,10 @@ const Detalles = () => {
   const navigation = useNavigation();
   const [informacion, setInformacion] = useState<string>("");
   const [ShowMore, setShowMore] = useState(false);
-  const { name = "", id = "" } = useLocalSearchParams<{
+  const { name = "", id = "", imagenArtist} = useLocalSearchParams<{
     name?: string;
     id?: string;
+    imagenArtist?: string;
   }>();
   const [infoArtist, setInfo] = useState<ArtistInfo>({
     info: {
@@ -60,7 +61,7 @@ const Detalles = () => {
   const getDetails = (Item: artist) => {
     return router.push({
       pathname: "(app)/Detalles/[name]",
-      params: { id: Item.id, name: Item.name },
+      params: { id: Item.id, name: Item.name, imagenArtist: Item.images[0].url },
     });
   };
 
@@ -68,6 +69,7 @@ const Detalles = () => {
     navigation.setOptions({ title: name, headerBlurEffect: "regular" });
 
     const fetchData = async () => {
+      try{
       const [artistInfoResult, descriptionResult] = await Promise.all([
         getArtistInformation(id),
         getInfo(name, name, false),
@@ -87,12 +89,14 @@ const Detalles = () => {
       if (informacion === "?") info = "I Dont found it  :(";
 
       setInformacion(info);
+    }
+    catch(e){
+      ToastAndroid.showWithGravity(`${e}`, ToastAndroid.SHORT, ToastAndroid.CENTER)
+    }
     };
 
-    fetchData().catch((e) =>
-      ToastAndroid.showWithGravity(e, ToastAndroid.SHORT, ToastAndroid.CENTER)
-    );
-  }, [name, id, navigation]);
+    fetchData()
+    }, [name, id, navigation]);
 
   const getSongDetails = (Item: song) => {
     return router.push({
@@ -113,9 +117,7 @@ const Detalles = () => {
       headerImage={
         <Image
           source={{
-            uri:
-              infoArtist.info.images[0].url ||
-              "https://th.bing.com/th/id/OIP.dfpjYr0obWlvVKnjJ9ccyQHaHJ?rs=1&pid=ImgDetMain",
+            uri: imagenArtist ||  infoArtist.info.images[0].url
           }}
           style={{ width: "100%", height: 400 }}
         />

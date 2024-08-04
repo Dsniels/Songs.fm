@@ -4,7 +4,10 @@ import { LinearGradient } from "expo-linear-gradient";
 import { SplashScreen, Stack } from "expo-router";
 import { AppState, StyleSheet, View } from "react-native";
 import { useAuth } from "@/hooks/useAuth";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { Feather } from "@expo/vector-icons";
+import { ThemedText } from "@/components/ThemedText";
+import NetInfo from "@react-native-community/netinfo";
 
 const CustomHeader = () => {
   return (
@@ -24,25 +27,34 @@ SplashScreen.preventAutoHideAsync();
 
 export default function Applayout() {
   const [{ sesionUsuario }, dispatch] = useStateValue();
+  const [Connection, setConnection] = useState<boolean|null>(true);
   useEffect(() => {
     AppState.addEventListener("change", async (state) => {
       if (state === "inactive") {
         await AsyncStorage.clear();
       }
     });
-    if(sesionUsuario?.usuario){
+        const unsubscribe = NetInfo.addEventListener((state) => {
+      setConnection(state.isConnected);
+    });
+
+    return () => unsubscribe();
+  
+  }, []);
+
+  const NotConnection = () => (
+    <View className="flex-1 bg-slate-900 items-center justify-center">
+      <Feather name="wifi-off" size={100} color="white" />
+      <ThemedText type="subtitle">Sin Conexion a internet</ThemedText>
+    </View>
+  );
+  useAuth(dispatch).finally(() => {
       SplashScreen.hideAsync();
-    }
-  
-  }, [sesionUsuario]);
+  });
 
-  const value = useAuth(dispatch);
-  if (value) {
-    SplashScreen.hideAsync();
-  }
   
 
-  return (
+  return Connection ? (
     <Stack screenOptions={{ headerTransparent: false }}>
       <Stack.Screen
         name="(tabs)"
@@ -75,7 +87,7 @@ export default function Applayout() {
         }}
       />
     </Stack>
-  );
+  ) : (<NotConnection />);
 }
 
 const styles = StyleSheet.create({

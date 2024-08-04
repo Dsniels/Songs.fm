@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "SpotifyApp",
-    "slug": "SpotifyApp",
-    "version": "1.0.0",
+    "name": "Songs.fm",
+    "slug": "Songs.fm",
+    "version": "1.1.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "mysupersecureuniqueapp",
@@ -16,12 +16,11 @@
       "supportsTablet": true
     },
     "android": {
-
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.danielsrd.SpotifyApp",
+      "package": "com.danielsrd.Songs.fm",
       "scheme": "mysupersecureuniqueapp"
     },
     "web": {
@@ -37,7 +36,6 @@
       "typedRoutes": true
     },
     "extra": {
-
       "eas": {
         "projectId": "2b41716d-c7d4-4568-9b93-87b2b7782275"
       }
