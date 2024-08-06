@@ -37,19 +37,12 @@ const SongDetails = () => {
   const isFocused = useIsFocused();
   const [informacion, setInformacion] = useState("");
   const [like, setLike] = useState<boolean>(false);
-
-  const playSound = async (soundUri: string) => {
-    if (currentSound) {
-      await currentSound.unloadAsync();
-      setCurrentSound(null);
-    }
-    const sound = new Audio.Sound();
+  const [loadingSound, setLoadingSound] = useState<boolean>(true);
+  const [playing, setPlaying] = useState<boolean>(false);
+  const playSound =() => {
     try {
-      const soundLoaded = (await sound.loadAsync({ uri: soundUri },{isLooping : true, shouldPlay:true })).isLoaded;
-      if (soundLoaded) {
-        setCurrentSound(sound);
-        sound
-          .playAsync()
+      if (currentSound) {
+          currentSound.playAsync().then(() => setPlaying(true))
           .catch((e) =>
             ToastAndroid.showWithGravity(
               e,
@@ -58,13 +51,12 @@ const SongDetails = () => {
             ),
           );
       }
-    } catch (error) {
-      console.error("Error ", error);
-    }
+    } catch (e) {console.log(e) }
   };
 
   const pause = async () => {
     await currentSound?.stopAsync();
+    setPlaying(false);
   };
 
   const navigation = useNavigation();
@@ -136,8 +128,14 @@ const SongDetails = () => {
         .join(" ");
         if(informacion === '?') informacion = 'I Dont found it  :(';
       setInformacion(informacion);
+      return Info
     };
-    fetchData().catch((e) =>
+    fetchData().then(async(info)=>{
+      const audio = new Audio.Sound();
+      await audio.loadAsync({uri:info.preview_url}, {isLooping:true});
+      setCurrentSound(audio);
+      setLoadingSound(false);
+    }).catch((e) =>
       ToastAndroid.showWithGravity(e, ToastAndroid.SHORT, ToastAndroid.CENTER),
     );
   }, [navigation]);
@@ -192,12 +190,17 @@ const SongDetails = () => {
               </Pressable>
             )}
 
-            {currentSound === null && Track.info.preview_url ? (
+            {loadingSound ? (
+              <View style={styles.playButton}>
+                <ActivityIndicator size="large" />
+              </View>
+              ): !playing ? (
+              
               <Pressable
                 className="bg-cyan-950"
                 style={styles.playButton}
                 // skipcq: JS-0417
-                onPress={() => playSound(Track.info.preview_url || " ")}
+                onPress={() => playSound()}
               >
                 <Ionicons name="play" size={30} color="white" />
               </Pressable>
