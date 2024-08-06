@@ -29,11 +29,11 @@ export default function Applayout() {
   const [{ sesionUsuario }, dispatch] = useStateValue();
   const [Connection, setConnection] = useState<boolean|null>(true);
   useEffect(() => {
-    AppState.addEventListener("change", async (state) => {
-      if (state === "inactive") {
-        await AsyncStorage.clear();
-      }
-    });
+    // AppState.addEventListener("change", async (state) => {
+    //   if (state === "inactive") {
+    //     await AsyncStorage.clear();
+    //   }
+    // });
         const unsubscribe = NetInfo.addEventListener((state) => {
       setConnection(state.isConnected);
     });

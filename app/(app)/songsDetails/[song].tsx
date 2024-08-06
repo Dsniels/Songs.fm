@@ -25,6 +25,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { getInfo } from "@/Api/AnnotatiosActions";
 import { extractInfo } from "@/service/FormatData";
 import { artist, features, song } from "@/types/Card.types";
+import { mergeAndStore } from "@/service/seeds";
 
 type ITrack = {
   info: song;
@@ -51,7 +52,7 @@ const SongDetails = () => {
             ),
           );
       }
-    } catch (e) {console.log(e) }
+    } catch (e) {ToastAndroid.showWithGravity(`${e}`, ToastAndroid.SHORT, ToastAndroid.CENTER);}
   };
 
   const pause = async () => {
@@ -150,6 +151,7 @@ const SongDetails = () => {
   const handleLike = (id: string) => {
     queueMicrotask(()=>AddToFav(id))
     setLike(true);
+    mergeAndStore("seedTrack", [id]);
   };
   const handleUnLike = (id: string) => {
     queueMicrotask(()=>deleteFromFav(id))
@@ -164,7 +166,7 @@ const SongDetails = () => {
         <Image
           source={{
             uri:
-              Track.info.album.images[0].url || ImageSong,         }}
+              Track.info.album.images[0].url || ImageSong}}
           style={{ width: "100%", height: 400 }}
         />
       }

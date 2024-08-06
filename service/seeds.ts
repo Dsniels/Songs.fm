@@ -6,10 +6,10 @@ const extractIDs = <T extends { id: string }>(data: T[]): string[] => {
   return data.map((item) => item.id);
 };
 
-const mergeAndStore = async (key: string, newItems: string[]) => {
+export const mergeAndStore = async (key: string, newItems: string[]) => {
   const existingItems = await AsyncStorage.getItem(key);
   const existingArray = existingItems ? convertToArray(existingItems) : [];
-  const mergedArray = [...existingArray, ...newItems];
+  const mergedArray = Array.from(new Set([...existingArray, ...newItems]))
   await AsyncStorage.setItem(key, mergedArray.toString());
   
 

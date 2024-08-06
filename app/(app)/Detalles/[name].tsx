@@ -43,7 +43,7 @@ const Detalles = () => {
   const { name = "", id = "", imagenArtist} = useLocalSearchParams<{
     name?: string;
     id?: string;
-    imagenArtist?: string;
+    imagenArtist: string;
   }>();
   const [infoArtist, setInfo] = useState<ArtistInfo>({
     info: {
@@ -84,12 +84,14 @@ const Detalles = () => {
         artists: Artists,
       });
 
-
-      const description = descriptionResult;
-      let info = description.map((i) => extractInfo(i)).join(" ");
+      if(descriptionResult){
+      let info = descriptionResult.map((i) => extractInfo(i)).join(" ");
       if (informacion === "?") info = "I Dont found it  :(";
 
       setInformacion(info);
+      }else{
+        setInformacion("I Dont found it  :(");
+      }
     }
     catch(e){
       ToastAndroid.showWithGravity(`${e}`, ToastAndroid.SHORT, ToastAndroid.CENTER)
@@ -119,7 +121,7 @@ const Detalles = () => {
       headerImage={
         <Image
           source={{
-            uri: imagenArtist ||  infoArtist.info.images[0].url
+            uri: infoArtist.info.images[0].url || imagenArtist
           }}
           style={{ width: "100%", height: 400 }}
         />
@@ -188,7 +190,7 @@ const Detalles = () => {
                 Albums
               </ThemedText>
               <ScrollView horizontal>
-                {infoArtist.albums.map((item: album) => (
+                {infoArtist.albums?.map((item: album) => (
                   <ImageBackground
                     key={item.id}
                     style={styles.TopSongs}
