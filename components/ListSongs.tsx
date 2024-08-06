@@ -1,12 +1,12 @@
 import { styles } from "@/Styles/styles";
 import { song } from "@/types/Card.types";
 import { LinearGradient } from "expo-linear-gradient";
-import { ImageBackground, Text, TouchableOpacity, View } from "react-native";
+import { ImageBackground, Text, TouchableHighlight, TouchableOpacity, View } from "react-native";
 
 export const ListSongs = ({ item, getSongDetails }: {item:song, getSongDetails: (item:song)=>void}) => {
   return (
     // skipcq: JS-0415
-    <TouchableOpacity key={item.id} onPress={() => getSongDetails(item)}>
+    <TouchableHighlight key={item.id} onPress={() => getSongDetails(item)}>
       <ImageBackground
         key={item.id}
         style={styles.TopSongs}
@@ -37,6 +37,6 @@ export const ListSongs = ({ item, getSongDetails }: {item:song, getSongDetails: 
           </View>
         </LinearGradient>
       </ImageBackground>
-    </TouchableOpacity>
+    </TouchableHighlight>
   );
 };

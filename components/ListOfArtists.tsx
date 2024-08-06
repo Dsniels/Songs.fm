@@ -1,12 +1,12 @@
 import { styles } from "@/Styles/styles";
 import { artist } from "@/types/Card.types";
 import { LinearGradient } from "expo-linear-gradient";
-import { ImageBackground, Text, TouchableOpacity, View } from "react-native";
+import { ImageBackground, Text, TouchableHighlight, TouchableOpacity, View } from "react-native";
 
 export const ListOfArtists = ({ item, getDetails }: {item:artist, getDetails : (item:artist)=>void}) => {
   return (
     // skipcq: JS-0415
-    <TouchableOpacity
+    <TouchableHighlight
       style={{ elevation: 270 }}
       key={item.id}
       // skipcq: JS-0417
@@ -35,6 +35,6 @@ export const ListOfArtists = ({ item, getDetails }: {item:artist, getDetails : (
           </View>
         </LinearGradient>
       </ImageBackground>
-    </TouchableOpacity>
+    </TouchableHighlight>
   );
 };
