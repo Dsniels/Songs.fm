@@ -20,11 +20,11 @@ import { Picker } from "@react-native-picker/picker";
 import { ListSongs } from "@/components/ListSongs";
 import { ListOfArtists } from "@/components/ListOfArtists";
 import { SmallListSongs } from "@/components/SmallListSongs";
-import { Feather, AntDesign } from "@expo/vector-icons";
+import { Feather } from "@expo/vector-icons";
 
 import { artist, genero, ItemRespone, song } from "@/types/Card.types";
-import * as SecureStorage from "expo-secure-store";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+
+import { Settings } from "@/components/Settings";
 
 export default function TabTwoScreen() {
 	const [{ sesionUsuario }, dispatch] = useStateValue();
@@ -84,8 +84,10 @@ export default function TabTwoScreen() {
 		setRequestArtist((prev) => ({ ...prev, artists: data.items }));
 		setRequestMusic((prev) => ({ ...prev, songs: dataTopSongs.items }));
 		setGeneros(topGeneros(data));
-		queueMicrotask(() => seedTracks(dataTopSongs.items));
-		queueMicrotask(() => seedArtist(data));
+		queueMicrotask(() => {
+			seedArtist(data)
+			seedTracks(dataTopSongs.items)
+		});
 	}, [selectDate]);
 
 	useEffect(() => {
@@ -134,13 +136,7 @@ export default function TabTwoScreen() {
 		});
 	};
 
-	const HandleSettings = () => {
-		setModal(false);
-		SecureStorage.deleteItemAsync("token").then(async () => {
-			await AsyncStorage.clear();
-			router.replace("/login");
-		});
-	};
+
 
 	return (
 		<SafeAreaView style={[styles.container]} className="flex-1">
@@ -158,37 +154,7 @@ export default function TabTwoScreen() {
 				// skipcq: JS-0417
 				ListHeaderComponent={() => (
 					<View className="flex-1 items-center justify-center m-1 mt-16">
-						<Modal
-							visible={modal}
-							transparent
-							onRequestClose={() => setModal(false)}
-							animationType="none"
-						>
-							<View className="bg-slate-800 flex h-36 m-12 p-5  rounded-2xl shadow-lg shadow-slate-300 justify-center items-center">
-								<View className="flex w-full p-3 m-2 flex-row-reverse justify-end items-end ">
-									<TouchableOpacity
-										onPress={() => setModal(false)}
-									>
-										<AntDesign
-											name="close"
-											size={20}
-											color="white"
-										/>
-									</TouchableOpacity>
-								</View>
-								<TouchableOpacity
-									onPress={HandleSettings}
-									className="bg-red-900 flex justify-center items-center content-center shadow-md w-20 h-11 m-7 p-2 rounded-md shadow-red-600"
-								>
-									<ThemedText
-										className="text-xs"
-										type="default"
-									>
-										Log out
-									</ThemedText>
-								</TouchableOpacity>
-							</View>
-						</Modal>
+						<Settings modal={modal} setModal={setModal} />	
 
 						<View className="flex items-center ">
 							<Image
