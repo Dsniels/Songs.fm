@@ -5,6 +5,7 @@ import {
   ImageBackground,
   Linking,
   Pressable,
+  SafeAreaView,
   ScrollView,
   Text,
   ToastAndroid,
@@ -112,6 +113,7 @@ const Detalles = () => {
   };
 
   return (
+    <SafeAreaView style={{backgroundColor: "#000818", flex: 1 }}>
     <ParallaxScrollView
       headerBackgroundColor={{ light: "#000818", dark: "#000818" }}
       headerImage={
@@ -263,6 +265,7 @@ const Detalles = () => {
         </>
       )}
     </ParallaxScrollView>
+    </SafeAreaView>
   );
 };
 

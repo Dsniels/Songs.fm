@@ -55,7 +55,7 @@ export default function Applayout() {
   
 
   return Connection ? (
-    <Stack screenOptions={{ headerTransparent: false }}>
+    <Stack screenOptions={{ animation :'simple_push', animationDuration:9000,  headerTransparent: false }}>
       <Stack.Screen
         name="(tabs)"
         options={{
@@ -69,7 +69,9 @@ export default function Applayout() {
       />
       <Stack.Screen
         name="Detalles/[name]"
+        
         options={{
+ animation :'simple_push', animationDuration:9000,
           headerTransparent: true,
           contentStyle: { backgroundColor: "#000818" },
           headerBackground: () => <CustomHeader />,
@@ -80,6 +82,7 @@ export default function Applayout() {
       <Stack.Screen
         name="songsDetails/[song]"
         options={{
+   animation :'simple_push', animationDuration:9000,
           headerTransparent: true,
           headerBackground: () => <CustomHeader />,
           headerShadowVisible: true,

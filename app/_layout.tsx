@@ -13,7 +13,7 @@ export default function RootLayout() {
 
   return (
     <StateProvider initialState={initialState} reducer={mainReducer}>
-      <Slot />
+      <Slot  />
     </StateProvider>
   );
 }

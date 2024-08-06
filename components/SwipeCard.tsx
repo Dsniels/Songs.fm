@@ -95,9 +95,11 @@ export const SwipeCard = ({
     try {
       await sound.loadAsync(
         { uri: soundUri },
-        { isLooping: true, shouldPlay: true }
+        { isLooping: true}
       );
+      isFocused && sound.playAsync().then(() => {
       setCurrentSound(sound);
+      });
     } catch (_) {
       await sound.stopAsync();
 
@@ -147,6 +149,8 @@ export const SwipeCard = ({
       },
     });
   };
+
+
   return (
     <View>
       <View>

@@ -10,7 +10,6 @@ import * as SecureStorage from "expo-secure-store";
 import * as Haptics from "expo-haptics";
 import { checkToken, getAccessToken } from "@/Api/SpotifyAuth";
 import { ResponseAxios, TokenResponse } from "@/types/Card.types";
-import UserServices from "@/Api/UserServices";
 import { getprofile } from "@/Api/UserAction";
 
 WebBrowser.maybeCompleteAuthSession();
