@@ -7,15 +7,18 @@ import { Recommendatios, song } from "@/types/Card.types";
 
 export default function music() {
 	const [data, setData] = useState<song[]>([]);
-	const [error, setError] = useState<boolean>(false);
 
-	const fetchData = useCallback(async (): Promise<Recommendatios[]> => {
+	const fetchData = useCallback(async (): Promise<void> => {
+		try{
 		const data_response: Recommendatios[] = await getRecomendations();
 		const data_result = data_response.filter(
 			(i: Recommendatios) => i.preview_url !== null
 		);
-		const extractedData = data_result;
-		return extractedData;
+		setData((prev)=>[...prev, ...data_result]);
+	}catch(_){
+		fetchData()
+	}
+		
 	}, []);
 
 
@@ -23,14 +26,8 @@ export default function music() {
 	useEffect(() => {
 		if (data.length <= 10) {
 			fetchData()
-				.then((traks: song[]) => {
-					setData((prev: song[]) => [...prev, ...traks]);
-				})
-				.catch(() => {
-					setError(true);
-				});
 		}
-	}, [data, error]);
+	}, [data ]);
 
   
 	return (
