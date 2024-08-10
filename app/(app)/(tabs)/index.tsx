@@ -6,12 +6,11 @@ import {
 	FlatList,
 	Image,
 	TouchableOpacity,
-	Modal,
 } from "react-native";
 import { ThemedText } from "@/components/ThemedText";
 import { useCallback, useEffect, useState } from "react";
 import { useStateValue } from "@/Context/store";
-import { getRecentlySongs, getTop } from "@/Api/SongsActions";
+import { GetCurrentlyPlayingSong, getRecentlySongs, getTop } from "@/Api/SongsActions";
 import { styles } from "@/Styles/styles";
 import { topGeneros } from "@/service/TopGeners";
 import { seedArtist, seedTracks } from "@/service/seeds";
@@ -21,9 +20,7 @@ import { ListSongs } from "@/components/ListSongs";
 import { ListOfArtists } from "@/components/ListOfArtists";
 import { SmallListSongs } from "@/components/SmallListSongs";
 import { Feather } from "@expo/vector-icons";
-
-import { artist, genero, ItemRespone, song } from "@/types/Card.types";
-
+import { artist, currentlyPlaying, genero, ItemRespone, song } from "@/types/Card.types";
 import { Settings } from "@/components/Settings";
 
 export default function TabTwoScreen() {
@@ -39,6 +36,7 @@ export default function TabTwoScreen() {
 	const [modal, setModal] = useState(false);
 	const [selectDate, setSelectDate] = useState("short_term");
 	const [recent, setRecent] = useState<song[]>([]);
+	const [currentlyPlaying, setCurrentlyPlaying] = useState<song | undefined>(undefined);
 	const [requestArtist, setRequestArtist] = useState<{
 		artists: Array<artist>;
 		offset: number;
@@ -60,6 +58,13 @@ export default function TabTwoScreen() {
 			params: { id: Item.id, name: Item.name, imagenArtist: Item.images[0].url },
 		});
 	}, []);
+	
+	const getCurrentlyPlaying = () =>{
+		GetCurrentlyPlayingSong().then((response)=>{
+			setCurrentlyPlaying(response.item)
+		})
+	}
+
 	const fetchRecentlySongs = useCallback(async () => {
 		const recently = await getRecentlySongs();
 		const newArray = recently.items.map((item) => item.track);
@@ -99,14 +104,17 @@ export default function TabTwoScreen() {
 	const onRefresh = useCallback(async () => {
 		try {
 			setLoading(true);
+		    getCurrentlyPlaying();
 			await Promise.all([fetchData(), fetchRecentlySongs()]);
 			setLoading(false);
 		} catch (_) {
 			onRefresh();
 		}
+
 	}, [fetchData]);
 
 	useEffect(() => {
+
 		onRefresh();
 	}, [selectDate, onRefresh]);
 
@@ -155,7 +163,6 @@ export default function TabTwoScreen() {
 				ListHeaderComponent={() => (
 					<View className="flex-1 items-center justify-center m-1 mt-16">
 						<Settings modal={modal} setModal={setModal} />	
-
 						<View className="flex items-center ">
 							<Image
 								className="w-28 h-28 rounded-full m-4"
@@ -170,6 +177,14 @@ export default function TabTwoScreen() {
 								<ThemedText type="subtitle">
 									{usuario.display_name}
 								</ThemedText>
+							</View>
+							<View className="p-2">
+								{currentlyPlaying && (
+
+								<ThemedText numberOfLines={1} lineBreakMode="head" type="default">
+									{currentlyPlaying.name} - {currentlyPlaying.artists[0].name}
+								</ThemedText>
+								  )}
 							</View>
 						</View>
 						<View className="m-3 flex text-center items-center justify-center flex-row">
