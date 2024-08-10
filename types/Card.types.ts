@@ -9,6 +9,11 @@ export type Track = {
   tracks: { items: Array<song> };
 };
 
+export type currentlyPlaying ={
+  is_playing : boolean
+  item : song
+}
+
 export type TrackResponse ={
   tracks : Array<song>
 }
