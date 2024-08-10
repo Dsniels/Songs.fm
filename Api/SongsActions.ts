@@ -5,6 +5,7 @@ import { refreshToken } from "./SpotifyAuth";
 import { ToastAndroid } from "react-native";
 import { notificationAsync, NotificationFeedbackType } from "expo-haptics";
 import {
+	currentlyPlaying,
 	features,
 	ItemRespone,
 	Recently,
@@ -41,6 +42,13 @@ export const search = (t: string): Promise<Track> => {
 		);
 	});
 };
+export const GetCurrentlyPlayingSong = () : Promise<currentlyPlaying> =>{
+	return new Promise((resolve, reject)=>{
+		HttpCliente.get('/me/player/currently-playing').then((response : AxiosResponse<currentlyPlaying>)=>{
+			resolve(response.data)
+		}).catch((e)=>reject(e))
+	})
+}
 
 export const getRecomendations = async (): Promise<Recommendatios[]> => {
 	const { songs, artists, generos } = await seeds();
@@ -51,7 +59,7 @@ export const getRecomendations = async (): Promise<Recommendatios[]> => {
 	const randomSpeechiness = Math.random();
 	return new Promise((resolve, reject) => {
 		HttpCliente.get(
-			`/recommendations?limit=40&seed_tracks=${songs.toString()}&seed_genres=${generos}&target_energy=${randomEnergy}&target_speechiness${randomSpeechiness}&seed_artists=${artists.toString()}&target_danceability=${randomDanceability}&target_popularity=${randomPopularity}&target_valence${randomValence}`
+			`/recommendations?limit=40&seed_tracks=${songs.toString()}&seed_genres=${generos}&target_energy=${randomEnergy}&target_speechiness${randomSpeechiness}&target_danceability=${randomDanceability}&target_popularity=${randomPopularity}&target_valence${randomValence}`
 		)
 			.then((response: AxiosResponse<TrackResponse>) => {
 				if (response.data.tracks.length > 0) {
@@ -68,7 +76,7 @@ export const getRecomendations = async (): Promise<Recommendatios[]> => {
 
 export const getRecentlySongs = (): Promise<Recently> => {
 	return new Promise((resolve, reject) => {
-		HttpCliente.get("/me/player/recently-played?limit=20")
+		HttpCliente.get("/me/player/recently-played?limit=15")
 			.then((response) => {
 				resolve(response.data);
 			})
