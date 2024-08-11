@@ -41,7 +41,7 @@ export const SwipeCard = ({
   const removeTopCard = async () => {
     if (currentSound) {
       await currentSound.stopAsync();
-      // await currentSound.unloadAsync();
+      await currentSound.unloadAsync();
 
       setCurrentSound(null);
     }
