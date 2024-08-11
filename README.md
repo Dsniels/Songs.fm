@@ -1,6 +1,6 @@
-# Welcome to your Expo app 👋
+# Songs.fm
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Android app to discover new music, interesting facts about artists and songs Using the Spotify Web API, Genius API, inspired by tinder cards
 
 ## Get started
 
@@ -16,35 +16,19 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
     npx expo start
    ```
 
-In the output, you'll find options to open the app in a
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+## project's images
 
-## Get a fresh project
+<img src="https://github.com/user-attachments/assets/f0707883-6518-4277-8332-486459970a02" width="300" />
+<img src="https://github.com/user-attachments/assets/3880f690-b449-4ff1-be51-dc3615d495d3" width="300" />
+<img src="https://github.com/user-attachments/assets/70dc7b75-e362-4c68-905c-fcaef290524e" width="300" />
+<img src="https://github.com/user-attachments/assets/645ac488-28f6-43c4-a998-a455bd2e23e5" width="300" />
+<img src="https://github.com/user-attachments/assets/4ba6341e-96f0-479e-9cdb-74a3e9b0e74b" width="300" />
+<img src="https://github.com/user-attachments/assets/941f2aea-47be-4390-a74f-5928db9beffc" width="300" />
+<img src="https://github.com/user-attachments/assets/db46e84f-a7e7-45cc-8ea1-8e6668faa99f" width="300" />
+<img src="https://github.com/user-attachments/assets/88e0a72f-50b8-47ef-a197-5c3f96eafe9e" width="300" />
+<img src="https://github.com/user-attachments/assets/61456698-0f1d-4153-93a7-15ad84571707" width="300" />
+<img src="https://github.com/user-attachments/assets/616ff226-0cea-4926-9bb4-5e1df610c5b3" width="300" />
+<img src="https://github.com/user-attachments/assets/a8ea9b9a-d6c4-444b-a364-604ab5db2271" width="300" />
 
-When you're ready, run:
-
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
