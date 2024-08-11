@@ -16,8 +16,6 @@ Android app to discover new music, interesting facts about artists and songs Usi
     npx expo start
    ```
 
-
-
 ## project's images
 
 <img src="https://github.com/user-attachments/assets/f0707883-6518-4277-8332-486459970a02" width="300" />
@@ -31,4 +29,3 @@ Android app to discover new music, interesting facts about artists and songs Usi
 <img src="https://github.com/user-attachments/assets/61456698-0f1d-4153-93a7-15ad84571707" width="300" />
 <img src="https://github.com/user-attachments/assets/616ff226-0cea-4926-9bb4-5e1df610c5b3" width="300" />
 <img src="https://github.com/user-attachments/assets/a8ea9b9a-d6c4-444b-a364-604ab5db2271" width="300" />
-
