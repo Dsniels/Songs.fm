@@ -9,14 +9,14 @@ export type Track = {
   tracks: { items: Array<song> };
 };
 
-export type currentlyPlaying ={
-  is_playing : boolean
-  item : song
-}
+export type currentlyPlaying = {
+  is_playing: boolean;
+  item: song;
+};
 
-export type TrackResponse ={
-  tracks : Array<song>
-}
+export type TrackResponse = {
+  tracks: Array<song>;
+};
 
 export type album = {
   images: Array<{ url: string }>;
@@ -61,9 +61,9 @@ export type Recently = {
 export type annotations = {
   result: { artist_names: string };
 };
-export type childrenType ={
-  children : Array<childrenType>;
-}
+export type childrenType = {
+  children: Array<childrenType>;
+};
 export type annotationResponse = {
   children: Array<{ children: Array<string | object> }>;
 };
