@@ -90,7 +90,7 @@ export default function TabTwoScreen() {
 		setRequestMusic((prev) => ({ ...prev, songs: dataTopSongs.items }));
 		setGeneros(topGeneros(data));
 		queueMicrotask(() => {
-			seedArtist(data)
+			// seedArtist(data)
 			seedTracks(dataTopSongs.items)
 		});
 	}, [selectDate]);
