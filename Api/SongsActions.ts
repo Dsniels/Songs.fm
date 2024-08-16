@@ -51,7 +51,7 @@ export const GetCurrentlyPlayingSong = () : Promise<currentlyPlaying> =>{
 }
 
 export const getRecomendations = async (): Promise<Recommendatios[]> => {
-	const { songs, artists, generos } = await seeds();
+	const { songs} = await seeds();
 	const randomDanceability = Math.random();
 	const randomPopularity = Math.floor(Math.random() * 100);
 	const randomValence = Math.random();
@@ -59,7 +59,7 @@ export const getRecomendations = async (): Promise<Recommendatios[]> => {
 	const randomSpeechiness = Math.random();
 	return new Promise((resolve, reject) => {
 		HttpCliente.get(
-			`/recommendations?limit=40&seed_tracks=${songs.toString()}&seed_genres=${generos}&target_energy=${randomEnergy}&target_speechiness${randomSpeechiness}&target_danceability=${randomDanceability}&target_popularity=${randomPopularity}&target_valence${randomValence}`
+			`/recommendations?limit=40&seed_tracks=${songs.toString()}&target_energy=${randomEnergy}&target_speechiness${randomSpeechiness}&target_danceability=${randomDanceability}&target_popularity=${randomPopularity}&target_valence${randomValence}`
 		)
 			.then((response: AxiosResponse<TrackResponse>) => {
 				if (response.data.tracks.length > 0) {
@@ -102,7 +102,7 @@ export const getListOfSongs = (
 
 export const FavoriteSongs = (): Promise<song[]> => {
 	return new Promise((resolve, reject) => {
-		HttpCliente.get("/me/tracks?limit=50&offset=400")
+		HttpCliente.get("/me/tracks?limit=50&offset=500")
 			.then((Response: AxiosResponse<ItemRespone<song[]>>) => {
 				queueMicrotask(() => seedTracks(Response.data.items));
 				resolve(Response.data.items);
