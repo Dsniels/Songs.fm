@@ -14,9 +14,9 @@ import {
   View,
 } from "react-native";
 import { Audio } from "expo-av";
-import {  useIsFocused } from "@react-navigation/native";
+import { useIsFocused } from "@react-navigation/native";
 import { router, useNavigation } from "expo-router";
-import {  song } from "@/types/Card.types";
+import { song } from "@/types/Card.types";
 
 export const SwipeCard = ({
   children,
@@ -81,7 +81,7 @@ export const SwipeCard = ({
           friction: 5,
         }).start();
       },
-    })
+    }),
   ).current;
 
   const playSound = async (soundUri: string) => {
@@ -93,13 +93,12 @@ export const SwipeCard = ({
     }
 
     try {
-      await sound.loadAsync(
-        { uri: soundUri },
-        { isLooping: true}
-      );
-      isFocused && items[0].preview_url === soundUri && sound.playAsync().then(() => {
-      setCurrentSound(sound);
-      });
+      await sound.loadAsync({ uri: soundUri }, { isLooping: true });
+      isFocused &&
+        items[0].preview_url === soundUri &&
+        sound.playAsync().then(() => {
+          setCurrentSound(sound);
+        });
     } catch (_) {
       await sound.stopAsync();
 
@@ -112,7 +111,7 @@ export const SwipeCard = ({
   useEffect(() => {
     if (items.length > 0 && isFocused) {
       playSound(items[0].preview_url);
-    }else{
+    } else {
       if (currentSound) {
         currentSound.stopAsync();
       }
@@ -125,17 +124,15 @@ export const SwipeCard = ({
         inputRange: [-500, 0, 500],
         outputRange: ["8deg", "0deg", "-8deg"],
       }),
-    [swipe]
+    [swipe],
   );
 
   const animatedCardStyle = useMemo(
     () => ({
       transform: [...swipe.getTranslateTransform(), { rotate }],
     }),
-    [swipe, rotate]
+    [swipe, rotate],
   );
-
-
 
   const getSongDetails = (Item: song) => {
     return router.push({
@@ -149,7 +146,6 @@ export const SwipeCard = ({
       },
     });
   };
-
 
   return (
     <View>
