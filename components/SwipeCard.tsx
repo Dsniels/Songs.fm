@@ -97,7 +97,7 @@ export const SwipeCard = ({
         { uri: soundUri },
         { isLooping: true}
       );
-      isFocused && sound.playAsync().then(() => {
+      isFocused && items[0].preview_url === soundUri && sound.playAsync().then(() => {
       setCurrentSound(sound);
       });
     } catch (_) {
