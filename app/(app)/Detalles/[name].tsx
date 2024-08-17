@@ -86,11 +86,11 @@ const Detalles = () => {
 
       if(descriptionResult){
       let info = descriptionResult.map((i) => extractInfo(i)).join(" ");
-      if (informacion === "?") info = "I Dont found it  :(";
+      if (informacion === "?") info = "No se encontró información";
 
       setInformacion(info);
       }else{
-        setInformacion("I Dont found it  :(");
+        setInformacion("No se encontró información");
       }
     }
     catch(e){

@@ -127,7 +127,7 @@ const SongDetails = () => {
         // skipcq: JS-0323
         .map((item) => extractInfo(item))
         .join(" ");
-        if(informacion === '?') informacion = 'I Dont found it  :(';
+        if(informacion === '?') informacion = 'No se encontró información';
       setInformacion(informacion);
       return Info
     };

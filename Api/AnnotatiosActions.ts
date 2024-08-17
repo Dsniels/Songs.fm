@@ -32,7 +32,7 @@ export const getInfo = async (
         .toLocaleLowerCase()
         .includes(artists.toLocaleLowerCase());
     }) || false;
-    if(!result) return ['I Dont found it  :(']
+    if(!result) return ['No se encontro informacion']
   let id = result.id;
   if (song) {
     id = result.id;
