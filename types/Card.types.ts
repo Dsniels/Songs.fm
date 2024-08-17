@@ -18,6 +18,14 @@ export type TrackResponse ={
   tracks : Array<song>
 }
 
+export type UrlRequest = {
+  target_energy : number,
+  seed_tracks : string,
+  target_speechiness : number
+  target_danceability : number
+  target_popularity : number
+  target_valence : number
+}
 export type album = {
   images: Array<{ url: string }>;
   id: string;
