@@ -9,23 +9,23 @@ export type Track = {
   tracks: { items: Array<song> };
 };
 
-export type currentlyPlaying ={
-  is_playing : boolean
-  item : song
-}
+export type currentlyPlaying = {
+  is_playing: boolean;
+  item: song;
+};
 
-export type TrackResponse ={
-  tracks : Array<song>
-}
+export type TrackResponse = {
+  tracks: Array<song>;
+};
 
 export type UrlRequest = {
-  target_energy : number,
-  seed_tracks : string,
-  target_speechiness : number
-  target_danceability : number
-  target_popularity : number
-  target_valence : number
-}
+  target_energy: number;
+  seed_tracks: string;
+  target_speechiness: number;
+  target_danceability: number;
+  target_popularity: number;
+  target_valence: number;
+};
 export type album = {
   images: Array<{ url: string }>;
   id: string;
@@ -69,9 +69,9 @@ export type Recently = {
 export type annotations = {
   result: { artist_names: string };
 };
-export type childrenType ={
-  children : Array<childrenType>;
-}
+export type childrenType = {
+  children: Array<childrenType>;
+};
 export type annotationResponse = {
   children: Array<{ children: Array<string | object> }>;
 };

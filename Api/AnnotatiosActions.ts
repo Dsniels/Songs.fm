@@ -1,6 +1,5 @@
-import { annotations, childrenType } from '@/types/Card.types';
-import axios, { AxiosResponse } from 'axios';
-
+import { annotations, childrenType } from "@/types/Card.types";
+import axios, { AxiosResponse } from "axios";
 
 const GeniusApi = axios.create({
   baseURL: process.env.EXPO_PUBLIC_BASE_URL_GENIUS,
@@ -13,8 +12,7 @@ export const getInfo = async (
   search: string,
   artists: string,
   song: boolean,
-) : Promise<childrenType[] | string[] >  => {
-
+): Promise<childrenType[] | string[]> => {
   const changed = search.replace(/\s*\(.*?\)\s*/g, "").trim();
   const query = song ? changed.concat(artists) : search;
   const { status, data } = await GeniusApi.get(
@@ -32,7 +30,7 @@ export const getInfo = async (
         .toLocaleLowerCase()
         .includes(artists.toLocaleLowerCase());
     }) || false;
-    if(!result) return ['No se encontro informacion']
+  if (!result) return ["No se encontro informacion"];
   let id = result.id;
   if (song) {
     id = result.id;
@@ -40,25 +38,32 @@ export const getInfo = async (
     id = result.primary_artist.id;
   }
 
-  const children : childrenType[] = await getAnnotations(id, song ? 'songs' :'artists');
-
+  const children: childrenType[] = await getAnnotations(
+    id,
+    song ? "songs" : "artists",
+  );
 
   return children;
 };
 
-
-
-const getAnnotations =(id:string, term : "songs" | "artists") : Promise<childrenType[]>=>{
-  return new Promise((resolve, reject)=>{
-    GeniusApi.get(`/${term}/${id}`).then((response : AxiosResponse)=>{
-      if(response.status === 200){
-        if(term === 'songs') {
-          resolve(response.data.response.song.description.dom.children);
-        }else{
-          resolve(response.data.response.artist.description_annotation.annotations[0].body.dom.children);
+const getAnnotations = (
+  id: string,
+  term: "songs" | "artists",
+): Promise<childrenType[]> => {
+  return new Promise((resolve, reject) => {
+    GeniusApi.get(`/${term}/${id}`)
+      .then((response: AxiosResponse) => {
+        if (response.status === 200) {
+          if (term === "songs") {
+            resolve(response.data.response.song.description.dom.children);
+          } else {
+            resolve(
+              response.data.response.artist.description_annotation
+                .annotations[0].body.dom.children,
+            );
+          }
         }
-      }
-    })
-    .catch(reject);
+      })
+      .catch(reject);
   });
 };
