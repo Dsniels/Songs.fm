@@ -13,6 +13,7 @@ import {
 	song,
 	Track,
 	TrackResponse,
+	UrlRequest,
 } from "@/types/Card.types";
 
 export const getTop = <T>(
@@ -42,25 +43,41 @@ export const search = (t: string): Promise<Track> => {
 		);
 	});
 };
-export const GetCurrentlyPlayingSong = () : Promise<currentlyPlaying> =>{
-	return new Promise((resolve, reject)=>{
-		HttpCliente.get('/me/player/currently-playing').then((response : AxiosResponse<currentlyPlaying>)=>{
-			resolve(response.data)
-		}).catch((e)=>reject(e))
-	})
-}
+export const GetCurrentlyPlayingSong = (): Promise<currentlyPlaying> => {
+	return new Promise((resolve, reject) => {
+		HttpCliente.get("/me/player/currently-playing")
+			.then((response: AxiosResponse<currentlyPlaying>) => {
+				resolve(response.data);
+			})
+			.catch((e) => reject(e));
+	});
+};
 
-export const getRecomendations = async (): Promise<Recommendatios[]> => {
-	const { songs} = await seeds();
+const buildParams= async (minEnergy : number = 1, minDance:number = 1) => {
+	const { songs } = await seeds();
 	const randomDanceability = Math.random();
 	const randomPopularity = Math.floor(Math.random() * 100);
 	const randomValence = Math.random();
 	const randomEnergy = Math.random();
 	const randomSpeechiness = Math.random();
+	const objects: UrlRequest = {
+		seed_tracks: songs.toString(),
+		target_danceability: randomDanceability * minDance,
+		target_energy: randomEnergy * minEnergy,
+		target_popularity: randomPopularity,
+		target_speechiness: randomSpeechiness,
+		target_valence: randomValence,
+	};
+
+	const params: string = new URLSearchParams(objects as any).toString();
+	console.log(params);
+	return params;
+};
+
+export const getRecomendations = async (): Promise<Recommendatios[]> => {
+	const params = buildParams();
 	return new Promise((resolve, reject) => {
-		HttpCliente.get(
-			`/recommendations?limit=40&seed_tracks=${songs.toString()}&target_energy=${randomEnergy}&target_speechiness${randomSpeechiness}&target_danceability=${randomDanceability}&target_popularity=${randomPopularity}&target_valence${randomValence}`
-		)
+		HttpCliente.get(`/recommendations?limit=40&${params}`)
 			.then((response: AxiosResponse<TrackResponse>) => {
 				if (response.data.tracks.length > 0) {
 					resolve(response.data.tracks);
