@@ -19,8 +19,8 @@ export type TrackResponse = {
 };
 
 export type UrlRequest = {
+	seed_tracks : string
 	target_energy: number;
-	seed_tracks: string;
 	target_speechiness: number;
 	target_danceability: number;
 	target_popularity: number;
