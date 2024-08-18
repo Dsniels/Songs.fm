@@ -4,12 +4,10 @@ import {
 	RefreshControl,
 	ActivityIndicator,
 	FlatList,
-	Image,
 	TouchableOpacity,
 } from "react-native";
 import { ThemedText } from "@/components/ThemedText";
 import { useCallback, useEffect, useState } from "react";
-import { useStateValue } from "@/Context/store";
 import { GetCurrentlyPlayingSong, getRecentlySongs, getTop } from "@/Api/SongsActions";
 import { styles } from "@/Styles/styles";
 import { topGeneros } from "@/service/TopGeners";
@@ -23,17 +21,13 @@ import { artist,ItemRespone, song } from "@/types/Card.types";
 import { Settings } from "@/components/Settings";
 import RangePicker from "@/components/RangePicker";
 import ListGeners from "@/components/ListGenrs";
+import UserProfile from "@/components/UserProfile";
 
 export default function TabTwoScreen() {
-	const [{ sesionUsuario }, dispatch] = useStateValue();
 	const [generos, setGeneros] = useState<{ name: string; value: number }[]>(
 		[]
 	);
 	const [loading, setLoading] = useState(false);
-	const [usuario, setUsuario] = useState({
-		display_name: "",
-		images: { url: "" },
-	});
 	const [modal, setModal] = useState(false);
 	const [selectDate, setSelectDate] = useState("short_term");
 	const [recent, setRecent] = useState<song[]>([]);
@@ -96,11 +90,7 @@ export default function TabTwoScreen() {
 		});
 	}, [selectDate]);
 
-	useEffect(() => {
-		if (sesionUsuario) {
-			setUsuario(sesionUsuario.usuario);
-		}
-	}, [sesionUsuario]);
+
 
 	const onRefresh = useCallback(async () => {
 		try {
@@ -136,46 +126,20 @@ export default function TabTwoScreen() {
 	return (
 		<SafeAreaView style={[styles.container]} className="flex-1">
 			<View className="w-10/12 m-2 mt-10 flex justify-end content-end items-end ">
-				{/* skipcq: JS-0417 */}
 				<TouchableOpacity onPress={() => setModal(true)}>
 					<Feather name="settings" size={24} color="white" />
 				</TouchableOpacity>
 			</View>
 			<FlatList
 				stickyHeaderHiddenOnScroll
-				// skipcq: JS-0417
 				renderItem={() => null}
 				data={[]}
-				// skipcq: JS-0417
 				ListHeaderComponent={() => (
 					<View className="flex-1 items-center justify-center m-1 mt-16">
 						<Settings modal={modal} setModal={setModal} />	
-						<View className="flex items-center ">
-							<Image
-								className="w-28 h-28 rounded-full m-4"
-								source={{
-									scale: 1,
-									uri:
-										usuario.images.url ||
-										"https://filestore.community.support.microsoft.com/api/images/0ce956b2-9787-4756-a580-299568810730?upload=true",
-								}}
-							/>
-							<View>
-								<ThemedText type="subtitle">
-									{usuario.display_name}
-								</ThemedText>
-							</View>
-							<View className="p-2">
-								{currentlyPlaying && (
-
-								<ThemedText numberOfLines={1} lineBreakMode="head" type="default">
-									{currentlyPlaying.name} - {currentlyPlaying.artists[0].name}
-								</ThemedText>
-								  )}
-							</View>
-						</View>
-						<View className="m-3 flex text-center items-center justify-center flex-row">
-						<RangePicker selectDate={selectDate} setSelectDate={setSelectDate} />	
+						<View >
+							<UserProfile currentlyPlaying={currentlyPlaying as song} />
+							<RangePicker selectDate={selectDate} setSelectDate={setSelectDate} />	
 						</View>
 						{loading && <ActivityIndicator size="large" />}
 						{!loading && (
@@ -210,8 +174,9 @@ export default function TabTwoScreen() {
 										index.toString()
 									}
 									// skipcq: JS-0417
-									renderItem={({ item }) => (
+									renderItem={({ item, index }) => (
 										<ListOfArtists
+											index={index+1}
 											item={item}
 											getDetails={getDetails}
 										/>
@@ -230,9 +195,9 @@ export default function TabTwoScreen() {
 									keyExtractor={(_, index) =>
 										index.toString()
 									}
-									// skipcq: JS-0417
-									renderItem={({ item }) => (
+									renderItem={({ item, index }) => (
 										<ListSongs
+										index={index+1}
 											item={item}
 											getSongDetails={getSongDetails}
 										/>
@@ -253,7 +218,6 @@ export default function TabTwoScreen() {
 											keyExtractor={(_, index) =>
 												index.toString()
 											}
-											// skipcq: JS-0417
 											renderItem={({ item }) => (
 												<SmallListSongs
 													item={item}
