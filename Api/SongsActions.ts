@@ -119,7 +119,7 @@ export const getListOfSongs = (
 
 export const FavoriteSongs = (): Promise<song[]> => {
 	return new Promise((resolve, reject) => {
-		HttpCliente.get("/me/tracks?limit=50&offset=500")
+		HttpCliente.get("/me/tracks?limit=50&offset=200")
 			.then((Response: AxiosResponse<ItemRespone<song[]>>) => {
 				queueMicrotask(() => seedTracks(Response.data.items));
 				resolve(Response.data.items);
