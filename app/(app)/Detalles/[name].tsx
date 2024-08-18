@@ -2,12 +2,9 @@ import {
   ActivityIndicator,
   FlatList,
   Image,
-  ImageBackground,
   Linking,
   Pressable,
   SafeAreaView,
-  ScrollView,
-  Text,
   ToastAndroid,
   View,
 } from "react-native";
@@ -16,8 +13,6 @@ import { router, useLocalSearchParams, useNavigation } from "expo-router";
 import { getArtistInformation } from "@/Api/ArtistsActions";
 import { ThemedText } from "@/components/ThemedText";
 import ParallaxScrollView from "@/components/ParallaxScrollView";
-import { LinearGradient } from "expo-linear-gradient";
-import { styles } from "@/Styles/styles";
 import { getInfo } from "@/Api/AnnotatiosActions";
 import { extractInfo } from "@/service/FormatData";
 import { ListOfArtists } from "@/components/ListOfArtists";
@@ -28,8 +23,9 @@ import {
   items,
   song,
 } from "@/types/Card.types";
+import ListOfAlbums from "@/components/ListOfAlbums";
 
-type ArtistInfo = {
+ interface ArtistInfo {
   info: artist;
   songs: song[];
   albums: album[];
@@ -133,13 +129,11 @@ const Detalles = () => {
         </View>
       )}
       {informacion && (
-        // skipcq: JS-0415
         <>
           <View className="flex m-5 ">
             <ThemedText type="subtitle">Who is {name}?</ThemedText>
             <Pressable
               className="flex"
-              // skipcq: JS-0417
               onPress={() =>
                 ShowMore ? setShowMore(false) : setShowMore(true)
               }
@@ -179,7 +173,6 @@ const Detalles = () => {
                   <SmallListSongs
                     key={index}
                     item={item}
-                    // skipcq: JS-0417
                     getSongDetails={getSongDetails}
                   />
                 ))
@@ -189,52 +182,8 @@ const Detalles = () => {
               <ThemedText style={{ marginTop: 20 }} type="subtitle">
                 Albums
               </ThemedText>
-              <ScrollView horizontal>
-                {infoArtist.albums?.map((item: album) => (
-                  <ImageBackground
-                    key={item.id}
-                    style={styles.TopSongs}
-                    source={{
-                      uri:
-                        item.images[0].url ||
-                        "https://images.pexels.com/photos/145707/pexels-photo-145707.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-                    }}
-                  >
-                    <LinearGradient
-                      colors={["rgba(0,0,0,0.8)", "transparent"]}
-                      style={styles.linearGradient}
-                      start={{ x: 0, y: 1 }}
-                      end={{ x: 0, y: 0 }}
-                    >
-                      <View
-                        style={{
-                          display: "flex",
-                          zIndex: 0,
-                          top: 95,
-                          right: 30,
-                          margin: 30,
-                          width: 200,
-                          padding: 20,
-                        }}
-                        key={item.id}
-                      >
-                        <Text
-                          style={{
-                            textTransform: "capitalize",
-                            color: "white",
-                            fontSize: 18,
-                            fontStyle: "normal",
-                            fontWeight: "bold",
-                          }}
-                        >
-                          {item.name}
-                        </Text>
-                      </View>
-                    </LinearGradient>
-                  </ImageBackground>
-                ))}
-              </ScrollView>
-
+              <FlatList horizontal data={infoArtist.albums} renderItem={({item})=><ListOfAlbums item={item}/>} />
+        
               <ThemedText style={{ marginTop: 20 }} type="subtitle">
                 You may be interested...
               </ThemedText>
@@ -242,7 +191,6 @@ const Detalles = () => {
               <FlatList
                 horizontal
                 data={infoArtist.artists}
-                // skipcq: JS-0417
                 renderItem={({ item }: items<artist>) => (
                   <ListOfArtists item={item} getDetails={getDetails} />
                 )}

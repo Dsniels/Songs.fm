@@ -22,7 +22,6 @@ export default function music() {
 	}, []);
 
 
-
 	useEffect(() => {
 		if (data.length <= 10) {
 			fetchData()

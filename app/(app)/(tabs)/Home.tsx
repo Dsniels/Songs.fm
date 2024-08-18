@@ -35,7 +35,6 @@ export default function HomeScreen() {
     }, [])
   );
 
-
   const handleSearch = () => {
     if (!text) setItems(null);
     search(text).then((data) => {
@@ -76,7 +75,6 @@ export default function HomeScreen() {
         </View>
         <Pressable
           className="flex  align-middle m-1 bg-blue-950 rounded-2xl justify-center items-start p-3 shadow-lg shadow-cyan-500/50 "
-          // skipcq: JS-0417
           onPress={() => setShowModal(true)}
         >
           <View>
@@ -89,11 +87,8 @@ export default function HomeScreen() {
           setShowModal={setShowModal}
           text={text}
           items={items as Track}
-          // skipcq: JS-0417
           handleSearch={handleSearch}
-          // skipcq: JS-0417
           handleTextChange={handleTextChange}
-          // skipcq: JS-0417
           getSongDetails={getSongDetails}
         />
       </KeyboardAvoidingView>
