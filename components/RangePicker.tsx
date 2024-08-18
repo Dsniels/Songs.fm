@@ -11,7 +11,7 @@ const RangePicker = ({
 	setSelectDate: Dispatch<SetStateAction<string>>;
 }) => {
 	return (
-		<>
+		<View className="flex flex-row items-center justify-center align-middle">
 			<ThemedText type="defaultSemiBold">Range</ThemedText>
 			<Picker
 				dropdownIconColor="white"
@@ -36,7 +36,7 @@ const RangePicker = ({
 					value={"long_term"}
 				/>
 			</Picker>
-		</>
+		</View>
 	);
 };
 
