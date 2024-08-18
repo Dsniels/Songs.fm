@@ -13,15 +13,16 @@ import { useStateValue } from "@/Context/store";
 import { GetCurrentlyPlayingSong, getRecentlySongs, getTop } from "@/Api/SongsActions";
 import { styles } from "@/Styles/styles";
 import { topGeneros } from "@/service/TopGeners";
-import { seedArtist, seedTracks } from "@/service/seeds";
+import {  seedTracks } from "@/service/seeds";
 import { router } from "expo-router";
-import { Picker } from "@react-native-picker/picker";
 import { ListSongs } from "@/components/ListSongs";
 import { ListOfArtists } from "@/components/ListOfArtists";
 import { SmallListSongs } from "@/components/SmallListSongs";
 import { Feather } from "@expo/vector-icons";
-import { artist, currentlyPlaying, genero, ItemRespone, song } from "@/types/Card.types";
+import { artist,ItemRespone, song } from "@/types/Card.types";
 import { Settings } from "@/components/Settings";
+import RangePicker from "@/components/RangePicker";
+import ListGeners from "@/components/ListGenrs";
 
 export default function TabTwoScreen() {
 	const [{ sesionUsuario }, dispatch] = useStateValue();
@@ -114,23 +115,9 @@ export default function TabTwoScreen() {
 	}, [fetchData]);
 
 	useEffect(() => {
-
 		onRefresh();
 	}, [selectDate, onRefresh]);
 
-	const renderGeneroItem = ({ item }: genero, index: number) => (
-		<View className="m-3 rounded-lg" key={item.name}>
-			<ThemedText type="defaultSemiBold">
-				{index + 1}.- {item.name}
-			</ThemedText>
-			<View className="bg-gray-800 h-4 w-72 rounded-lg">
-				<View
-					className="bg-sky-700 h-full rounded-md"
-					style={{ width: `${item.value * 6}%` }}
-				/>
-			</View>
-		</View>
-	);
 	const getSongDetails = (Item: song) => {
 		return router.push({
 			pathname: "(app)/songsDetails/[song]",
@@ -188,32 +175,7 @@ export default function TabTwoScreen() {
 							</View>
 						</View>
 						<View className="m-3 flex text-center items-center justify-center flex-row">
-							<ThemedText type="defaultSemiBold">
-								Range
-							</ThemedText>
-							<Picker
-								dropdownIconColor="white"
-								mode="dialog"
-								style={{ color: "white", width: 225 }}
-								selectedValue={selectDate}
-								onValueChange={(value) => setSelectDate(value)}
-							>
-								<Picker.Item
-									color="#060C19"
-									label="en el ultimo mes"
-									value={"short_term"}
-								/>
-								<Picker.Item
-									color="#060C19"
-									label="en los ultimos 6 meses"
-									value={"medium_term"}
-								/>
-								<Picker.Item
-									color="#060C19"
-									label="en el ultimo Año"
-									value={"long_term"}
-								/>
-							</Picker>
+						<RangePicker selectDate={selectDate} setSelectDate={setSelectDate} />	
 						</View>
 						{loading && <ActivityIndicator size="large" />}
 						{!loading && (
@@ -231,8 +193,9 @@ export default function TabTwoScreen() {
 											index.toString()
 										}
 										renderItem={({ index, item }) =>
-											renderGeneroItem({ item }, index)
+										<ListGeners item={item} index={index}/>
 										}
+
 									/>
 								</View>
 								<ThemedText
