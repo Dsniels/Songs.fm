@@ -4,20 +4,19 @@ import { genero } from "@/types/Card.types";
 import { ThemedText } from "./ThemedText";
 
 const ListGeners = ({ item, index }: { item: genero; index: number }) => {
-    
-	return (
-		<View className="m-3 rounded-lg" key={item.name}>
-			<ThemedText type="defaultSemiBold">
-				{index + 1}.- {item.name}
-			</ThemedText>
-			<View className="bg-gray-800 h-4 w-72 rounded-lg">
-				<View
-					className="bg-sky-700 h-full rounded-md"
-					style={{ width: `${item.value * 6}%` }}
-				/>
-			</View>
-		</View>
-	);
+  return (
+    <View className="m-3 rounded-lg" key={item.name}>
+      <ThemedText type="defaultSemiBold">
+        {index + 1}.- {item.name}
+      </ThemedText>
+      <View className="bg-gray-800 h-4 w-72 rounded-lg">
+        <View
+          className="bg-sky-700 h-full rounded-md"
+          style={{ width: `${item.value * 6}%` }}
+        />
+      </View>
+    </View>
+  );
 };
 
 export default ListGeners;
