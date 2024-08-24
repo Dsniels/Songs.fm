@@ -40,18 +40,17 @@ const getRandomSeedItem = async (key: string) => {
 };
 
 export const seeds = async () => {
-  const [seedTrack1, seedTrack2, seedTrack3, seedTrack4, seedTrack5] = await Promise.all([
-    getRandomSeedItem("seedTrack"),
-    getRandomSeedItem("seedTrack"),
+  const [seedTrack1, seedTrack2, seedTrack3] = await Promise.all([
     getRandomSeedItem("seedTrack"),
     getRandomSeedItem("seedTrack"),
     getRandomSeedItem("seedTrack"),
   ]);
 
-  // const seedGeneros = generos[getRandomIndex(generos.length)];
-  // const seedGeneros1 = generos[getRandomIndex(generos.length)];
+  const seedGeneros = generos[getRandomIndex(generos.length)];
+  const seedGeneros1 = generos[getRandomIndex(generos.length)];
 
   return {
-    songs: [seedTrack1, seedTrack2, seedTrack3, seedTrack4, seedTrack5],
+    songs: [seedTrack1, seedTrack2, seedTrack3],
+    geners : [seedGeneros, seedGeneros1]
   };
 };

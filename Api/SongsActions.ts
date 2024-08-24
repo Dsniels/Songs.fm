@@ -54,7 +54,7 @@ export const GetCurrentlyPlayingSong = (): Promise<currentlyPlaying> => {
 };
 
 const buildParams = async (minEnergy: number = 1, minDance: number = 1) => {
-	const { songs } = await seeds();
+	const { songs, geners } = await seeds();
 	const randomDanceability = Math.random();
 	const randomPopularity = Math.floor(Math.random() * 100);
 	const randomValence = Math.random();
@@ -62,6 +62,7 @@ const buildParams = async (minEnergy: number = 1, minDance: number = 1) => {
 	const randomSpeechiness = Math.random();
 	const objects: Array<UrlRequest> = [
 		{
+			seed_geners : geners.toString(),
 			seed_tracks: songs.toString(),
 			target_danceability: randomDanceability * minDance,
 			target_energy: randomEnergy * minEnergy,
@@ -85,7 +86,7 @@ const buildParams = async (minEnergy: number = 1, minDance: number = 1) => {
 export const getRecomendations = async (): Promise<Recommendatios[]> => {
 	const params = await buildParams();
 	return new Promise((resolve, reject) => {
-		HttpCliente.get(`/recommendations?limit=40&${params}`)
+		HttpCliente.get(`/recommendations?limit=31&${params}`)
 			.then((response: AxiosResponse<TrackResponse>) => {
 				if (response.data.tracks.length > 0) {
 					resolve(response.data.tracks);
