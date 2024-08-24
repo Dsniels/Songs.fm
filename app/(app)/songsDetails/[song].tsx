@@ -171,7 +171,7 @@ const SongDetails = () => {
         />
       }
     >
-      {Track.audioFeatures.acousticness && informacion ? (
+      {Track.audioFeatures.acousticness  ? (
         <>
           <View className="flex flex-row justify-end items-center p-2">
             {like ? (
@@ -431,12 +431,13 @@ const SongDetails = () => {
               </View>
             </View>
           ) : showAbout ? (
+       
               <View className=" bg-opacity-80 bg-[#0f172a] m-1 mt-0 pt-0 -top-4 w-fit rounded-b-md rounded-l-md shadow-sm shadow-gray-700 ">
                 <ThemedText
                   className="p-7"
                   style={{ justifyContent: "center", textAlign: "justify" }}
                 >
-                  {informacion}
+                  {informacion ? informacion : ("Ocurrio un Error")}
                 </ThemedText>
               </View>
           ) : (
