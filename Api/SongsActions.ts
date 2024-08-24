@@ -56,7 +56,7 @@ export const GetCurrentlyPlayingSong = (): Promise<currentlyPlaying> => {
 const buildParams = async (minEnergy: number = 1, minDance: number = 1) => {
 	const { songs, geners } = await seeds();
 	const randomDanceability = Math.random();
-	const randomPopularity = Math.floor(Math.random() * 100);
+	const randomPopularity = Math.floor(Math.random() * 100 - 10);
 	const randomValence = Math.random();
 	const randomEnergy = Math.random();
 	const randomSpeechiness = Math.random();
