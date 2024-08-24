@@ -1,12 +1,14 @@
-import { ActivityIndicator, SafeAreaView, View } from "react-native";
+import { ActivityIndicator, SafeAreaView, ToastAndroid, View } from "react-native";
 import { useCallback, useEffect, useState } from "react";
 import { getRecomendations } from "@/Api/SongsActions";
 import Card from "@/components/Card";
 import { SwipeCard } from "@/components/SwipeCard";
 import { Recommendatios, song } from "@/types/Card.types";
+import { loadSongs } from "@/service/loadSongs";
 
 export default function music() {
 	const [data, setData] = useState<song[]>([]);
+	const [errorCount, setErrorCount] = useState<number>(0);
 
 	const fetchData = useCallback(async (): Promise<void> => {
 		try{
@@ -14,9 +16,15 @@ export default function music() {
 		const data_result = data_response.filter(
 			(i: Recommendatios) => i.preview_url !== null
 		);
-		setData((prev)=>[...prev, ...data_result]);
+		const songs = await loadSongs(data_result);
+		setData((prev)=>[...prev, ...songs]);
 	}catch(_){
-		fetchData()
+		setErrorCount((prev)=> prev+1);
+		if(errorCount < 3){
+			fetchData();
+		}else{
+			ToastAndroid.show("Ocurrio un error vuelve a intentarlo mas tarde",20 );
+		}
 	}
 		
 	}, []);
@@ -26,7 +34,7 @@ export default function music() {
 		if (data.length <= 10) {
 			fetchData()
 		}
-	}, [data ]);
+	}, [data]);
 
   
 	return (
