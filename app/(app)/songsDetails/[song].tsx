@@ -40,10 +40,12 @@ const SongDetails = () => {
   const [like, setLike] = useState<boolean>(false);
   const [loadingSound, setLoadingSound] = useState<boolean>(true);
   const [playing, setPlaying] = useState<boolean>(false);
-  const playSound =() => {
+  const playSound = () => {
     try {
       if (currentSound) {
-          currentSound.playAsync().then(() => setPlaying(true))
+        currentSound
+          .playAsync()
+          .then(() => setPlaying(true))
           .catch((e) =>
             ToastAndroid.showWithGravity(
               e,
@@ -52,7 +54,13 @@ const SongDetails = () => {
             ),
           );
       }
-    } catch (e) {ToastAndroid.showWithGravity(`${e}`, ToastAndroid.SHORT, ToastAndroid.CENTER);}
+    } catch (e) {
+      ToastAndroid.showWithGravity(
+        `${e}`,
+        ToastAndroid.SHORT,
+        ToastAndroid.CENTER,
+      );
+    }
   };
 
   const pause = async () => {
@@ -102,8 +110,8 @@ const SongDetails = () => {
     useCallback(() => {
       const onBlur = async () => {
         if (currentSound) {
-            await currentSound.stopAsync();
-            currentSound.unloadAsync();
+          await currentSound.stopAsync();
+          currentSound.unloadAsync();
         }
       };
       return () => onBlur();
@@ -127,51 +135,55 @@ const SongDetails = () => {
         // skipcq: JS-0323
         .map((item) => extractInfo(item))
         .join(" ");
-        if(informacion === '?') informacion = 'No se encontró información';
+      if (informacion === "?") informacion = "No se encontró información";
       setInformacion(informacion);
-      return Info
+      return Info;
     };
-    fetchData().then(async(info)=>{
-      const audio = new Audio.Sound();
-      await audio.loadAsync({uri:info.preview_url}, {isLooping:true});
-      setCurrentSound(audio);
-      setLoadingSound(false);
-    }).catch((e) =>
-      ToastAndroid.showWithGravity(e, ToastAndroid.SHORT, ToastAndroid.CENTER),
-    );
+    fetchData()
+      .then(async (info) => {
+        const audio = new Audio.Sound();
+        await audio.loadAsync({ uri: info.preview_url }, { isLooping: true });
+        setCurrentSound(audio);
+        setLoadingSound(false);
+      })
+      .catch((e) =>
+        ToastAndroid.showWithGravity(
+          e,
+          ToastAndroid.SHORT,
+          ToastAndroid.CENTER,
+        ),
+      );
   }, [navigation]);
 
   const getDetails = useCallback((Item: artist) => {
-
     return router.replace({
       pathname: "(app)/Detalles/[name]",
-      params: { id: Item.id, name: Item.name},
+      params: { id: Item.id, name: Item.name },
     });
   }, []);
   const handleLike = (id: string) => {
-    queueMicrotask(()=>AddToFav(id))
+    queueMicrotask(() => AddToFav(id));
     setLike(true);
     mergeAndStore("seedTrack", [id]);
   };
   const handleUnLike = (id: string) => {
-    queueMicrotask(()=>deleteFromFav(id))
+    queueMicrotask(() => deleteFromFav(id));
     setLike(false);
   };
 
   return (
     <ParallaxScrollView
-    
       headerBackgroundColor={{ light: "#D0D0D0", dark: "#353636" }}
       headerImage={
         <Image
           source={{
-            uri:
-              Track.info.album.images[0].url || ImageSong}}
+            uri: Track.info.album.images[0].url || ImageSong,
+          }}
           style={{ width: "100%", height: 400 }}
         />
       }
     >
-      {Track.audioFeatures.acousticness  ? (
+      {Track.audioFeatures.acousticness ? (
         <>
           <View className="flex flex-row justify-end items-center p-2">
             {like ? (
@@ -196,8 +208,7 @@ const SongDetails = () => {
               <View style={styles.playButton}>
                 <ActivityIndicator size="large" />
               </View>
-              ): !playing ? (
-              
+            ) : !playing ? (
               <Pressable
                 className="bg-cyan-950"
                 style={styles.playButton}
@@ -246,7 +257,6 @@ const SongDetails = () => {
           {showAbout === false ? (
             <View className=" bg-opacity-80 bg-[#0f172a] m-1 mt-0 pt-0 -top-4 w-full p-7 rounded-b-md rounded-r-md shadow-sm shadow-gray-700">
               <ThemedText type="defaultSemiBold">Artists</ThemedText>
-
 
               <ThemedView className=" flex flex-row justify-center content-center items-center bg-[#0f172a]">
                 <ScrollView
@@ -431,15 +441,14 @@ const SongDetails = () => {
               </View>
             </View>
           ) : showAbout ? (
-       
-              <View className=" bg-opacity-80 bg-[#0f172a] m-1 mt-0 pt-0 -top-4 w-fit rounded-b-md rounded-l-md shadow-sm shadow-gray-700 ">
-                <ThemedText
-                  className="p-7"
-                  style={{ justifyContent: "center", textAlign: "justify" }}
-                >
-                  {informacion ? informacion : ("Ocurrio un Error")}
-                </ThemedText>
-              </View>
+            <View className=" bg-opacity-80 bg-[#0f172a] m-1 mt-0 pt-0 -top-4 w-fit rounded-b-md rounded-l-md shadow-sm shadow-gray-700 ">
+              <ThemedText
+                className="p-7"
+                style={{ justifyContent: "center", textAlign: "justify" }}
+              >
+                {informacion ? informacion : "Ocurrio un Error"}
+              </ThemedText>
+            </View>
           ) : (
             <View className="bg-opacity-80 bg-cyan-950 flex justify-stretch content-center items-center align-middle m-1 mt-0 pt-0 -top-4 w-fit h-36 ">
               <ActivityIndicator className="m-8" size="large" />

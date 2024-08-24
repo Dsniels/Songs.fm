@@ -14,9 +14,9 @@ import {
   View,
 } from "react-native";
 import { Audio } from "expo-av";
-import {  useIsFocused } from "@react-navigation/native";
+import { useIsFocused } from "@react-navigation/native";
 import { router, useNavigation } from "expo-router";
-import {  song } from "@/types/Card.types";
+import { song } from "@/types/Card.types";
 import { Sound } from "expo-av/build/Audio";
 
 export const SwipeCard = ({
@@ -39,11 +39,11 @@ export const SwipeCard = ({
       currentSound.stopAsync();
     }
   });
-  navigation.addListener('focus',()=>{
-    if(currentSound){
+  navigation.addListener("focus", () => {
+    if (currentSound) {
       currentSound.playAsync();
     }
-  })
+  });
   const removeTopCard = async () => {
     if (currentSound) {
       await currentSound.stopAsync();
@@ -87,10 +87,10 @@ export const SwipeCard = ({
           friction: 5,
         }).start();
       },
-    })
+    }),
   ).current;
 
-  const playSound = async (sound : Sound, url : string) => {
+  const playSound = async (sound: Sound, url: string) => {
     if (currentSound) {
       await currentSound.unloadAsync();
 
@@ -98,10 +98,11 @@ export const SwipeCard = ({
     }
 
     try {
- 
-      isFocused && items[0].preview_url === url && sound.playAsync().then(() => {
-      setCurrentSound(sound);
-      });
+      isFocused &&
+        items[0].preview_url === url &&
+        sound.playAsync().then(() => {
+          setCurrentSound(sound);
+        });
     } catch (_) {
       await sound.stopAsync();
 
@@ -114,7 +115,7 @@ export const SwipeCard = ({
   useEffect(() => {
     if (items.length > 0 && isFocused) {
       playSound(items[0].sound as Sound, items[0].preview_url);
-    }else{
+    } else {
       if (currentSound) {
         currentSound.stopAsync();
       }
@@ -127,17 +128,15 @@ export const SwipeCard = ({
         inputRange: [-500, 0, 500],
         outputRange: ["8deg", "0deg", "-8deg"],
       }),
-    [swipe]
+    [swipe],
   );
 
   const animatedCardStyle = useMemo(
     () => ({
       transform: [...swipe.getTranslateTransform(), { rotate }],
     }),
-    [swipe, rotate]
+    [swipe, rotate],
   );
-
-
 
   const getSongDetails = (Item: song) => {
     return router.push({
@@ -151,7 +150,6 @@ export const SwipeCard = ({
       },
     });
   };
-
 
   return (
     <View>
