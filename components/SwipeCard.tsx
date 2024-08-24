@@ -42,6 +42,8 @@ export const SwipeCard = ({
   navigation.addListener('focus',()=>{
     if(currentSound){
       currentSound.playAsync();
+    }else{
+      playSound(items[0].sound as Sound, items[0].preview_url)
     }
   })
   const removeTopCard = async () => {
@@ -112,7 +114,7 @@ export const SwipeCard = ({
   };
 
   useEffect(() => {
-    if (items.length > 0 && isFocused) {
+    if (items.length > 0) {
       playSound(items[0].sound as Sound, items[0].preview_url);
     }else{
       if (currentSound) {
