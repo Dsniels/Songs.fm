@@ -1,3 +1,5 @@
+import { Sound } from "expo-av/build/Audio";
+
 export type CardType = {
 	id: string;
 	artist: string;
@@ -19,12 +21,13 @@ export type TrackResponse = {
 };
 
 export type UrlRequest = {
+	seed_geners : string
 	seed_tracks : string
-	target_energy: number;
-	target_speechiness: number;
-	target_danceability: number;
-	target_popularity: number;
-	target_valence: number;
+	target_energy: number
+	target_speechiness: number
+	target_danceability: number
+	target_popularity: number
+	target_valence: number
 };
 export type album = {
 	images: Array<{ url: string }>;
@@ -52,6 +55,7 @@ export type song = {
 	artists: Array<artist>;
 	album: album;
 	preview_url: string;
+	sound? : Sound
 };
 export type ResponseAxios<T> = {
 	data: T;
