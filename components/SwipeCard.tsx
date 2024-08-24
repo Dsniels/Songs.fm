@@ -17,6 +17,7 @@ import { Audio } from "expo-av";
 import {  useIsFocused } from "@react-navigation/native";
 import { router, useNavigation } from "expo-router";
 import {  song } from "@/types/Card.types";
+import { Sound } from "expo-av/build/Audio";
 
 export const SwipeCard = ({
   children,
@@ -38,6 +39,11 @@ export const SwipeCard = ({
       currentSound.stopAsync();
     }
   });
+  navigation.addListener('focus',()=>{
+    if(currentSound){
+      currentSound.playAsync();
+    }
+  })
   const removeTopCard = async () => {
     if (currentSound) {
       await currentSound.stopAsync();
@@ -84,8 +90,7 @@ export const SwipeCard = ({
     })
   ).current;
 
-  const playSound = async (soundUri: string) => {
-    const sound = new Audio.Sound();
+  const playSound = async (sound : Sound, url : string) => {
     if (currentSound) {
       await currentSound.unloadAsync();
 
@@ -93,11 +98,8 @@ export const SwipeCard = ({
     }
 
     try {
-      await sound.loadAsync(
-        { uri: soundUri },
-        { isLooping: true}
-      );
-      isFocused && items[0].preview_url === soundUri && sound.playAsync().then(() => {
+ 
+      isFocused && items[0].preview_url === url && sound.playAsync().then(() => {
       setCurrentSound(sound);
       });
     } catch (_) {
@@ -111,13 +113,13 @@ export const SwipeCard = ({
 
   useEffect(() => {
     if (items.length > 0 && isFocused) {
-      playSound(items[0].preview_url);
+      playSound(items[0].sound as Sound, items[0].preview_url);
     }else{
       if (currentSound) {
         currentSound.stopAsync();
       }
     }
-  }, [items, isFocused]);
+  }, [items]);
 
   const rotate = useMemo(
     () =>
