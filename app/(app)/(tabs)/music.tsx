@@ -10,7 +10,6 @@ import Card from "@/components/Card";
 import { SwipeCard } from "@/components/SwipeCard";
 import { Recommendatios, song } from "@/types/Card.types";
 import { loadSongs } from "@/service/loadSongs";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function music() {
 	const [data, setData] = useState<song[]>([]);
