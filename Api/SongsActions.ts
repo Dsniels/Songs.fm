@@ -86,7 +86,7 @@ const buildParams = async (minEnergy: number = 1, minDance: number = 1) => {
 export const getRecomendations = async (): Promise<Recommendatios[]> => {
 	const params = await buildParams();
 	return new Promise((resolve, reject) => {
-		HttpCliente.get(`/recommendations?limit=31&${params}`)
+		HttpCliente.get(`/recommendations?limit=20&${params}`)
 			.then((response: AxiosResponse<TrackResponse>) => {
 				if (response.data.tracks.length > 0) {
 					resolve(response.data.tracks);
