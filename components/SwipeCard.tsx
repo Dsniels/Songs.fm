@@ -1,17 +1,17 @@
 import {
-	Dispatch,
-	SetStateAction,
-	useEffect,
-	useMemo,
-	useRef,
-	useState,
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
 } from "react";
 import {
-	Animated,
-	Dimensions,
-	PanResponder,
-	Pressable,
-	View,
+  Animated,
+  Dimensions,
+  PanResponder,
+  Pressable,
+  View,
 } from "react-native";
 import { Audio } from "expo-av";
 import { useIsFocused } from "@react-navigation/native";
@@ -20,156 +20,156 @@ import { song } from "@/types/Card.types";
 import { Sound } from "expo-av/build/Audio";
 
 export const SwipeCard = ({
-	children,
-	items,
-	setItems,
+  children,
+  items,
+  setItems,
 }: {
-	children: (item: song) => React.JSX.Element;
-	items: song[];
-	setItems: Dispatch<SetStateAction<song[]>>;
+  children: (item: song) => React.JSX.Element;
+  items: song[];
+  setItems: Dispatch<SetStateAction<song[]>>;
 }) => {
-	const { height } = Dimensions.get("screen");
-	const swipe = useRef(new Animated.ValueXY()).current;
-	const titlSign = useRef(new Animated.Value(1)).current;
-	const [currentSound, setCurrentSound] = useState<Audio.Sound | null>(null);
-	const isFocused = useIsFocused();
-	const navigation = useNavigation();
-	navigation.addListener("blur", () => {
-		if (currentSound) {
-			currentSound.stopAsync();
-		}
-	});
-	navigation.addListener("focus", () => {
-		if (currentSound) {
-			currentSound.playAsync();
-		} else {
-			playSound(items[0].sound as Sound, items[0].preview_url);
-		}
-	});
-	const removeTopCard = async () => {
-		if (currentSound) {
-			await currentSound.stopAsync();
-			await currentSound.unloadAsync();
+  const { height } = Dimensions.get("screen");
+  const swipe = useRef(new Animated.ValueXY()).current;
+  const titlSign = useRef(new Animated.Value(1)).current;
+  const [currentSound, setCurrentSound] = useState<Audio.Sound | null>(null);
+  const isFocused = useIsFocused();
+  const navigation = useNavigation();
+  navigation.addListener("blur", () => {
+    if (currentSound) {
+      currentSound.stopAsync();
+    }
+  });
+  navigation.addListener("focus", () => {
+    if (currentSound) {
+      currentSound.playAsync();
+    } else {
+      playSound(items[0].sound as Sound, items[0].preview_url);
+    }
+  });
+  const removeTopCard = async () => {
+    if (currentSound) {
+      await currentSound.stopAsync();
+      await currentSound.unloadAsync();
 
-			setCurrentSound(null);
-		}
+      setCurrentSound(null);
+    }
 
-		setItems((prevState) => prevState.slice(1));
+    setItems((prevState) => prevState.slice(1));
 
-		swipe.setValue({ x: 0, y: 0 });
-	};
-	const panResponder = useRef(
-		PanResponder.create({
-			onMoveShouldSetPanResponder: () => true,
-			onPanResponderMove: (_, { dx, dy, y0 }) => {
-				swipe.setValue({ x: dx, y: dy });
-				titlSign.setValue(y0 > (height * 0.9) / 2 ? 1 : -1);
-			},
-			onPanResponderRelease: (_, { dx, dy }) => {
-				const direction = Math.sign(dx);
-				const isSwipedOffScreen = Math.abs(dx) > 100;
+    swipe.setValue({ x: 0, y: 0 });
+  };
+  const panResponder = useRef(
+    PanResponder.create({
+      onMoveShouldSetPanResponder: () => true,
+      onPanResponderMove: (_, { dx, dy, y0 }) => {
+        swipe.setValue({ x: dx, y: dy });
+        titlSign.setValue(y0 > (height * 0.9) / 2 ? 1 : -1);
+      },
+      onPanResponderRelease: (_, { dx, dy }) => {
+        const direction = Math.sign(dx);
+        const isSwipedOffScreen = Math.abs(dx) > 100;
 
-				if (isSwipedOffScreen) {
-					Animated.timing(swipe, {
-						duration: 100,
-						toValue: {
-							x: direction * 500,
-							y: dy,
-						},
-						useNativeDriver: true,
-					}).start(removeTopCard);
-					return;
-				}
-				Animated.spring(swipe, {
-					toValue: {
-						x: 0,
-						y: 0,
-					},
-					useNativeDriver: true,
-					friction: 5,
-				}).start();
-			},
-		})
-	).current;
+        if (isSwipedOffScreen) {
+          Animated.timing(swipe, {
+            duration: 100,
+            toValue: {
+              x: direction * 500,
+              y: dy,
+            },
+            useNativeDriver: true,
+          }).start(removeTopCard);
+          return;
+        }
+        Animated.spring(swipe, {
+          toValue: {
+            x: 0,
+            y: 0,
+          },
+          useNativeDriver: true,
+          friction: 5,
+        }).start();
+      },
+    }),
+  ).current;
 
-	const playSound = async (sound: Sound, url: string) => {
-		if (currentSound && currentSound !== sound) {
-			await currentSound.unloadAsync();
+  const playSound = async (sound: Sound, url: string) => {
+    if (currentSound && currentSound !== sound) {
+      await currentSound.unloadAsync();
 
-			setCurrentSound(null);
-		}
+      setCurrentSound(null);
+    }
 
-		try {
-			isFocused &&
-				items[0].preview_url === url &&
-				sound.playAsync().then(() => {
-					setCurrentSound(sound);
-				});
-		} catch (_) {
-			await sound.stopAsync();
+    try {
+      isFocused &&
+        items[0].preview_url === url &&
+        sound.playAsync().then(() => {
+          setCurrentSound(sound);
+        });
+    } catch (_) {
+      await sound.stopAsync();
 
-			await sound.unloadAsync();
+      await sound.unloadAsync();
 
-			setCurrentSound(null);
-		}
-	};
+      setCurrentSound(null);
+    }
+  };
 
-	useEffect(() => {
-		if (items.length > 0) {
-			playSound(items[0].sound as Sound, items[0].preview_url);
-		} else {
-			if (currentSound) {
-				currentSound.stopAsync();
-			}
-		}
-	}, [items]);
+  useEffect(() => {
+    if (items.length > 0) {
+      playSound(items[0].sound as Sound, items[0].preview_url);
+    } else {
+      if (currentSound) {
+        currentSound.stopAsync();
+      }
+    }
+  }, [items]);
 
-	const rotate = useMemo(
-		() =>
-			Animated.multiply(swipe.x, titlSign).interpolate({
-				inputRange: [-500, 0, 500],
-				outputRange: ["8deg", "0deg", "-8deg"],
-			}),
-		[swipe]
-	);
+  const rotate = useMemo(
+    () =>
+      Animated.multiply(swipe.x, titlSign).interpolate({
+        inputRange: [-500, 0, 500],
+        outputRange: ["8deg", "0deg", "-8deg"],
+      }),
+    [swipe],
+  );
 
-	const animatedCardStyle = useMemo(
-		() => ({
-			transform: [...swipe.getTranslateTransform(), { rotate }],
-		}),
-		[swipe, rotate]
-	);
+  const animatedCardStyle = useMemo(
+    () => ({
+      transform: [...swipe.getTranslateTransform(), { rotate }],
+    }),
+    [swipe, rotate],
+  );
 
-	const getSongDetails = (Item: song) => {
-		return router.push({
-			pathname: "(app)/songsDetails/[song]",
-			params: {
-				id: Item.id,
-				name: Item.name,
-				artists: Item.artists[0].name,
-				ImageSong: Item.album.images[0].url,
-				preview_url: Item.preview_url,
-			},
-		});
-	};
+  const getSongDetails = (Item: song) => {
+    return router.push({
+      pathname: "(app)/songsDetails/[song]",
+      params: {
+        id: Item.id,
+        name: Item.name,
+        artists: Item.artists[0].name,
+        ImageSong: Item.album.images[0].url,
+        preview_url: Item.preview_url,
+      },
+    });
+  };
 
-	return (
-		<View>
-			<View>
-				{items
-					.map((item, index: number) => (
-						<Animated.View
-							key={index}
-							style={[index === 0 ? animatedCardStyle : {}]}
-							{...(index === 0 ? panResponder.panHandlers : {})}
-						>
-							<Pressable onPress={() => getSongDetails(item)}>
-								{children(item)}
-							</Pressable>
-						</Animated.View>
-					))
-					.reverse()}
-			</View>
-		</View>
-	);
+  return (
+    <View>
+      <View>
+        {items
+          .map((item, index: number) => (
+            <Animated.View
+              key={index}
+              style={[index === 0 ? animatedCardStyle : {}]}
+              {...(index === 0 ? panResponder.panHandlers : {})}
+            >
+              <Pressable onPress={() => getSongDetails(item)}>
+                {children(item)}
+              </Pressable>
+            </Animated.View>
+          ))
+          .reverse()}
+      </View>
+    </View>
+  );
 };
