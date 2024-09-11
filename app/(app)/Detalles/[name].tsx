@@ -111,9 +111,9 @@ const Detalles = () => {
   };
 
   return (
-    <SafeAreaView style={{backgroundColor: "#000818", flex: 1 }}>
+    <SafeAreaView style={{backgroundColor: "#000000", flex: 1 }}>
     <ParallaxScrollView
-      headerBackgroundColor={{ light: "#000818", dark: "#000818" }}
+      headerBackgroundColor={{ light: "#000000", dark: "#000000" }}
       headerImage={
         <Image
           source={{

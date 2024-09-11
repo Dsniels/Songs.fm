@@ -70,10 +70,11 @@ export default function Applayout() {
       <Stack.Screen
         name="Detalles/[name]"
         
+
         options={{
  animation :'simple_push', animationDuration:9000,
           headerTransparent: true,
-          contentStyle: { backgroundColor: "#000818" },
+          contentStyle: { backgroundColor: "#000000" },
           headerBackground: () => <CustomHeader />,
           headerShadowVisible: true,
           headerTitleStyle: { fontWeight: "bold", color: "white" },
@@ -95,7 +96,7 @@ export default function Applayout() {
 
 const styles = StyleSheet.create({
   header: {
-    height: 100, // Altura del encabezado, ajusta según sea necesario
+    height: 100, 
     backgroundColor: "transparent",
     borderBottomWidth: 0,
     shadowColor: "transparent",

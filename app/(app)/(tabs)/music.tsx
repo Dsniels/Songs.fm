@@ -46,7 +46,7 @@ export default function music() {
 	}, [data]);
 
 	return (
-		<SafeAreaView style={{ backgroundColor: "#000818", flex: 1 }}>
+		<SafeAreaView style={{ backgroundColor: "#000000", flex: 1 }}>
 			{data.length > 0 ? (
 				<View
 					style={{ display: "flex", marginTop: 10, marginBottom: 10 }}
