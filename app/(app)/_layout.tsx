@@ -27,19 +27,18 @@ SplashScreen.preventAutoHideAsync();
 
 export default function Applayout() {
   const [{ sesionUsuario }, dispatch] = useStateValue();
-  const [Connection, setConnection] = useState<boolean|null>(true);
+  const [Connection, setConnection] = useState<boolean | null>(true);
   useEffect(() => {
     // AppState.addEventListener("change", async (state) => {
     //   if (state === "inactive") {
     //     await AsyncStorage.clear();
     //   }
     // });
-        const unsubscribe = NetInfo.addEventListener((state) => {
+    const unsubscribe = NetInfo.addEventListener((state) => {
       setConnection(state.isConnected);
     });
 
     return () => unsubscribe();
-  
   }, []);
 
   const NotConnection = () => (
@@ -49,13 +48,17 @@ export default function Applayout() {
     </View>
   );
   useAuth(dispatch).finally(() => {
-      SplashScreen.hideAsync();
+    SplashScreen.hideAsync();
   });
 
-  
-
   return Connection ? (
-    <Stack screenOptions={{ animation :'simple_push', animationDuration:9000,  headerTransparent: false }}>
+    <Stack
+      screenOptions={{
+        animation: "simple_push",
+        animationDuration: 9000,
+        headerTransparent: false,
+      }}
+    >
       <Stack.Screen
         name="(tabs)"
         options={{
@@ -63,16 +66,12 @@ export default function Applayout() {
           headerBlurEffect: "dark",
         }}
       />
-      <Stack.Screen
-        name="login"
-        options={{  headerShown: false }}
-      />
+      <Stack.Screen name="login" options={{ headerShown: false }} />
       <Stack.Screen
         name="Detalles/[name]"
-        
-
         options={{
- animation :'simple_push', animationDuration:9000,
+          animation: "simple_push",
+          animationDuration: 9000,
           headerTransparent: true,
           contentStyle: { backgroundColor: "#000000" },
           headerBackground: () => <CustomHeader />,
@@ -83,7 +82,8 @@ export default function Applayout() {
       <Stack.Screen
         name="songsDetails/[song]"
         options={{
-   animation :'simple_push', animationDuration:9000,
+          animation: "simple_push",
+          animationDuration: 9000,
           headerTransparent: true,
           headerBackground: () => <CustomHeader />,
           headerShadowVisible: true,
@@ -91,12 +91,14 @@ export default function Applayout() {
         }}
       />
     </Stack>
-  ) : (<NotConnection />);
+  ) : (
+    <NotConnection />
+  );
 }
 
 const styles = StyleSheet.create({
   header: {
-    height: 100, 
+    height: 100,
     backgroundColor: "transparent",
     borderBottomWidth: 0,
     shadowColor: "transparent",
