@@ -95,7 +95,6 @@ export const getRecomendations = async (): Promise<Recommendatios[]> => {
 				}
 			})
 			.catch((e: AxiosError) => {
-				console.log(e);
 				reject(e);
 			});
 	});
