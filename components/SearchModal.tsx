@@ -46,7 +46,7 @@ export const SearchModal = ({
         <ThemedView className="bg-[#000818] flex  align-middle items-center p-2 content-center m-1 text-white  flex-row">
           <Ionicons name="search" size={24} color="white" />
           <TextInput
-            className="flex-auto bg-blue-950 text-white p-3 m-2 rounded-2xl"
+            className="flex-auto bg-[#592EF2] text-white p-3 m-2 rounded-2xl"
             value={text}
             clearTextOnFocus
             onTextInput={handleSearch}

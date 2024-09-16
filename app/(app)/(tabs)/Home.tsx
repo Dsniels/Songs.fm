@@ -74,7 +74,7 @@ export default function HomeScreen() {
           </ThemedText>
         </View>
         <Pressable
-          className="flex  align-middle m-1 bg-blue-950 rounded-2xl justify-center items-start p-3 shadow-lg shadow-cyan-500/50 "
+          className="flex  align-middle m-1 bg-[#7A36D9] rounded-2xl justify-center items-start p-3 shadow-lg shadow-cyan-500/50 "
           onPress={() => setShowModal(true)}
         >
           <View>

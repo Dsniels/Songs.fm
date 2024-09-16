@@ -18,6 +18,7 @@ import { useIsFocused } from "@react-navigation/native";
 import { router, useNavigation } from "expo-router";
 import { song } from "@/types/Card.types";
 import { Sound } from "expo-av/build/Audio";
+import { SlideOutDown } from "react-native-reanimated";
 
 export const SwipeCard = ({
 	children,
@@ -32,7 +33,7 @@ export const SwipeCard = ({
 	const swipe = useRef(new Animated.ValueXY()).current;
 	const titlSign = useRef(new Animated.Value(1)).current;
 	const [currentSound, setCurrentSound] = useState<Audio.Sound | null>(null);
-	const isFocused = useIsFocused();
+	let isFocused = useIsFocused();
 	const navigation = useNavigation();
 	navigation.addListener("blur", () => {
 		if (currentSound) {
@@ -43,6 +44,7 @@ export const SwipeCard = ({
 		if (currentSound) {
 			currentSound.playAsync();
 		} else {
+			isFocused = true
 			playSound(items[0].sound as Sound, items[0].preview_url);
 		}
 	});
@@ -100,11 +102,14 @@ export const SwipeCard = ({
 		}
 
 		try {
-			isFocused &&
-				items[0].preview_url === url &&
-				sound.playAsync().then(() => {
-					setCurrentSound(sound);
-				});
+
+
+			if(isFocused && items[0].preview_url === url){
+				sound.playAsync().then(()=>{
+					setCurrentSound(sound)
+				})
+			}
+
 		} catch (_) {
 			await sound.stopAsync();
 
@@ -115,7 +120,7 @@ export const SwipeCard = ({
 	};
 
 	useEffect(() => {
-		if (items.length > 0) {
+		if (items.length > 0 && isFocused) {
 			playSound(items[0].sound as Sound, items[0].preview_url);
 		} else {
 			if (currentSound) {

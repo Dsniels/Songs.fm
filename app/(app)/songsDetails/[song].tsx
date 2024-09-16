@@ -216,7 +216,7 @@ const SongDetails = () => {
             <Pressable
               className="w-44 p-2 bg-opacity-70 rounded-t-md"
               style={{
-                backgroundColor: !showAbout ? "#0f172a" : "transparent",
+                backgroundColor: !showAbout ? "#0D0D0D" : "transparent",
               }}
               // skipcq: JS-0417
               onPress={() => setShowAbout(false)}
@@ -230,7 +230,7 @@ const SongDetails = () => {
             </Pressable>
             <Pressable
               className=" flex flex-wrap w-40 text-center align-middle justify-items-center content-center justify-center bg-opacity-70  rounded-t-md"
-              style={{ backgroundColor: showAbout ? "#0f172a" : "transparent" }}
+              style={{ backgroundColor: showAbout ? "#0D0D0D" : "transparent" }}
               // skipcq: JS-0417
               onPress={() => setShowAbout(true)}
             >
@@ -244,13 +244,13 @@ const SongDetails = () => {
           </View>
 
           {showAbout === false ? (
-            <View className=" bg-opacity-80 bg-[#0f172a] m-1 mt-0 pt-0 -top-4 w-full p-7 rounded-b-md rounded-r-md shadow-sm shadow-gray-700">
+            <View className=" bg-opacity-80 bg-[#0D0D0D] m-1 mt-0 pt-0 -top-4 w-full p-7 rounded-b-md rounded-r-md shadow-sm shadow-gray-700">
               <ThemedText type="defaultSemiBold">Artists</ThemedText>
 
 
-              <ThemedView className=" flex flex-row justify-center content-center items-center bg-[#0f172a]">
+              <ThemedView className=" flex flex-row justify-center content-center items-center bg-[#0D0D0D]">
                 <ScrollView
-                  className="bg-[#0f172a]"
+                  className="bg-[#0D0D0D]"
                   horizontal
                   style={{ width: 80 }}
                 >
@@ -282,7 +282,7 @@ const SongDetails = () => {
                     }}
                   >
                     <View
-                      className="bg-sky-700"
+                      className="bg-[#0554F2]"
                       style={{
                         height: "100%",
                         width: `${Track.audioFeatures.danceability * 100}%`,
@@ -302,7 +302,7 @@ const SongDetails = () => {
                     }}
                   >
                     <View
-                      className="bg-sky-700"
+                      className="bg-[#0554F2]"
                       style={{
                         height: "100%",
                         width: `${Track.audioFeatures.acousticness * 100}%`,
@@ -322,7 +322,7 @@ const SongDetails = () => {
                     }}
                   >
                     <View
-                      className="bg-sky-700"
+                      className="bg-[#0554F2]"
                       style={{
                         height: "100%",
                         width: `${Track.audioFeatures.energy * 100}%`,
@@ -342,7 +342,7 @@ const SongDetails = () => {
                     }}
                   >
                     <View
-                      className="bg-sky-700"
+                      className="bg-[#0554F2]"
                       style={{
                         height: "100%",
                         width: `${Track.audioFeatures.instrumentalness * 100}%`,
@@ -364,7 +364,7 @@ const SongDetails = () => {
                     }}
                   >
                     <View
-                      className="bg-sky-700"
+                      className="bg-[#0554F2]"
                       style={{
                         height: "100%",
                         width: `${Track.audioFeatures.liveness * 100}%`,
@@ -398,7 +398,7 @@ const SongDetails = () => {
                     }}
                   >
                     <View
-                      className="bg-sky-700"
+                      className="bg-[#0554F2]"
                       style={{
                         height: "100%",
                         width: `${Track.audioFeatures.speechiness * 100}%`,
@@ -418,7 +418,7 @@ const SongDetails = () => {
                     }}
                   >
                     <View
-                      className="bg-sky-700"
+                      className="bg-[#0554F2]"
                       style={{
                         height: "100%",
                         width: `${Track.audioFeatures.valence * 100}%`,
@@ -432,7 +432,7 @@ const SongDetails = () => {
             </View>
           ) : showAbout ? (
        
-              <View className=" bg-opacity-80 bg-[#0f172a] m-1 mt-0 pt-0 -top-4 w-fit rounded-b-md rounded-l-md shadow-sm shadow-gray-700 ">
+              <View className=" bg-opacity-80 bg-[#0D0D0D] m-1 mt-0 pt-0 -top-4 w-fit rounded-b-md rounded-l-md shadow-sm shadow-gray-700 ">
                 <ThemedText
                   className="p-7"
                   style={{ justifyContent: "center", textAlign: "justify" }}
@@ -442,7 +442,7 @@ const SongDetails = () => {
               </View>
           ) : (
             <View className="bg-opacity-80 bg-cyan-950 flex justify-stretch content-center items-center align-middle m-1 mt-0 pt-0 -top-4 w-fit h-36 ">
-              <ActivityIndicator className="m-8" size="large" />
+              <ActivityIndicator   className="m-8" size="large" />
             </View>
           )}
           <View style={{ marginTop: 30, marginBottom: 20 }}>

@@ -11,7 +11,7 @@ export const SmallListSongs = ({
 }) => {
 	return (
 		<TouchableOpacity
-			className=" flex flex-row m-0 border-2 bg-black items-center p-0 shadow "
+			className=" flex flex-row m-0  bg-opacity-100 items-center p-0 shadow "
 			// skipcq: JS-0417
 			onPress={() => getSongDetails(item)}
 		>

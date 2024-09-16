@@ -12,7 +12,7 @@ const ListGeners = ({ item, index }: { item: genero; index: number }) => {
 			</ThemedText>
 			<View className="bg-gray-800 h-4 w-72 rounded-lg">
 				<View
-					className="bg-sky-700 h-full rounded-md"
+					className="bg-[#2793F2] h-full rounded-md"
 					style={{ width: `${item.value * 6}%` }}
 				/>
 			</View>
