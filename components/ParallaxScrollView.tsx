@@ -62,14 +62,14 @@ export default function ParallaxScrollView({ children, headerImage }: Props) {
 const Styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#000818",
+    backgroundColor: "#000000",
   },
   header: {
     height: 350,
     overflow: "hidden",
   },
   content: {
-    backgroundColor: "#000818",
+    backgroundColor: "#000000",
     flex: 1,
     padding: 32,
     gap: 16,
