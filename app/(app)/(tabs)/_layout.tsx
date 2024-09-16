@@ -74,6 +74,7 @@ export default function TabLayout() {
 									: "person-circle-outline"
 							}
 							color={color}
+
 						/>
 					),
 				}}
